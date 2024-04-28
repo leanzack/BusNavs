@@ -31,15 +31,13 @@ public class Main extends Application {
         String user = "root";
         String pwd = "root";
         
-        try {
-            // Optionally load the driver manually if automatic loading fails
-            Class.forName("org.mariadb.jdbc.Driver"); 
+        try {            Class.forName("org.mariadb.jdbc.Driver"); 
             connection = DriverManager.getConnection(url, user, pwd);
             System.out.println("Done");
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace(); // In case the MariaDB driver class is not found
+            e.printStackTrace();
         }
  
     }
