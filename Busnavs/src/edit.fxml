@@ -31,6 +31,7 @@
                   <Font name="Agency FB Bold" size="30.0" />
                </font>
             </Button>
+            <Button fx:id="register_but" layoutX="258.0" layoutY="251.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Register" />
          </children>
     </AnchorPane>
   </children>

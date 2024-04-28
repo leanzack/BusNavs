@@ -16,5 +16,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Leanzack/eclipse-workspace/Busnavs/mariadb-java-client-3.3.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
