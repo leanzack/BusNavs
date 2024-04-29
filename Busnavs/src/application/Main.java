@@ -33,7 +33,6 @@ public class Main extends Application {
         
         try {            Class.forName("org.mariadb.jdbc.Driver"); 
             connection = DriverManager.getConnection(url, user, pwd);
-            System.out.println("Done");
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

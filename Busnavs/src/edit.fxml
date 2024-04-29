@@ -25,8 +25,7 @@
         </Button>
         <Button fx:id="Passenger" layoutX="339.0" layoutY="111.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="149.0" text="Passenger" textAlignment="JUSTIFY" style="-fx-font-size: 30px; -fx-font-family: 'Agency FB Bold';">
         </Button>
-        <Button fx:id="register_but" layoutX="258.0" layoutY="251.0" mnemonicParsing="false" onAction="#switchToScene2" prefHeight="25.0" prefWidth="125.0" text="Register">
-        </Button>
+       
       </children>
     </AnchorPane>
   </children>
