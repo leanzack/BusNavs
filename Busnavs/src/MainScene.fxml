@@ -11,10 +11,10 @@
       <AnchorPane prefHeight="386.0" prefWidth="600.0">
          <children>
             <Button fx:id="Logout" layoutX="28.0" layoutY="75.0" mnemonicParsing="false" onAction="#Logout" text="Back" />
-            <Button layoutX="294.0" layoutY="178.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" text="Login" />
-            <TextField layoutX="255.0" layoutY="105.0" prefHeight="26.0" prefWidth="183.0" />
+            <Button layoutX="294.0" layoutY="178.0" mnemonicParsing="false" onAction="#Driver_inside" prefHeight="30.0" prefWidth="119.0" text="Login" />
+            <TextField fx:id="login" layoutX="255.0" layoutY="105.0" prefHeight="26.0" prefWidth="183.0" />
             <Label layoutX="316.0" layoutY="145.0" text="DRIVER ID" />
- 			<Button fx:id="register_but" layoutX="258.0" layoutY="251.0" mnemonicParsing="false" onAction="#switchToScene2" prefHeight="25.0" prefWidth="125.0" text="Register">
+ 			<Button layoutX="258.0" layoutY="251.0" mnemonicParsing="false" onAction="#switchToScene2" prefHeight="25.0" prefWidth="125.0" text="Register">
         </Button>
                  </children>
       </AnchorPane>

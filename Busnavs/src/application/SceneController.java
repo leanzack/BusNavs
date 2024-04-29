@@ -17,7 +17,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class SceneController {
@@ -30,7 +29,8 @@ public class SceneController {
 	private Parent root;
 	 @FXML public TextField driver_id;
 	 @FXML public TextField driver_name;
-	 @FXML public Button register_button;
+	 @FXML public TextField login;
+
 
 	
 	 @FXML
@@ -55,6 +55,7 @@ public class SceneController {
         stage.show();	
 	}
 	 }
+	 @FXML
 	 public void BacktoMain(ActionEvent event) throws IOException {
 		
 		        Parent root = FXMLLoader.load(getClass().getResource("/edit.fxml"));
@@ -75,9 +76,34 @@ public class SceneController {
 	            stage.show();	
 	        }
 	 @FXML
+	 public void Driver_inside() throws IOException {
+		 
+		 if (login != null && !login.getText().trim().isEmpty()) {
+		        String driverLOGIN = login.getText().trim(); 
+		        
+		        String query = "SELECT INTO driver (driver_id) VALUES (?);";
+
+
+		        try (Connection conn = dbManager.getConnection();
+		             PreparedStatement pst = conn.prepareStatement(query)) {
+
+		            pst.setString(1, driverLOGIN);
+		            pst.executeUpdate();
+
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		            Alert alert3 = new Alert(AlertType.CONFIRMATION);
+		          
+		            alert3.setContentText("Welcome " + driverLOGIN );
+		            alert3.showAndWait();
+		        }
+		    }
+		}
+	 
+	 @FXML
 	 public void register() throws IOException{
 		 if (driver_id != null && !driver_id.getText().trim().isEmpty()) {
-		        String driverID = driver_id.getText().trim(); // Use trim to remove any leading/trailing spaces
+		        String driverID = driver_id.getText().trim(); 
 		        String driverNAME = driver_name.getText().trim();
 
 		        String query = "INSERT INTO driver (driver_id, driver_name) VALUES (?, ?);";
@@ -92,10 +118,13 @@ public class SceneController {
 		            // Create and show the confirmation alert
 		            Alert alert = new Alert(AlertType.CONFIRMATION);
 		            alert.setTitle("Registration Successful");
-		            alert.setHeaderText(null); // No header text
 		            alert.setContentText("Successfully registered " + result + " record(s).");
 		            alert.showAndWait();
+		            
+		            driver_id.setText("");
+		            driver_name.setText("");
 
+		            
 		        } catch (SQLException e) {
 		            e.printStackTrace();
 
@@ -110,11 +139,11 @@ public class SceneController {
 		        // Create and show the error alert for empty driver ID
 		        Alert alert = new Alert(AlertType.ERROR);
 		        alert.setTitle("Validation Error");
-		        alert.setHeaderText(null); // No header text
 		        alert.setContentText("Error: Driver ID is required and cannot be empty.");
 		        alert.showAndWait();
 		    }
 		}
+	
 	 }
 
 //  }
