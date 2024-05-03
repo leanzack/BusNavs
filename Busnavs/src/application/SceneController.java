@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javafx.fxml.FXML;
@@ -23,13 +24,15 @@ public class SceneController {
 	
 
 	  public DBConnectionManager dbManager = new DBConnectionManager();
-	    
+
+	  
 	private Stage stage;
 	private Scene scene;
 	private Parent root;
 	 @FXML public TextField driver_id;
 	 @FXML public TextField driver_name;
 	 @FXML public TextField login;
+	
 
 
 	
@@ -75,30 +78,57 @@ public class SceneController {
 	            stage.setScene(scene);
 	            stage.show();	
 	        }
+	
+
 	 @FXML
-	 public void Driver_inside() throws IOException {
-		 
-		 if (login != null && !login.getText().trim().isEmpty()) {
-		        String driverLOGIN = login.getText().trim(); 
-		        
-		        String query = "SELECT INTO driver (driver_id) VALUES (?);";
+	 public void Driver_inside(ActionEvent event) throws IOException {
+	     if (login != null && !login.getText().trim().isEmpty()) {
+	         String driverLogin = login.getText().trim();
+	         String query = "SELECT driver_name FROM driver WHERE driver_id = ?";
+	         
+	         try (Connection conn = dbManager.getConnection();
+	              PreparedStatement pst = conn.prepareStatement(query)) {
 
+	             pst.setString(1, driverLogin);
+	             try (ResultSet rs = pst.executeQuery()) {
+	                 if (rs.next()) {
+	                     String driverName = rs.getString("driver_name");
 
-		        try (Connection conn = dbManager.getConnection();
-		             PreparedStatement pst = conn.prepareStatement(query)) {
+	                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/inside.fxml"));
+	                     inside_controller controller = new inside_controller();
+	                     loader.setController(controller);
+	                     Parent root = loader.load();
 
-		            pst.setString(1, driverLOGIN);
-		            pst.executeUpdate();
+	                     controller.setDriverName(driverName);
 
-		        } catch (SQLException e) {
-		            e.printStackTrace();
-		            Alert alert3 = new Alert(AlertType.CONFIRMATION);
-		          
-		            alert3.setContentText("Welcome " + driverLOGIN );
-		            alert3.showAndWait();
-		        }
-		    }
-		}
+	                     
+	                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+	                     Scene scene = new Scene(root);
+	                     stage.setScene(scene);
+	                     stage.show();
+
+	                     // Show welcome message
+	                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+	                     alert.setContentText("Welcome " + driverName);
+	                     alert.showAndWait();
+	                 } else {
+	                     Alert alert = new Alert(Alert.AlertType.ERROR);
+	                     alert.setContentText("No driver found with ID: " + driverLogin);
+	                     alert.showAndWait();
+	                 }
+	             }
+	         } catch (SQLException e) {
+	             e.printStackTrace();
+	             Alert alert = new Alert(Alert.AlertType.ERROR);
+	             alert.setContentText("Database error: " + e.getMessage());
+	             alert.showAndWait();
+	         }
+	     } else {
+	         Alert alert = new Alert(Alert.AlertType.WARNING);
+	         alert.setContentText("Please enter your driver ID.");
+	         alert.showAndWait();
+	     }
+	 }
 	 
 	 @FXML
 	 public void register() throws IOException{
@@ -111,9 +141,14 @@ public class SceneController {
 		        try (Connection conn = dbManager.getConnection();
 		             PreparedStatement pst = conn.prepareStatement(query)) {
 
+		            
+
+		            
 		            pst.setString(1, driverID);
 		            pst.setString(2, driverNAME);
 		            int result = pst.executeUpdate();
+
+		            
 
 		            // Create and show the confirmation alert
 		            Alert alert = new Alert(AlertType.CONFIRMATION);
