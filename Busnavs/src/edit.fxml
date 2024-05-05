@@ -23,7 +23,7 @@
       <children>
         <Button fx:id="driver" onAction="#Driver_main" layoutX="142.0" layoutY="111.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="149.0" text="Driver" textAlignment="JUSTIFY" style="-fx-font-size: 30px; -fx-font-family: 'Agency FB Bold';">
         </Button>
-        <Button fx:id="Passenger" layoutX="339.0" layoutY="111.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="149.0" text="Passenger" textAlignment="JUSTIFY" style="-fx-font-size: 30px; -fx-font-family: 'Agency FB Bold';">
+        <Button fx:id="Passenger" onAction="#Passenger_main" layoutX="339.0" layoutY="111.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="149.0" text="Passenger" textAlignment="JUSTIFY" style="-fx-font-size: 30px; -fx-font-family: 'Agency FB Bold';">
         </Button>
        
       </children>

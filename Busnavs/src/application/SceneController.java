@@ -32,13 +32,23 @@ public class SceneController {
 	 @FXML public TextField driver_id;
 	 @FXML public TextField driver_name;
 	 @FXML public TextField login;
-	
+	 @FXML public TextField login2;
+
+	 @FXML public TextField passenger_name;
 
 
 	
 	 @FXML
 	public void switchToScene2(ActionEvent event) throws IOException {
          Parent root = FXMLLoader.load(getClass().getResource("/Scene2.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();	
+	}
+	 @FXML
+	public void switchToScene3(ActionEvent event) throws IOException {
+         Parent root = FXMLLoader.load(getClass().getResource("/Scene3.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -73,6 +83,16 @@ public class SceneController {
 	    public void Driver_main(ActionEvent event) throws IOException {
 
 	            Parent root = FXMLLoader.load(getClass().getResource("/MainScene.fxml"));
+	            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+	            scene = new Scene(root);
+	            stage.setScene(scene);
+	            stage.show();	
+	        }
+	 
+	 @FXML
+	    public void Passenger_main(ActionEvent event) throws IOException {
+
+	            Parent root = FXMLLoader.load(getClass().getResource("/MainScene2.fxml"));
 	            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 	            scene = new Scene(root);
 	            stage.setScene(scene);
@@ -129,6 +149,111 @@ public class SceneController {
 	         alert.showAndWait();
 	     }
 	 }
+	 
+	 @FXML
+	 public void passenger_inside(ActionEvent event) throws IOException {
+		
+		   if (login2 != null && !login2.getText().trim().isEmpty()) {
+		         String passNAME = login2.getText().trim();
+		         String query = "SELECT passenger_name FROM passenger WHERE passenger_name = ?";
+		         
+		         try (Connection conn = dbManager.getConnection();
+		              PreparedStatement pst = conn.prepareStatement(query)) {
+
+		             pst.setString(1, passNAME);
+		             try (ResultSet rs = pst.executeQuery()) {
+		                 if (rs.next()) {
+		                     String passengername = rs.getString("passenger_name");
+
+		                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/passenger_inside.fxml"));
+		                     inside_controller2 controller2 = new inside_controller2();
+		                     loader.setController(controller2);
+		                     Parent root = loader.load();
+
+		                     controller2.setPassengerName(passengername);
+
+		                     
+		                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		                     Scene scene = new Scene(root);
+		                     stage.setScene(scene);
+		                     stage.show();
+
+		                     // Show welcome message
+		                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		                     alert.setContentText("Welcome " + passengername);
+		                     alert.showAndWait();
+		                 } else {
+		                     Alert alert = new Alert(Alert.AlertType.ERROR);
+		                     alert.setContentText("No passenger found with ID: " + passNAME);
+		                     alert.showAndWait();
+		                 }
+		             }
+		         } catch (SQLException e) {
+		             e.printStackTrace();
+		             Alert alert = new Alert(Alert.AlertType.ERROR);
+		             alert.setContentText("Database error: " + e.getMessage());
+		             alert.showAndWait();
+		         }
+		     } else {
+		         Alert alert = new Alert(Alert.AlertType.WARNING);
+		         alert.setContentText("Please enter your passenger ID.");
+		         alert.showAndWait();
+		     }
+		 }
+		 
+	
+		 
+		 
+	 
+	   
+	 @FXML
+	 public void pass_register() throws IOException {
+		  if (passenger_name != null && !passenger_name.getText().trim().isEmpty()) {
+		        String passNAME = passenger_name.getText().trim();
+
+		        String query = "INSERT INTO passenger (passenger_name) VALUES (?);";
+
+		        try (Connection conn = dbManager.getConnection();
+		             PreparedStatement pst = conn.prepareStatement(query)) {
+
+		            
+
+		            
+		            pst.setString(1, passNAME);
+		            int result = pst.executeUpdate();
+
+		            
+
+		            // Create and show the confirmation alert
+		            Alert alert = new Alert(AlertType.CONFIRMATION);
+		            alert.setTitle("Registration Successful");
+		            alert.setContentText("Successfully registered " + result + " record(s).");
+		            alert.showAndWait();
+		            
+		            passenger_name.setText("");
+
+		            
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+
+		            // Create and show the SQL error alert
+		            Alert alert = new Alert(AlertType.ERROR);
+		            alert.setTitle("Database Error");
+		            alert.setHeaderText("Failed to register the passenger.");
+		            alert.setContentText("A database error occurred: " + e.getMessage());
+		            alert.showAndWait();
+		        }
+		    } else {
+		        // Create and show the error alert for empty driver ID
+		        Alert alert = new Alert(AlertType.ERROR);
+		        alert.setTitle("Validation Error");
+		        alert.setContentText("Error: Passenger ID is required and cannot be empty.");
+		        alert.showAndWait();
+		    }
+		}
+	
+	 
+		 
 	 
 	 @FXML
 	 public void register() throws IOException{

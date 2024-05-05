@@ -2,19 +2,19 @@ package application;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class inside_controller {
+public class inside_controller2 {
     
     @FXML
-    private Label driverNameLabel;
+    private Label passengerNameLabel;
     
     // Constructor
-    public inside_controller() {
+    public inside_controller2() {
         // Constructor logic, if any
     }
     
     // Method to set driver name
-    public void setDriverName(String driverName) {
-        driverNameLabel.setText(driverName);
+    public void setPassengerName(String passengername) {
+    	passengerNameLabel.setText(passengername);
     }
   
     
