@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane prefHeight="617.0" prefWidth="957.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <AnchorPane prefHeight="617.0" prefWidth="969.0" styleClass="root">
+          <children>
+              <SplitPane dividerPositions="0.1741112123974476" orientation="HORIZONTAL" prefHeight="558.0" prefWidth="1099.0" styleClass="split-pane">
+                  <items>
+			<AnchorPane prefWidth="178.0">
+			    <children>
+                        <AnchorPane layoutX="17.0" layoutY="14.0" prefHeight="122.0" prefWidth="145.0" styleClass="empty-border">
+                           <children>
+      			        <ImageView fitHeight="111.0" fitWidth="149.0" layoutX="4.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
+                           </children>
+                        </AnchorPane>
+			        <Label fx:id="passengerNameLabel" contentDisplay="CENTER" layoutX="46.0" layoutY="185.0" prefHeight="29.0" prefWidth="100.0" styleClass="label-title" text="Passenger Name" textAlignment="JUSTIFY" />
+			    </children>
+			</AnchorPane>
+			<AnchorPane prefHeight="615.0" prefWidth="825.0" styleClass="main-panel">
+    <children>
+        <BorderPane layoutX="21.0" layoutY="48.0" prefHeight="255.0" prefWidth="645.0" styleClass="border-pane" AnchorPane.bottomAnchor="344.0" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="237.0" AnchorPane.topAnchor="48.0">
+                           <top>
+                <ScrollPane prefHeight="103.0" prefWidth="392.0" BorderPane.alignment="CENTER">
+                    <content>
+                        <HBox fx:id="h_box" spacing="10" styleClass="hbox-container">
+                            <!-- Route buttons will be added here dynamically -->
+                        </HBox>
+                    </content>
+                </ScrollPane>
+                           </top>
+                           <bottom>
+                <ScrollPane prefHeight="103.0" prefWidth="392.0" BorderPane.alignment="CENTER">
+                    <content>
+                        <HBox fx:id="h_box1" spacing="10" styleClass="hbox-container">
+                            <!-- Driver buttons will be added here dynamically -->
+                        </HBox>
+                    </content>
+                </ScrollPane>
+                           </bottom>
+                           <center>
+                              <Label text="Select available driver" BorderPane.alignment="CENTER" />
+                           </center>
+        </BorderPane>
+		     <Label layoutX="306.0" layoutY="23.0" text="Select a Route" />
+                        <TitledPane layoutX="48.0" layoutY="322.0" prefHeight="173.0" prefWidth="252.0" text="Ticket Information">
+                           <content>
+                              <AnchorPane prefHeight="86.0" prefWidth="405.0">
+                                 <children>
+                              <Label fx:id="selectedRouteLabel" layoutX="20.0" layoutY="14.0" prefWidth="200" text="Selected Route: None" />
+            				  <Label fx:id="selectedDriverLabel" layoutX="20.0" layoutY="41.0" prefWidth="200" text="Selected Driver: None" />
+                                    <Button layoutX="98.0" layoutY="102.0" mnemonicParsing="false" onAction="#handleDoneAction" text="Done" />
+                                    <Label fx:id="selectedDriverLabel1" layoutX="20.0" layoutY="65.0" prefWidth="200" text="Fare:" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>		    </children>
+		</AnchorPane>
+
+
+                  </items>
+              </SplitPane>
+          </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

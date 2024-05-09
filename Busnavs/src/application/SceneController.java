@@ -24,7 +24,11 @@ public class SceneController {
 	
 
 	  public DBConnectionManager dbManager = new DBConnectionManager();
-
+	  
+	  private void applyStylesheet(Scene scene) {
+	        String cssPath = "application.css"; // Adjust this path as needed
+	        scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+	    }
 	  
 	private Stage stage;
 	private Scene scene;
@@ -177,7 +181,7 @@ public class SceneController {
 		                     Scene scene = new Scene(root);
 		                     stage.setScene(scene);
 		                     stage.show();
-
+		                     applyStylesheet(scene); 
 		                     // Show welcome message
 		                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		                     alert.setContentText("Welcome " + passengername);

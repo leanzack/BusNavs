@@ -3,6 +3,7 @@ package application;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DBConnectionManager {
     private String url = "jdbc:mariadb://localhost:3306/busnavs";
@@ -39,4 +40,5 @@ public class DBConnectionManager {
             }
         }
     }
+
 }

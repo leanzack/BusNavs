@@ -1,1 +1,48 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.hbox-container {
+    -fx-padding: 5;
+    -fx-spacing: 10; /* Space between buttons */
+}
+
+.route-button, .driver-button {
+    -fx-background-color: #ffffff; /* White background for a cleaner look */
+    -fx-text-fill: #4A90E2; /* Color text to match your previous button color */
+    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-radius: 5px; /* Ensures the background matches the border radius */
+    -fx-padding: 10px 20px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 150px; /* Smaller minimum width */
+    -fx-alignment: center; /* Center text within the button */
+}
+
+.route-button:hover, .driver-button:hover {
+    -fx-background-color: #e0e0e0; /* Lighter grey on hover for a soft interaction feedback */
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+}
+.empty-border {
+    -fx-border-color: transparent; /* Makes the border invisible, but space is allocated for it */
+    -fx-border-width: 10; /* Width of the border space */
+    -fx-background-color: #4A90E2; /* Adjust the background as needed */
+    -fx-padding: 10; /* Optional: adds space inside the border */
+}
+.subtle-border {
+    -fx-border-color: rgba(255, 255, 255, 0.2); /* White border with low opacity */
+    -fx-border-width: 10;
+    -fx-background-color: #000000; /* Assuming a dark background for contrast */
+    -fx-padding: 10;
+}
+
+
+.label-title {
+   -fx-font-size: 24px; /* Larger font size for better visibility and importance */
+    -fx-font-weight: bold; /* Make the font bold to stand out */
+    -fx-text-fill: #2e2e2e; /* A darker text color for better readability */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0, 0, 1); /* Text shadow for depth */
+    -fx-padding: 5px; /* Padding around the text */
+    -fx-alignment: center-left; /* Align text to the left */
+    -fx-background-color: #f0f0f0; /* A light background color */
+    -fx-background-radius: 5; /* Rounded corners for the background */
+    -fx-padding: 10px; /* Padding to give some breathing room around the text */
+    -fx-margin: 10px; /* Optional: margin around the label */
+}
+
