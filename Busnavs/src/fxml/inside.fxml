@@ -5,28 +5,37 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 
 <BorderPane prefHeight="617.0" prefWidth="957.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <AnchorPane prefHeight="617.0" prefWidth="969.0" styleClass="root">
-      
           <children>
               <SplitPane dividerPositions="0.1741112123974476" orientation="HORIZONTAL" prefHeight="617.0" prefWidth="1099.0" styleClass="split-pane">
                   <items>
-                      <!-- Left side content -->
-			<AnchorPane prefWidth="188.0">
-                          <children>
-                              <!-- Added fx:id="driverNameLabel" -->
-                             <Label fx:id="driverNameLabel" contentDisplay="CENTER" layoutX="46.0" layoutY="185.0" prefHeight="29.0" prefWidth="100.0" styleClass="label-title" text="Passenger Name" textAlignment="JUSTIFY" />                             
-                              <ImageView fitHeight="100.0" fitWidth="115.0" layoutX="25.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
-                          </children>
-                      </AnchorPane>
-                      <!-- Right side content -->
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="400.0">
-                          <children>
-                        <SplitPane layoutX="223.1" layoutY="81.0" />
-                          </children>
-                      </AnchorPane>
+			<AnchorPane prefWidth="178.0">
+			    <children>
+                        <AnchorPane layoutX="17.0" layoutY="14.0" prefHeight="122.0" prefWidth="145.0" styleClass="empty-border">
+                           <children>
+      			        <ImageView fitHeight="111.0" fitWidth="149.0" layoutX="4.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
+                           </children>
+                        </AnchorPane>
+			        <Label fx:id="passengerNameLabel" contentDisplay="CENTER" layoutX="46.0" layoutY="185.0" prefHeight="29.0" prefWidth="100.0" styleClass="label-title" text="Passenger Name" textAlignment="JUSTIFY" />
+			    </children>
+			</AnchorPane>
+			<AnchorPane prefHeight="615.0" prefWidth="903.0" styleClass="main-panel">
+                     <children>
+                        <BorderPane layoutX="65.0" layoutY="67.0" prefHeight="251.0" prefWidth="773.0">
+                           <left>
+                              <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                           </left>
+                           <right>
+                              <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                           </right></BorderPane>
+                     </children>
+		</AnchorPane>
+
+
                   </items>
               </SplitPane>
           </children>
