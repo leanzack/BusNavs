@@ -28,20 +28,22 @@
 			</AnchorPane>
 			<AnchorPane prefHeight="615.0" prefWidth="825.0" styleClass="main-panel">
     <children>
-        <BorderPane layoutX="21.0" layoutY="48.0" prefHeight="255.0" prefWidth="645.0" styleClass="border-pane" AnchorPane.bottomAnchor="344.0" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="237.0" AnchorPane.topAnchor="48.0">
+    
+    
+                        <BorderPane layoutY="54.0" prefHeight="115.0" prefWidth="965.0">
                            <top>
-                <ScrollPane prefHeight="103.0" prefWidth="392.0" BorderPane.alignment="CENTER">
+                           <ScrollPane fitToWidth="true" prefHeight="98.0" prefWidth="967.0" styleClass="my-scroll-pane">
                     <content>
-                        <HBox fx:id="h_box" spacing="10" styleClass="hbox-container">
+                        <HBox fx:id="h_box" alignment="CENTER" prefHeight="76.0" prefWidth="640.0" spacing="10" styleClass="hbox-container">
                             <!-- Route buttons will be added here dynamically -->
                         </HBox>
                     </content>
                 </ScrollPane>
                            </top>
                            <bottom>
-                <ScrollPane prefHeight="103.0" prefWidth="392.0" BorderPane.alignment="CENTER">
+                           <ScrollPane fitToWidth="true" prefHeight="98.0" prefWidth="967.0" styleClass="my-scroll-pane">
                     <content>
-                        <HBox fx:id="h_box1" spacing="10" styleClass="hbox-container">
+                        <HBox fx:id="h_box1" alignment="CENTER" prefHeight="76.0" prefWidth="640.0" spacing="10" styleClass="hbox-container">
                             <!-- Driver buttons will be added here dynamically -->
                         </HBox>
                     </content>
@@ -58,7 +60,7 @@
                                  <children>
                               <Label fx:id="selectedRouteLabel" layoutX="20.0" layoutY="14.0" prefWidth="200" text="Selected Route: None" />
             				  <Label fx:id="selectedDriverLabel" layoutX="20.0" layoutY="41.0" prefWidth="200" text="Selected Driver: None" />
-<Label fx:id="fixed_fare" layoutX="20.0" layoutY="65.0" prefWidth="200" text="Fare: None"/>
+<Label fx:id="fixed_fare" layoutX="20.0" layoutY="65.0" prefWidth="200" text="Fare: None" />
                                
                                     <Button layoutX="98.0" layoutY="102.0" mnemonicParsing="false" onAction="#handleDoneAction" text="Done" />
                                  </children>

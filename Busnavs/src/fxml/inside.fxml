@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane prefHeight="617.0" prefWidth="957.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
@@ -25,13 +27,32 @@
 			</AnchorPane>
 			<AnchorPane prefHeight="615.0" prefWidth="903.0" styleClass="main-panel">
                      <children>
-                        <BorderPane layoutX="65.0" layoutY="67.0" prefHeight="251.0" prefWidth="773.0">
+                        <BorderPane prefHeight="169.0" prefWidth="965.0">
                            <left>
-                              <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                           <ScrollPane fitToWidth="true" prefHeight="98.0" prefWidth="965.0" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
+
+                              <content>
+              				<HBox fx:id="hbox_route" alignment="CENTER" prefHeight="96.0" prefWidth="952.0" styleClass="hbox-container" />
+                            </content>
+        			</ScrollPane>
                            </left>
-                           <right>
-                              <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-                           </right></BorderPane>
+                           <top>
+                              <Label text="Choose your routes" BorderPane.alignment="CENTER" />
+                           </top>
+                           </BorderPane>
+                        <BorderPane layoutX="129.0" layoutY="252.0">
+                           <center>
+                           
+                              <ScrollPane fitToWidth="true" styleClass="my-scroll-pane">
+                                 <content>
+                                    <VBox fx:id="vbox_route" alignment="CENTER" prefHeight="281.0" prefWidth="231.0" styleClass="vbox-container" />
+                                 </content>
+                              </ScrollPane>
+                           </center>
+                           <top>
+                              <Label text="Routes Today" BorderPane.alignment="CENTER" />
+                           </top>
+                        </BorderPane>
                      </children>
 		</AnchorPane>
 

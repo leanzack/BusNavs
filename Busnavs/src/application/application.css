@@ -3,6 +3,22 @@
     -fx-spacing: 10; /* Space between buttons */
 }
 
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar {
+    -fx-background-color: #f2f2f2;
+}
+.my-scroll-pane .scroll-bar:vertical, .my-scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: #ddd;
+}
+.vbox-container  {
+		
+	 -fx-padding: 5;
+    -fx-spacing: 10; 
+}
+
 .route-button, .driver-button {
     -fx-background-color: #ffffff; /* White background for a cleaner look */
     -fx-text-fill: #4A90E2; /* Color text to match your previous button color */
