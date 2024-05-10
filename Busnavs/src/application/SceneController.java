@@ -44,7 +44,7 @@ public class SceneController {
 	
 	 @FXML
 	public void switchToScene2(ActionEvent event) throws IOException {
-         Parent root = FXMLLoader.load(getClass().getResource("/Scene2.fxml"));
+         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene2.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -52,7 +52,7 @@ public class SceneController {
 	}
 	 @FXML
 	public void switchToScene3(ActionEvent event) throws IOException {
-         Parent root = FXMLLoader.load(getClass().getResource("/Scene3.fxml"));
+         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene3.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -65,7 +65,7 @@ public class SceneController {
 		    alert.setHeaderText("You're about to go back to Main Menu!");
 		    
 	if (alert.showAndWait().get() == ButtonType.OK) {
-        Parent root = FXMLLoader.load(getClass().getResource("/edit.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/edit.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -75,7 +75,7 @@ public class SceneController {
 	 @FXML
 	 public void BacktoMain(ActionEvent event) throws IOException {
 		
-		        Parent root = FXMLLoader.load(getClass().getResource("/edit.fxml"));
+		        Parent root = FXMLLoader.load(getClass().getResource("/fxml/edit.fxml"));
 		        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		        Scene scene = new Scene(root);
 		        stage.setScene(scene);
@@ -86,7 +86,7 @@ public class SceneController {
 	 @FXML
 	    public void Driver_main(ActionEvent event) throws IOException {
 
-	            Parent root = FXMLLoader.load(getClass().getResource("/MainScene.fxml"));
+	            Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainScene.fxml"));
 	            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 	            scene = new Scene(root);
 	            stage.setScene(scene);
@@ -96,7 +96,7 @@ public class SceneController {
 	 @FXML
 	    public void Passenger_main(ActionEvent event) throws IOException {
 
-	            Parent root = FXMLLoader.load(getClass().getResource("/MainScene2.fxml"));
+	            Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainScene2.fxml"));
 	            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 	            scene = new Scene(root);
 	            stage.setScene(scene);
@@ -118,7 +118,7 @@ public class SceneController {
 	                 if (rs.next()) {
 	                     String driverName = rs.getString("driver_name");
 
-	                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/inside.fxml"));
+	                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/inside.fxml"));
 	                     inside_controller controller = new inside_controller();
 	                     loader.setController(controller);
 	                     Parent root = loader.load();
@@ -130,6 +130,7 @@ public class SceneController {
 	                     Scene scene = new Scene(root);
 	                     stage.setScene(scene);
 	                     stage.show();
+	                     applyStylesheet(scene); 
 
 	                     // Show welcome message
 	                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -169,7 +170,7 @@ public class SceneController {
 		                 if (rs.next()) {
 		                     String passengername = rs.getString("passenger_name");
 
-		                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/passenger_inside.fxml"));
+		                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/passenger_inside.fxml"));
 		                     inside_controller2 controller2 = new inside_controller2();
 		                     loader.setController(controller2);
 		                     Parent root = loader.load();

@@ -58,8 +58,9 @@
                                  <children>
                               <Label fx:id="selectedRouteLabel" layoutX="20.0" layoutY="14.0" prefWidth="200" text="Selected Route: None" />
             				  <Label fx:id="selectedDriverLabel" layoutX="20.0" layoutY="41.0" prefWidth="200" text="Selected Driver: None" />
+<Label fx:id="fixed_fare" layoutX="20.0" layoutY="65.0" prefWidth="200" text="Fare: None"/>
+                               
                                     <Button layoutX="98.0" layoutY="102.0" mnemonicParsing="false" onAction="#handleDoneAction" text="Done" />
-                                    <Label fx:id="selectedDriverLabel1" layoutX="20.0" layoutY="65.0" prefWidth="200" text="Fare:" />
                                  </children>
                               </AnchorPane>
                            </content>
