@@ -2,63 +2,87 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="617.0" prefWidth="957.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="617.0" prefWidth="957.0" style="-fx-background-color: #687197;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <AnchorPane prefHeight="617.0" prefWidth="969.0" styleClass="root">
           <children>
-              <SplitPane dividerPositions="0.1741112123974476" orientation="HORIZONTAL" prefHeight="617.0" prefWidth="1099.0" styleClass="split-pane">
-                  <items>
-			<AnchorPane prefWidth="178.0">
+			<AnchorPane layoutX="14.0" layoutY="1.0" prefHeight="615.0" prefWidth="1060.0" style="-fx-background-color: #687197;" styleClass="main-panel">
+               <children>
+                  <BorderPane layoutX="226.0" layoutY="36.0" prefHeight="176.0" prefWidth="813.0" style="-fx-background-color: #687197;">
+                     <top>
+                        <Label lineSpacing="2.0" text="Choose your routes" BorderPane.alignment="CENTER">
+                           <textFill>
+                              <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                                 <stops>
+                                    <Stop>
+                                       <color>
+                                          <Color red="0.6710526347160339" green="0.48775583505630493" blue="0.48775583505630493" />
+                                       </color>
+                                    </Stop>
+                                    <Stop offset="1.0">
+                                       <color>
+                                          <Color red="1.0" green="1.0" blue="1.0" />
+                                       </color>
+                                    </Stop>
+                                 </stops>
+                              </RadialGradient>
+                           </textFill>
+                           <effect>
+                              <DropShadow radius="23.9225" width="76.69" />
+                           </effect>
+                           <font>
+                              <Font size="33.0" />
+                           </font>
+                        </Label>
+                     </top>
+                     <center>
+                     <ScrollPane fitToWidth="true" prefHeight="125.0" prefWidth="813.0" style="-fx-background-color: #687197;" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
+
+                                    <content>
+                                    <HBox fx:id="hbox_route" alignment="CENTER" prefHeight="105.0" prefWidth="811.0" style="-fx-background-color: #687197;" styleClass="hbox-container" />
+                                 
+                                  </content>
+  			</ScrollPane>
+                     </center>
+                     </BorderPane>
+                  <BorderPane layoutX="210.0" layoutY="301.0">
+                     <center>
+                     
+                                          <ScrollPane fitToWidth="true" style="-fx-background-color: #687197;" styleClass="my-scroll-pane">
+                           <content>
+                            <VBox fx:id="vbox_route" alignment="CENTER" layoutX="197.0" layoutY="315.0" prefHeight="287.0" prefWidth="247.0" style="-fx-background-color: #687197;" styleClass="hbox-container" />
+                           
+                                          
+                           </content>
+                        </ScrollPane>
+                     </center>
+                     <top>
+                        <Label fx:id="today" text="Routes Today" visible="false" BorderPane.alignment="CENTER" />
+                     </top>
+                  </BorderPane>
+               </children>
+		</AnchorPane>
+			<AnchorPane prefHeight="617.0" prefWidth="193.0" style="-fx-background-color: #31343E;">
 			    <children>
-                        <AnchorPane layoutX="17.0" layoutY="14.0" prefHeight="122.0" prefWidth="145.0" styleClass="empty-border">
-                           <children>
-      			        <ImageView fitHeight="111.0" fitWidth="149.0" layoutX="4.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
-                           </children>
-                        </AnchorPane>
+                  <AnchorPane layoutX="17.0" layoutY="14.0" prefHeight="122.0" prefWidth="145.0" styleClass="empty-border">
+                     <children>
+			        <ImageView fitHeight="111.0" fitWidth="149.0" layoutX="4.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
+                     </children>
+                  </AnchorPane>
 			        <Label fx:id="passengerNameLabel" contentDisplay="CENTER" layoutX="46.0" layoutY="185.0" prefHeight="29.0" prefWidth="100.0" styleClass="label-title" text="Passenger Name" textAlignment="JUSTIFY" />
 			    </children>
 			</AnchorPane>
-			<AnchorPane prefHeight="615.0" prefWidth="903.0" styleClass="main-panel">
-                     <children>
-                        <BorderPane prefHeight="169.0" prefWidth="965.0">
-                           <left>
-                           <ScrollPane fitToWidth="true" prefHeight="98.0" prefWidth="965.0" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
-
-                              <content>
-              				<HBox fx:id="hbox_route" alignment="CENTER" prefHeight="96.0" prefWidth="952.0" styleClass="hbox-container" />
-                            </content>
-        			</ScrollPane>
-                           </left>
-                           <top>
-                              <Label text="Choose your routes" BorderPane.alignment="CENTER" />
-                           </top>
-                           </BorderPane>
-                        <BorderPane layoutX="129.0" layoutY="252.0">
-                           <center>
-                           
-                              <ScrollPane fitToWidth="true" styleClass="my-scroll-pane">
-                                 <content>
-                                    <VBox fx:id="vbox_route" alignment="CENTER" prefHeight="281.0" prefWidth="231.0" styleClass="vbox-container" />
-                                 </content>
-                              </ScrollPane>
-                           </center>
-                           <top>
-                              <Label text="Routes Today" BorderPane.alignment="CENTER" />
-                           </top>
-                        </BorderPane>
-                     </children>
-		</AnchorPane>
-
-
-                  </items>
-              </SplitPane>
           </children>
       </AnchorPane>
    </center>

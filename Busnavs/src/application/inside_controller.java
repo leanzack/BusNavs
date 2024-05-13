@@ -17,8 +17,8 @@ import javafx.scene.layout.VBox;
 public class inside_controller {
 	
 	  public DBConnectionManager dbManager = new DBConnectionManager();
-	  private List<String> selectedRouteNames = new ArrayList();
-	  private List<Button> selectedRouteButtons = new ArrayList();
+	  private List<String> selectedRouteNames = new ArrayList<String>();
+	  private List<Button> selectedRouteButtons = new ArrayList<Button>();
 
 
     
@@ -26,6 +26,9 @@ public class inside_controller {
     private Label driverNameLabel;
     @FXML 
     private HBox hbox_route;
+    
+    @FXML
+    private Label today;
     
     @FXML 
     private VBox vbox_route;
@@ -47,24 +50,33 @@ public class inside_controller {
 
     // Method to load route buttons from the database
     public void loadRouteButtons() {
-        String query = "SELECT route_name FROM routes";
+    	String query = "SELECT route_name, fare FROM routes";
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pst = conn.prepareStatement(query);
              ResultSet rs = pst.executeQuery()) {
 
-            List<Button> buttons = new ArrayList<>();
+            List<HBox> buttonContainers = new ArrayList<>();
             while (rs.next()) {
                 String routeName = rs.getString("route_name");
+                double fare = rs.getDouble("fare");
 
                 Button routeButton = new Button(routeName);
+                Button fareLabel = new Button(String.format("₱%.2f", fare));
+                VBox buttonContainer = new VBox(routeButton, fareLabel);
+                buttonContainer.setAlignment(null);
                 routeButton.getStyleClass().add("route-button");
-                routeButton.setOnAction(e -> handleRouteSelection(routeName));
+                fareLabel.getStyleClass().add("route-button");
 
-                buttons.add(routeButton);
+                routeButton.setOnAction(e -> handleRouteSelection(routeName));
+                
+
+
+                HBox hbox = new HBox(buttonContainer);
+                buttonContainers.add(hbox);
             }
             Platform.runLater(() -> {
                 hbox_route.getChildren().clear();
-                hbox_route.getChildren().addAll(buttons);
+                hbox_route.getChildren().addAll(buttonContainers);
             });
         } catch (SQLException ex) {
             Platform.runLater(() -> {
@@ -73,9 +85,13 @@ public class inside_controller {
             });
         }
     }
-
-    private void handleRouteSelection(String routeName) {
+    
+    private void UpdateRoute(String fare) {
     	
+    }
+    private void handleRouteSelection(String routeName) {
+      	today.setVisible(true);
+
     	 if (!selectedRouteNames.contains(routeName)) {
              selectedRouteNames.add(routeName);
 
@@ -85,11 +101,14 @@ public class inside_controller {
              s_route.setOnAction(e -> handleRouteDeselection(routeName, s_route));
              selectedRouteButtons.add(s_route);
 
+             
              // Update the VBox with the new set of buttons
              Platform.runLater(() -> {
                  vbox_route.getChildren().clear();
                  vbox_route.getChildren().addAll(selectedRouteButtons);
              });
+             
+
          }
 
          // Display an alert for the selected route
@@ -109,4 +128,6 @@ public class inside_controller {
             vbox_route.getChildren().addAll(selectedRouteButtons);
         });
     }
+    
+    
 }
