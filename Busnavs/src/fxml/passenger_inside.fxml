@@ -23,6 +23,7 @@
       			        <ImageView fitHeight="111.0" fitWidth="149.0" layoutX="4.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
                            </children>
                         </AnchorPane>
+                        
 			        <Label fx:id="passengerNameLabel" contentDisplay="CENTER" layoutX="46.0" layoutY="185.0" prefHeight="29.0" prefWidth="100.0" styleClass="label-title" text="Passenger Name" textAlignment="JUSTIFY" />
 			    </children>
 			</AnchorPane>
@@ -34,6 +35,10 @@
                            <top>
                            <ScrollPane fitToWidth="true" prefHeight="98.0" prefWidth="967.0" styleClass="my-scroll-pane">
                     <content>
+                    
+                    
+                    
+                    
                         <HBox fx:id="h_box" alignment="CENTER" prefHeight="76.0" prefWidth="640.0" spacing="10" styleClass="hbox-container">
                             <!-- Route buttons will be added here dynamically -->
                         </HBox>
