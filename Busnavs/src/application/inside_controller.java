@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,9 +38,11 @@ public class inside_controller {
     
     @FXML 
     private VBox vbox_route;
+    
+    @FXML 
+    private Button add_route;
     // Constructor
     public inside_controller() {
-        // Constructor logic, if any
     }
     
     // Method to set driver name
@@ -51,44 +54,52 @@ public class inside_controller {
   
     public void initialize() {
         loadRouteButtons();
+     
+
+
     }
 
-    // Method to load route buttons from the database
     public void loadRouteButtons() {
-    	String query = "SELECT route_name, fare FROM routes";
+
+        String query = "SELECT route_name, fare FROM routes";
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pst = conn.prepareStatement(query);
              ResultSet rs = pst.executeQuery()) {
 
             List<HBox> buttonContainers = new ArrayList<>();
             while (rs.next()) {
+            	
                 String routeName = rs.getString("route_name");
                 double fare = rs.getDouble("fare");
 
                 Button routeButton = new Button(routeName);
                 Button fareLabel = new Button(String.format("₱%.2f", fare));
+
+                fareLabel.setOnAction(e -> fareUps(routeName, fare));
+                
+                routeButton.setOnAction(e -> {
+                    handleRouteSelection(routeName);
+                });
+
                 VBox buttonContainer = new VBox(routeButton, fareLabel);
                 buttonContainer.setAlignment(null);
                 routeButton.getStyleClass().add("route-button");
                 fareLabel.getStyleClass().add("fare-button");
-
-                routeButton.setOnAction(e -> handleRouteSelection(routeName));
-             
-                fareLabel.setOnAction(e -> fareUps(routeName, fare));
-                
-                
-                fareLabel.setOnAction(e -> {
-                    fareUps(routeName, fare);
-                });
-                
-                fareLabels.put(routeName, fareLabel);
+                fareLabels.put(routeName, fareLabel); // Populate the fareLabels map
 
                 HBox hbox = new HBox(buttonContainer);
                 buttonContainers.add(hbox);
+                buttonContainer.setAlignment(Pos.CENTER); // Set alignment to center
+
+
+                
             }
             Platform.runLater(() -> {
                 hbox_route.getChildren().clear();
+                hbox_route.setAlignment(Pos.CENTER); // Ensure the alignment of HBox content
+
                 hbox_route.getChildren().addAll(buttonContainers);
+
             });
         } catch (SQLException ex) {
             Platform.runLater(() -> {
@@ -98,29 +109,30 @@ public class inside_controller {
         }
     }
     
-    private void fareUps(String routeName, double fare) {
-    	
-    	   TextInputDialog dialog = new TextInputDialog(String.format("%.2f", fare));
-           dialog.setTitle("Update Fare");
-           dialog.setHeaderText("Update the fare for " + routeName);
-           dialog.setContentText("New fare:");
 
-           Optional<String> result = dialog.showAndWait();
-           result.ifPresent(newFareStr -> {
-               try {
-                   double newFare = Double.parseDouble(newFareStr);
-                   updateFareInDatabase(routeName, newFare); 
-                   Button fareLabel = fareLabels.get(routeName);
-                   if (fareLabel != null) {
-                       fareLabel.setText(String.format("₱%.2f", newFare));
-                   }
-               } catch (NumberFormatException ex) {
-                   Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid fare entered: " +newFareStr);
-                   alert.showAndWait();
-               }
-           });
-       }
-  
+private void fareUps(String routeName, double fare) {
+    TextInputDialog dialog = new TextInputDialog(String.format("%.2f", fare));
+    dialog.setTitle("Update Fare");
+    dialog.setHeaderText("Update the fare for " + routeName);
+    dialog.setContentText("New fare:");
+
+    Optional<String> result = dialog.showAndWait();
+    result.ifPresent(newFareStr -> {
+        try {
+            double newFare = Double.parseDouble(newFareStr);
+            updateFareInDatabase(routeName, newFare);
+            
+            Button fareLabel = fareLabels.get(routeName);
+            if (fareLabel != null) {
+                fareLabel.setText(String.format("₱%.2f", newFare));
+            }
+        } catch (NumberFormatException ex) {
+            System.out.println("Invalid fare entered: " + newFareStr);
+        }
+    });
+}
+
+
     	
     private void updateFareInDatabase(String routeName, double newFare) {
     	
@@ -167,7 +179,6 @@ public class inside_controller {
              selectedRouteButtons.add(s_route);
 
              
-             // Update the VBox with the new set of buttons
              Platform.runLater(() -> {
                  vbox_route.getChildren().clear();
                  vbox_route.getChildren().addAll(selectedRouteButtons);
@@ -182,6 +193,7 @@ public class inside_controller {
              alert.showAndWait();
          });
      }
+    
     private void handleRouteDeselection(String routeName, Button s_route) {
     	
     	selectedRouteNames.remove(routeName);
