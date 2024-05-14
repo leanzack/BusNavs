@@ -5,12 +5,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -65,11 +67,27 @@ public class inside_controller {
                 VBox buttonContainer = new VBox(routeButton, fareLabel);
                 buttonContainer.setAlignment(null);
                 routeButton.getStyleClass().add("route-button");
-                fareLabel.getStyleClass().add("route-button");
+                fareLabel.getStyleClass().add("fare-button");
 
                 routeButton.setOnAction(e -> handleRouteSelection(routeName));
                 
+                fareLabel.setOnAction(e -> {
+                    TextInputDialog dialog = new TextInputDialog(String.format("%.2f", fare));
+                    dialog.setTitle("Update Fare");
+                    dialog.setHeaderText("Update the fare for " + routeName);
+                    dialog.setContentText("New fare:");
 
+                    Optional<String> result = dialog.showAndWait();
+                    result.ifPresent(newFareStr -> {
+                        try {
+                            double newFare = Double.parseDouble(newFareStr);
+                            updateFareInDatabase(routeName, newFare); 
+                            fareLabel.setText(String.format("₱%.2f", newFare));
+                        } catch (NumberFormatException ex) {
+                            System.out.println("Invalid fare entered: " + newFareStr);
+                        }
+                    });
+                });
 
                 HBox hbox = new HBox(buttonContainer);
                 buttonContainers.add(hbox);
@@ -86,9 +104,38 @@ public class inside_controller {
         }
     }
     
-    private void UpdateRoute(String fare) {
+    private void updateFareInDatabase(String routeName, double newFare) {
     	
-    }
+    	   String sql = "UPDATE routes SET fare = ? WHERE route_name = ?";
+    	    
+    	    try (Connection conn = dbManager.getConnection();
+    	            PreparedStatement pst = conn.prepareStatement(sql)) {
+    	           
+    	           pst.setDouble(1, newFare);
+    	           pst.setString(2, routeName);
+    	           
+    	           int rowsAffected = pst.executeUpdate();
+    	           
+    	           if (rowsAffected > 0) {
+    	                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Fare updated successfully for route: " + routeName);
+    	                alert.showAndWait();
+
+    	           } else {
+    	                Alert alert = new Alert(Alert.AlertType.ERROR, "No records found for route: " + routeName);
+    	                alert.showAndWait();
+
+    	               System.out.println("No records found for route: " + routeName);
+    	           }
+    	       } catch (SQLException e) {
+    	    	   Alert alert = new Alert(Alert.AlertType.ERROR, "Error updating fare for route: " + routeName);
+	                alert.showAndWait();
+    	           e.printStackTrace();
+    	       }
+    	   }
+
+	
+
+
     private void handleRouteSelection(String routeName) {
       	today.setVisible(true);
 

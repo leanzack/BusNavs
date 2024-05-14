@@ -56,9 +56,14 @@ public class inside_controller2 {
                 String routeName = rs.getString("route_name");
                 double fare = rs.getDouble("fare");
 
+         
+              
                 Button routeButton = new Button(routeName);
                 routeButton.getStyleClass().add("route-button");
                 routeButton.setOnAction(e -> handleRouteSelection(routeName, fare));
+
+           
+                
 
                 Platform.runLater(() -> h_box.getChildren().add(routeButton));
             }
@@ -70,14 +75,7 @@ public class inside_controller2 {
         }
     }
 
-     
-        
-        
-        
-   
-    
-   
-    
+  
     public void loaddriverButton() {
         String query = "SELECT driver_name FROM driver";
         try (Connection conn2 = dbManager.getConnection();
