@@ -4,7 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javafx.application.Platform;
@@ -21,6 +23,7 @@ public class inside_controller {
 	  public DBConnectionManager dbManager = new DBConnectionManager();
 	  private List<String> selectedRouteNames = new ArrayList<String>();
 	  private List<Button> selectedRouteButtons = new ArrayList<Button>();
+	  private Map<String, Button> fareLabels = new HashMap<>();
 
 
     
@@ -70,24 +73,15 @@ public class inside_controller {
                 fareLabel.getStyleClass().add("fare-button");
 
                 routeButton.setOnAction(e -> handleRouteSelection(routeName));
+             
+                fareLabel.setOnAction(e -> fareUps(routeName, fare));
+                
                 
                 fareLabel.setOnAction(e -> {
-                    TextInputDialog dialog = new TextInputDialog(String.format("%.2f", fare));
-                    dialog.setTitle("Update Fare");
-                    dialog.setHeaderText("Update the fare for " + routeName);
-                    dialog.setContentText("New fare:");
-
-                    Optional<String> result = dialog.showAndWait();
-                    result.ifPresent(newFareStr -> {
-                        try {
-                            double newFare = Double.parseDouble(newFareStr);
-                            updateFareInDatabase(routeName, newFare); 
-                            fareLabel.setText(String.format("₱%.2f", newFare));
-                        } catch (NumberFormatException ex) {
-                            System.out.println("Invalid fare entered: " + newFareStr);
-                        }
-                    });
+                    fareUps(routeName, fare);
                 });
+                
+                fareLabels.put(routeName, fareLabel);
 
                 HBox hbox = new HBox(buttonContainer);
                 buttonContainers.add(hbox);
@@ -104,6 +98,30 @@ public class inside_controller {
         }
     }
     
+    private void fareUps(String routeName, double fare) {
+    	
+    	   TextInputDialog dialog = new TextInputDialog(String.format("%.2f", fare));
+           dialog.setTitle("Update Fare");
+           dialog.setHeaderText("Update the fare for " + routeName);
+           dialog.setContentText("New fare:");
+
+           Optional<String> result = dialog.showAndWait();
+           result.ifPresent(newFareStr -> {
+               try {
+                   double newFare = Double.parseDouble(newFareStr);
+                   updateFareInDatabase(routeName, newFare); 
+                   Button fareLabel = fareLabels.get(routeName);
+                   if (fareLabel != null) {
+                       fareLabel.setText(String.format("₱%.2f", newFare));
+                   }
+               } catch (NumberFormatException ex) {
+                   Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid fare entered: " +newFareStr);
+                   alert.showAndWait();
+               }
+           });
+       }
+  
+    	
     private void updateFareInDatabase(String routeName, double newFare) {
     	
     	   String sql = "UPDATE routes SET fare = ? WHERE route_name = ?";
