@@ -29,7 +29,8 @@ public class SceneController {
 	        String cssPath = "application.css"; // Adjust this path as needed
 	        scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
 	    }
-	  
+	    public String driverName; // Declare driverName as an instance variable
+
 	private Stage stage;
 	private Scene scene;
 	private Parent root;
@@ -125,7 +126,8 @@ public class SceneController {
 
 	                     controller.setDriverName(driverName);
 
-	                     
+	                     this.driverName = driverName;
+
 	                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 	                     Scene scene = new Scene(root);
 	                     stage.setScene(scene);

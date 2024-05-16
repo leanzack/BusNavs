@@ -154,6 +154,7 @@ public class inside_controller2 {
             alert.showAndWait();
         }
     }
+	
 
     
 

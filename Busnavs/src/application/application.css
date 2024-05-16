@@ -59,6 +59,37 @@
     -fx-alignment: center; /* Center text within the button */
 }
 
+.add_route {
+    -fx-background-color: transparent; /* Make the background transparent */
+    -fx-text-fill: #4A90E2; /* Set text color */
+    -fx-font-size: 20px; /* Increase font size for better visibility */
+    -fx-padding: 5px; /* Adjust padding */
+    -fx-alignment: center; /* Center text within the button */
+}
+
+.add_route:hover {
+    -fx-background-color: transparent; /* Make the background transparent */
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+}
+
+.done_select {
+     -fx-background-color: #31343E; /* White background for a cleaner look */
+    -fx-text-fill: #4A90E2; /* Color text to match your previous button color */
+    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-radius: 5px; /* Ensures the background matches the border radius */
+    -fx-padding: 10px 20px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 150px; /* Smaller minimum width */
+    -fx-alignment: center; /* Center text within the button */
+}
+
+.done_select:hover {
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+}
+
+
+
 
 .fare-button:hover {
     -fx-background-color: #e0e0e0; /* Lighter grey on hover for a soft interaction feedback */
@@ -79,16 +110,5 @@
 }
 
 
-.label-title {
-   -fx-font-size: 24px; /* Larger font size for better visibility and importance */
-    -fx-font-weight: bold; /* Make the font bold to stand out */
-    -fx-text-fill: #2e2e2e; /* A darker text color for better readability */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0, 0, 1); /* Text shadow for depth */
-    -fx-padding: 5px; /* Padding around the text */
-    -fx-alignment: center-left; /* Align text to the left */
-    -fx-background-color: #f0f0f0; /* A light background color */
-    -fx-background-radius: 5; /* Rounded corners for the background */
-    -fx-padding: 10px; /* Padding to give some breathing room around the text */
-    -fx-margin: 10px; /* Optional: margin around the label */
-}
+
 
