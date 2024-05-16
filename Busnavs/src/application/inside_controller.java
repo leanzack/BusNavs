@@ -1,4 +1,5 @@
 package application;
+
 import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,9 +44,20 @@ public class inside_controller {
 
     @FXML 
     private Button addRouteButton;
- 
+    @FXML 
+    private Button deleteRouteButton;
+    
     @FXML 
     private Button selected;
+    
+    @FXML
+    private String selectedRouteName;
+    @FXML 
+    private double fareLabel;
+  
+ 
+ 
+    
     
 
     // Constructor
@@ -66,13 +78,12 @@ public class inside_controller {
     
     public void initialize() {
         loadRouteButtons();
-     
-
-
+        
+    
     }
 
     public void loadRouteButtons() {
-
+        
         String query = "SELECT route_name, fare FROM routes";
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pst = conn.prepareStatement(query);
@@ -124,11 +135,10 @@ public class inside_controller {
         }
     }
     
-
     private void handleRouteSelection(String routeName, double fare) {
     	
     
-               
+
       	today.setVisible(true);
 
 
@@ -136,17 +146,18 @@ public class inside_controller {
              selectedRouteNames.add(routeName);
 
              Button s_route = new Button(routeName);
-             s_route.getStyleClass().add("route-button");
+             s_route.getStyleClass().add("vbox_routebutton");
              s_route.setWrapText(true); // Enable text wrapping
 
              Button fareLabel = new Button(String.format("₱%.2f", fare));
              fareLabel.getStyleClass().add("fare-button");
+             selectedRouteButtons.add(s_route);
+
              selectedRouteButtons.add(fareLabel);
              
              fareLabel.setMinWidth(150); // Or any fixed width you desire
 
              s_route.setOnAction(e -> handleRouteDeselection(routeName, s_route, fareLabel));
-             selectedRouteButtons.add(s_route);
              s_route.setMaxWidth(Double.MAX_VALUE);
              fareLabel.setOnAction(e -> fareUps(routeName, fare));
 
@@ -216,33 +227,56 @@ public class inside_controller {
     }
     
     public void routeSelected() {
-    	
-        String selectedRoutesString = String.join(",", selectedRouteNames);
-
-        String updateQuery = "UPDATE driver SET selected_route = ? WHERE driver_name = ?";
+        String updateQuery = "INSERT INTO SelectedRoutes (driver_name, selected_route, fare) VALUES (?, ?, ?);";
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pst = conn.prepareStatement(updateQuery)) {
+            
+            for (String routeName : selectedRouteNames) {
+                // Query the fare for the selected route from the database
+                double fare = queryFareForRoute(routeName);
+                
+                pst.setString(1, driverName);
+                pst.setString(2, routeName);
+                pst.setDouble(3, fare); // Set the fare obtained from the database
+                pst.addBatch(); // Add the current route to the batch
+            }
 
-            pst.setString(1, selectedRoutesString);
-            pst.setString(2, driverName);
-            int rowsAffected = pst.executeUpdate();
+            int[] rowsAffected = pst.executeBatch(); // Execute the batch insert
+            
+            // Check if any rows were affected
+            boolean success = false;
+            for (int row : rowsAffected) {
+                if (row > 0) {
+                    success = true;
+                    break;
+                }
+            }
 
-            if (rowsAffected > 0) {
+            if (success) {
                 // If rows were affected, display an alert
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Current routes: " + selectedRoutesString);
-                alert.showAndWait();
-            } else {
-                // If no rows were affected, you can handle this case accordingly
-                // For example, display a different alert or perform some other action
-                Alert alert = new Alert(Alert.AlertType.WARNING, "No rows were affected.");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Driver data updated successfully. Routes: " + String.join(", ", selectedRouteNames));
                 alert.showAndWait();
             }
+            
         } catch (SQLException e) {
             // Handle SQLException appropriately
             e.printStackTrace(); // You can replace this with logging or other error handling
         }
     }
-   	  
+
+    private double queryFareForRoute(String routeName) throws SQLException {
+        String fareQuery = "SELECT fare FROM routes WHERE route_name = ?";
+        try (Connection conn = dbManager.getConnection();
+             PreparedStatement pst = conn.prepareStatement(fareQuery)) {
+            pst.setString(1, routeName);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("fare"); // Return the fare from the query result
+                }
+            }
+        }
+        throw new SQLException("Fare not found for route: " + routeName);
+    }
     
     private void updateFareInDatabase(String routeName, double newFare) {
     	
@@ -313,7 +347,7 @@ public class inside_controller {
     
 private void insertTODB(String routeName, double fare) {
 		
-		String qry = "INSERT INTO daily_route (route_name, fare) VALUES (?, ?)";
+		String qry = "INSERT INTO routes (route_name, fare) VALUES (?, ?)";
 		
 		  try (Connection conn = dbManager.getConnection();
 			         PreparedStatement pst = conn.prepareStatement(qry)) {
@@ -343,5 +377,9 @@ private void insertTODB(String routeName, double fare) {
 		        alert.showAndWait();
 		    }
 		}
+
+    
+
+
     
 }
