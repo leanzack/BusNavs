@@ -1,7 +1,6 @@
 package application;
 
-import java.awt.ScrollPane;
-import java.awt.event.ActionEvent;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,8 +16,12 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
+
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -29,6 +32,7 @@ public class inside_controller {
 	  private List<String> selectedRouteNames = new ArrayList<String>();
 	  private List<Button> selectedRouteButtons = new ArrayList<Button>();
 	  private Map<String, Button> fareLabels = new HashMap<>();
+	  private List<String> routesToDelete = new ArrayList<>();
 
 	@FXML
 	private String driverName; 
@@ -50,12 +54,15 @@ public class inside_controller {
 
     @FXML 
     private Button addRouteButton;
-    @FXML 
-    private Button deleteRouteButton;
+ 
     
     @FXML 
     private Button selected;
-    
+    @FXML
+    private ImageView imageView;
+    @FXML
+    private ImageView logo;
+
     @FXML
     private String selectedRouteName;
     @FXML 
@@ -85,11 +92,30 @@ public class inside_controller {
     public void initialize() {
         loadRouteButtons();
         
-    
+        try {
+            // Load the driver image
+            Image driverImage = new Image(getClass().getResource("/imageg/driver.png").toExternalForm());
+            
+            // Set the driver image to the imageView
+            imageView.setImage(driverImage);
+            
+            // Load the logo image
+            Image logoImage = new Image(getClass().getResource("/imageg/navvs.png").toExternalForm());
+            
+            // Set the logo image to the logo ImageView
+            logo.setImage(logoImage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       
+        
+      
     }
 
+    
+    
+
     public void loadRouteButtons() {
-        
         String query = "SELECT route_name, fare FROM routes";
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pst = conn.prepareStatement(query);
@@ -97,51 +123,45 @@ public class inside_controller {
 
             List<HBox> buttonContainers = new ArrayList<>();
             while (rs.next()) {
-            	
                 String routeName = rs.getString("route_name");
                 double fare = rs.getDouble("fare");
 
                 Button routeButton = new Button(routeName);
                 Button fareLabel = new Button(String.format("₱%.2f", fare));
+                Button deleteRouteAction = new Button("Delete");
 
                 fareLabel.setOnAction(e -> fareUps(routeName, fare));
+                routeButton.setOnAction(e -> handleRouteSelection(routeName, fare));
+                deleteRouteAction.setOnAction(e -> toggleRouteForDeletion(routeName, fare));
 
-                routeButton.setOnAction(e -> {
-                    handleRouteSelection(routeName, fare);
-                });
+                VBox buttonContainer = new VBox(routeButton, fareLabel, deleteRouteAction);
+                buttonContainer.setAlignment(Pos.CENTER);
+                buttonContainer.setSpacing(10); 
 
-                VBox buttonContainer = new VBox(routeButton, fareLabel);
-                buttonContainer.setAlignment(null);
+                
                 routeButton.getStyleClass().add("route-button");
-
                 fareLabel.getStyleClass().add("fare-button");
-                fareLabels.put(routeName, fareLabel); // Populate the fareLabels map
+                deleteRouteAction.getStyleClass().add("delete");
 
-                
+                fareLabels.put(routeName, fareLabel);
+
                 HBox hbox = new HBox(buttonContainer);
+                hbox.setAlignment(Pos.CENTER);
                 buttonContainers.add(hbox);
-                buttonContainer.setAlignment(Pos.CENTER); // Set alignment to center
-                
-                routeButton.setMaxWidth(Double.MAX_VALUE);
-
-
             }
+
             Platform.runLater(() -> {
                 hbox_route.getChildren().clear();
-                hbox_route.setAlignment(Pos.CENTER); // Ensure the alignment of HBox content
-
                 hbox_route.getChildren().addAll(buttonContainers);
+            });
 
-            });
         } catch (SQLException ex) {
-            Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Error loading routes: " + ex.getMessage());
-                alert.showAndWait();
-            });
+            showErrorAlert("Error loading routes: " + ex.getMessage());
         }
     }
     
-    private void handleRouteSelection(String routeName, double fare) {
+
+	private void handleRouteSelection(String routeName, double fare) {
     	
     
     	border_visibility.setVisible(true);
@@ -190,6 +210,7 @@ public class inside_controller {
 
 	
 
+	
 	private void handleRouteDeselection(String routeName, Button s_route, Button fareLabel) {
     	
     	selectedRouteNames.remove(routeName);
@@ -227,8 +248,7 @@ public class inside_controller {
 	                }
 	            } catch (NumberFormatException ex) {
 	                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Invalid fare entered: " + newFareStr);
-	                alert.showAndWait();
-	                
+	                alert.showAndWait(); 
 	            }
 	        });
 	    }
@@ -405,6 +425,7 @@ public class inside_controller {
                 }
             });
         });
+        loadRouteButtons();
     }
   
     
@@ -441,7 +462,69 @@ private void insertTODB(String routeName, double fare) {
 		    }
 		}
 
-    
+
+
+
+			
+			private void toggleRouteForDeletion(String routeName, double fare) {
+			    Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+			    confirmationAlert.setTitle("Confirm Deletion");
+			    confirmationAlert.setHeaderText("Delete Route");
+			    confirmationAlert.setContentText("Are you sure you want to delete the route: " + routeName + "?");
+
+			    Optional<ButtonType> result = confirmationAlert.showAndWait();
+			    if (result.isPresent() && result.get() == ButtonType.OK) {
+			        // User confirmed deletion, proceed with deletion
+			        deleteRoute(routeName, fare);
+			    } else {
+			        // User canceled deletion, do nothing
+			    }
+			}
+
+			private void deleteRoute(String routeName, double fare) {
+			    String deleteQuery = "DELETE FROM routes WHERE route_name = ?";
+			    
+			    try (Connection conn = dbManager.getConnection();
+			         PreparedStatement pst = conn.prepareStatement(deleteQuery)) {
+			         
+			        pst.setString(1, routeName);
+			        int rowsAffected = pst.executeUpdate();
+			        
+			        if (rowsAffected > 0) {
+			            // Route successfully deleted from the database
+			            routesToDelete.remove(routeName);
+
+			            // Provide visual feedback for the user (optional)
+			            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			            alert.setTitle("Route Deletion");
+			            alert.setHeaderText(null);
+			            alert.setContentText("Route " + routeName + " has been successfully deleted from the database.");
+			            alert.showAndWait();
+			        } else {
+			            // Route not found in the database
+			            Alert alert = new Alert(Alert.AlertType.ERROR);
+			            alert.setTitle("Error");
+			            alert.setHeaderText(null);
+			            alert.setContentText("Route " + routeName + " was not found in the database.");
+			            alert.showAndWait();
+			        }
+			    } catch (SQLException e) {
+			        // Database error occurred
+			        Alert alert = new Alert(Alert.AlertType.ERROR);
+			        alert.setTitle("Database Error");
+			        alert.setHeaderText(null);
+			        alert.setContentText("An error occurred while deleting route " + routeName + " from the database: " + e.getMessage());
+			        alert.showAndWait();
+			    }
+			    loadRouteButtons();
+			}
+			
+			private void showErrorAlert(String string) {
+				   Alert alert = new Alert(Alert.AlertType.ERROR);
+				    alert.setTitle("Error");
+				    alert.setHeaderText("Error");
+				    alert.showAndWait();		
+			}
 
 
     

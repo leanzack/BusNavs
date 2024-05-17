@@ -27,7 +27,7 @@ public class account extends Application {
     public static void main(String[] args) {
         launch(args);
         
-        Connection connection = null;
+        Connection connection;
         String url = "jdbc:mariadb://localhost:3306/busnavs";
         String user = "root";
         String pwd = "root";

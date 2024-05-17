@@ -3,73 +3,75 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="657.0" prefWidth="1074.0" style="-fx-background-color: #687197;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="741.0" prefWidth="1084.0" style="-fx-background-color: #687197;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <AnchorPane prefHeight="617.0" prefWidth="1074.0" styleClass="root">
+      <AnchorPane prefHeight="741.0" prefWidth="1085.0" styleClass="root">
           <children>
-			<AnchorPane layoutY="-12.0" prefHeight="669.0" prefWidth="1074.0" style="-fx-background-color: #687197;" styleClass="main-panel">
+			<AnchorPane prefHeight="741.0" prefWidth="1084.0" style="-fx-background-color: #687197;" styleClass="main-panel">
                <children>
-                  <AnchorPane layoutX="226.0" layoutY="14.0" prefHeight="212.0" prefWidth="835.0" style="-fx-background-color: #868DAC;">
+                  <AnchorPane layoutX="229.0" layoutY="36.0" prefHeight="690.0" prefWidth="845.0" style="-fx-background-color: #4f566c;" styleClass="pane">
                      <children>
-                        <BorderPane layoutX="11.0" layoutY="9.0" prefHeight="197.0" prefWidth="772.0">
+            					
+                                          					<Button fx:id="addRouteButton" layoutX="765.0" layoutY="-2.0" mnemonicParsing="false" onAction="#addRouteAction" prefHeight="51.0" prefWidth="53.0" style="-fx-background-color: transparent;" styleClass="add_route" text="+" />
+                        <Label layoutX="682.0" layoutY="15.0" prefHeight="17.0" prefWidth="65.0" text="Add route" textFill="WHITE" />
+                        <Label layoutX="396.0" layoutY="15.0" text="Route List" textFill="WHITE" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="235.0" layoutY="87.0" prefHeight="219.0" prefWidth="824.0" style="-fx-background-color: #868DAC;" styleClass="pane">
+                     <children>
+                        <BorderPane layoutX="11.0" layoutY="6.0" prefHeight="206.0" prefWidth="800.0">
                          <center>
-            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="156.0" prefWidth="761.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
-              <HBox fx:id="hbox_route" alignment="CENTER_LEFT" prefHeight="154.0" prefWidth="759.0" style="-fx-background-color: #687197;" styleClass="hbox-container">
+            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="206.0" prefWidth="788.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+              <HBox fx:id="hbox_route" alignment="CENTER_LEFT" prefHeight="204.0" prefWidth="785.0" style="-fx-background-color: #868DAC;">
         </HBox>
             </ScrollPane>
       </center>
                          
-                                       </BorderPane>
-            					
-            					<Button fx:id="addRouteButton" layoutX="790.0" layoutY="10.0" mnemonicParsing="false" onAction="#addRouteAction" opacity="0.69" prefHeight="38.0" prefWidth="35.0" styleClass="add_route" text="+" />
-                     </children>
+                                                         </BorderPane>
+                   
+                                       </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="226.0" layoutY="229.0" prefHeight="441.0" prefWidth="836.0" style="-fx-background-color: #868DAC;" styleClass="AnchorPane">
+                  <AnchorPane layoutX="235.0" layoutY="317.0" prefHeight="393.0" prefWidth="298.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                      <children>
-                        <BorderPane fx:id="border_visibility" layoutX="13.0" prefHeight="372.0" prefWidth="284.0" visible="false">
+                        <BorderPane fx:id="border_visibility" layoutX="1.0" prefHeight="372.0" prefWidth="296.0" visible="false">
                            <top>
-                              <Label fx:id="today" text="Routes Today" visible="false" BorderPane.alignment="CENTER" />
+                              <Label fx:id="today" text="Routes Today" BorderPane.alignment="CENTER" />
                            </top>
                            <right>
                            
-        <ScrollPane fx:id="myScrollPane" fitToWidth="true" prefWidth="268.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" visible="true" BorderPane.alignment="CENTER">
+                          <ScrollPane fx:id="myScrollPane" fitToWidth="true" prefHeight="355.0" prefWidth="297.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
                                  <content>
-                                  <VBox fx:id="vbox_route" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="353.0" prefWidth="196.0" spacing="5" style="-fx-background-color: #687197;" styleClass="hbox-container" />                                                               
+                                  <VBox fx:id="vbox_route" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="353.0" prefWidth="196.0" spacing="5" style="-fx-background-color: #868DAC;" styleClass="hbox-container" />                                                               
                                  </content>
                               </ScrollPane>
                            </right>
+                           <bottom>
+            					<Button fx:id="selected" mnemonicParsing="false" onAction="#routeSelected" opacity="0.69" prefHeight="19.0" prefWidth="62.0" styleClass="add_route" text="Done" BorderPane.alignment="CENTER" />
+                           </bottom>
                         </BorderPane>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="routes" alignment="TOP_CENTER" layoutX="350.0" layoutY="17.0" lineSpacing="2.0" prefHeight="44.0" prefWidth="568.0" text="ROUTE LIST" textAlignment="JUSTIFY">
-                     <effect>
-                        <DropShadow radius="23.9225" width="76.69" />
-                     </effect>
-                     <font>
-                        <Font name="Bell MT Bold" size="33.0" />
-                     </font>
-                  </Label>
-					<Button fx:id="selected" layoutX="301.0" layoutY="610.0" mnemonicParsing="false" onAction="#routeSelected" prefHeight="25.0" prefWidth="180.0" styleClass="done_select" text="Done" visible="false" />
+<AnchorPane fx:id="rd_anchor" layoutX="541.0" layoutY="315.0" prefHeight="394.0" prefWidth="518.0" style="-fx-background-color: #868DAC;" styleClass="pane" />
                  
-                     </children>
+                                       </children>
 		</AnchorPane>
-			<AnchorPane layoutX="-11.0" prefHeight="657.0" prefWidth="246.0">
-			    <children>
-                  <AnchorPane layoutX="26.0" layoutY="19.0" prefHeight="119.0" prefWidth="104.0" styleClass="empty-border">
+			<AnchorPane layoutX="6.0" layoutY="36.0" prefHeight="690.0" prefWidth="217.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+			   <children>
+                  <AnchorPane layoutX="12.0" layoutY="206.0" prefHeight="94.0" prefWidth="183.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                      <children>
-			        <ImageView fitHeight="124.0" fitWidth="134.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
+                        <ImageView fx:id="imageView" fitHeight="72.0" fitWidth="75.0" layoutX="14.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" styleClass="transparent-background" />
+                        <Label fx:id="driverNameLabel" alignment="CENTER" layoutX="97.0" layoutY="26.0" prefHeight="27.0" prefWidth="94.0" text="Label" />
+                        <Label alignment="CENTER" layoutX="101.0" layoutY="62.0" prefHeight="17.0" prefWidth="90.0" text="Driver" />
                      </children>
                   </AnchorPane>
-			        <Label fx:id="driverNameLabel" contentDisplay="CENTER" layoutX="46.0" layoutY="185.0" prefHeight="29.0" prefWidth="100.0" styleClass="label-title" text="Passenger Name" textAlignment="JUSTIFY" />
-			    </children>
+                  <ImageView fx:id="logo" fitHeight="122.0" fitWidth="186.0" layoutX="15.0" layoutY="77.0" pickOnBounds="true" preserveRatio="true" />
+    </children>
 			</AnchorPane>
           </children>
       </AnchorPane>

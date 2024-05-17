@@ -29,6 +29,7 @@
     -fx-spacing: 10px; /* Adjust the spacing between buttons as needed */
 }
 
+
 .route-button, .driver-button {
     -fx-background-color: #ffffff; /* White background for a cleaner look */
     -fx-text-fill: #4A90E2; /* Color text to match your previous button color */
@@ -55,7 +56,8 @@
 }
 
 
-.route-button:hover, .driver-button:hover {
+
+.route-button:hover, .driver-button:hover{
     -fx-background-color: #e0e0e0; /* Lighter grey on hover for a soft interaction feedback */
     -fx-cursor: hand; /* Cursor change to indicate button is clickable */
 }
@@ -76,19 +78,48 @@
     -fx-min-width: 150px; /* Smaller minimum width */
     -fx-alignment: center; /* Center text within the button */
 }
+.transparent-background {
+    -fx-background-color:  #687197;
+}
+
+.delete {
+    -fx-background-color: #800000; /* White background for a cleaner look */
+    -fx-text-fill: #000000; /* Color text to match your previous button color */
+    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 3px; /* Rounded corners */
+    -fx-background-radius: 3px; /* Ensures the background matches the border radius */
+    -fx-padding: 5px 10px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 100px; /* Smaller minimum width */
+    -fx-alignment: center;
+}
+.delete:hover {
+    -fx-background-color: #FFFFFF; /* Make the background transparent */
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+}
+
+
 .AnchorPane {
     -fx-background-color: #868DAC; /* Background color */
     -fx-padding: 20px; /* Padding */
 }
 
-.add_route, .delete_route {
+
+
+.add_route {
     -fx-background-color: #000000; /* Make the background transparent */
     -fx-text-fill: #4A90E2; /* Set text color */
     -fx-font-size: 20px; /* Increase font size for better visibility */
     -fx-padding: 5px; /* Adjust padding */
     -fx-alignment: center; /* Center text within the button */
      -fx-font-weight: bold; /* Make the text bold */
-    
+    	-fx-border-width: 10px 10px 10px 10px;
+	
+}
+.pane {
+	-fx-border-width: 2px 2px 2px 2px;
+	-fx-border-radius: 20px;
+	-fx-background-radius: 20px;
 }
 
 .add_route:hover {
@@ -111,6 +142,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
     -fx-min-width: 150px; /* Smaller minimum width */
     -fx-alignment: center; /* Center text within the button */
+    
 }
 
 .done_select:hover {
@@ -137,6 +169,8 @@
     -fx-background-color: #000000; /* Assuming a dark background for contrast */
     -fx-padding: 10;
 }
+
+
 
 
 
