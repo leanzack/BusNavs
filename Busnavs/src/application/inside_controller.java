@@ -1,5 +1,6 @@
 package application;
 
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +19,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -41,6 +43,10 @@ public class inside_controller {
     
     @FXML 
     private VBox vbox_route;
+  
+    @FXML 
+    private BorderPane border_visibility;
+    
 
     @FXML 
     private Button addRouteButton;
@@ -138,9 +144,9 @@ public class inside_controller {
     private void handleRouteSelection(String routeName, double fare) {
     	
     
-
+    	border_visibility.setVisible(true);
       	today.setVisible(true);
-
+      	selected.setVisible(true);
 
     	 if (!selectedRouteNames.contains(routeName)) {
              selectedRouteNames.add(routeName);
@@ -159,7 +165,7 @@ public class inside_controller {
 
              s_route.setOnAction(e -> handleRouteDeselection(routeName, s_route, fareLabel));
              s_route.setMaxWidth(Double.MAX_VALUE);
-             fareLabel.setOnAction(e -> fareUps(routeName, fare));
+             fareLabel.setOnAction(e -> fareUps_insideDriver(routeName, fare));
 
              
              Platform.runLater(() -> {
@@ -177,11 +183,12 @@ public class inside_controller {
              alert.showAndWait();
          });
          
-         selected.setVisible(true);
 
     }
     
 
+
+	
 
 	private void handleRouteDeselection(String routeName, Button s_route, Button fareLabel) {
     	
@@ -200,6 +207,61 @@ public class inside_controller {
         });
     }
     
+	private void fareUps_insideDriver(String routeName, double fare) {
+		
+		  TextInputDialog dialog = new TextInputDialog(String.format("%.2f", fare));
+	        dialog.setTitle("Update Fare");
+	        dialog.setHeaderText("Update the fare for " + routeName);
+	        dialog.setContentText("New fare:");
+
+	        Optional<String> result = dialog.showAndWait();
+	      
+	        result.ifPresent(newFareStr -> {
+	            try {
+	                double newFare = Double.parseDouble(newFareStr);
+	                updateFareInDriver(routeName, newFare);
+	                
+	                Button fareLabel = fareLabels.get(routeName);
+	                if (fareLabel != null) {
+	                    fareLabel.setText(String.format("₱%.2f", newFare));
+	                }
+	            } catch (NumberFormatException ex) {
+	                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Invalid fare entered: " + newFareStr);
+	                alert.showAndWait();
+	                
+	            }
+	        });
+	    }
+	private void updateFareInDriver(String routeName, double newFare) {
+    	
+	 	   String sql = "UPDATE SelectedRoutes SET fare = ? WHERE selected_route = ?";
+	 	    
+	 	    try (Connection conn = dbManager.getConnection();
+	 	            PreparedStatement pst = conn.prepareStatement(sql)) {
+	 	           
+	 	           pst.setDouble(1, newFare);
+	 	           pst.setString(2, routeName);
+	 	           
+	 	           int rowsAffected = pst.executeUpdate();
+	 	           
+	 	           if (rowsAffected > 0) {
+	 	                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Fare updated successfully for route: " + routeName);
+	 	                alert.showAndWait();
+
+	 	           } else {
+	 	                Alert alert = new Alert(Alert.AlertType.ERROR, "No records found for route: " + routeName);
+	 	                alert.showAndWait();
+
+	 	               System.out.println("No records found for route: " + routeName);
+	 	           }
+	 	       } catch (SQLException e) {
+	 	    	   Alert alert = new Alert(Alert.AlertType.ERROR, "Error updating fare for route: " + routeName);
+		                alert.showAndWait();
+	 	           e.printStackTrace();
+	 	       }
+	 	   }
+	    
+	
     private void fareUps(String routeName, double fare) {
     	
         TextInputDialog dialog = new TextInputDialog(String.format("%.2f", fare));
@@ -227,6 +289,7 @@ public class inside_controller {
     }
     
     public void routeSelected() {
+    
         String updateQuery = "INSERT INTO SelectedRoutes (driver_name, selected_route, fare) VALUES (?, ?, ?);";
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pst = conn.prepareStatement(updateQuery)) {
@@ -253,16 +316,15 @@ public class inside_controller {
             }
 
             if (success) {
-                // If rows were affected, display an alert
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Driver data updated successfully. Routes: " + String.join(", ", selectedRouteNames));
                 alert.showAndWait();
             }
             
         } catch (SQLException e) {
-            // Handle SQLException appropriately
             e.printStackTrace(); // You can replace this with logging or other error handling
         }
     }
+    
 
     private double queryFareForRoute(String routeName) throws SQLException {
         String fareQuery = "SELECT fare FROM routes WHERE route_name = ?";
@@ -309,6 +371,7 @@ public class inside_controller {
     
     
     public void addRouteAction() {
+    	
         TextInputDialog routeDialog = new TextInputDialog();
         routeDialog.setTitle("Add Route");
         routeDialog.setHeaderText("Enter Route Name");

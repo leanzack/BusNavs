@@ -60,6 +60,11 @@
     -fx-cursor: hand; /* Cursor change to indicate button is clickable */
 }
 
+.hover {
+    -fx-background-color: #e0e0e0; /* Lighter grey on hover for a soft interaction feedback */
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+}
+
 .fare-button {	
     -fx-background-color: #000000; /* White background for a cleaner look */
     -fx-text-fill: #4A90E2; /* Color text to match your previous button color */
