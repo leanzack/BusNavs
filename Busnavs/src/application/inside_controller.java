@@ -40,11 +40,6 @@ public class inside_controller {
 	  private List<Button> selectedRouteButtons = new ArrayList<Button>();
 	  private Map<String, Button> fareLabels = new HashMap<>();
 	  private List<String> routesToDelete = new ArrayList<>();
-	  
-	  private void applyStylesheet(Scene scene) {
-	        String cssPath = "application.css"; // Adjust this path as needed
-	        scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
-	    }
 
 	@FXML
 	private String driverName; 
@@ -107,6 +102,8 @@ public class inside_controller {
     public void initialize() throws IOException {
         loadRouteButtons();
         
+        
+        
         try {
             Image driverImage = new Image(getClass().getResource("/imageg/driver.png").toExternalForm());
             imageView.setImage(driverImage);
@@ -119,7 +116,11 @@ public class inside_controller {
         Logout_account(null);
     }
 
-    
+	  
+	  private void applyStylesheet(Scene scene) {
+	        String cssPath = "application.css"; // Adjust this path as needed
+	        scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+	    }
 
 
     @FXML
@@ -131,7 +132,7 @@ public class inside_controller {
 		        Scene scene = new Scene(root);
 		        stage.setScene(scene);
 		        stage.show();
-		        applyStylesheet(scene); 
+		        applyStylesheet(scene);
 	            	
 	            System.out.println("Logging out driver: " + driverName);
 
@@ -213,6 +214,7 @@ public class inside_controller {
              s_route.setMaxWidth(Double.MAX_VALUE);
              fareLabel.setOnAction(e -> fareUps_insideDriver(routeName, fare));
 
+
              
              Platform.runLater(() -> {
             	 
@@ -256,56 +258,54 @@ public class inside_controller {
     
 	private void fareUps_insideDriver(String routeName, double fare) {
 		
-		  TextInputDialog dialog = new TextInputDialog(String.format("%.2f", fare));
-	        dialog.setTitle("Update Fare");
-	        dialog.setHeaderText("Update the fare for " + routeName);
-	        dialog.setContentText("New fare:");
+		 TextInputDialog dialog = new TextInputDialog(String.format("%.2f", fare));
+		    dialog.setTitle("Update Fare");
+		    dialog.setHeaderText("Update the fare for " + routeName);
+		    dialog.setContentText("New fare:");
 
-	        Optional<String> result = dialog.showAndWait();
-	      
-	        result.ifPresent(newFareStr -> {
-	            try {
-	                double newFare = Double.parseDouble(newFareStr);
-	                updateFareInDriver(routeName, newFare);
-	                
-	                Button fareLabel = fareLabels.get(routeName);
-	                if (fareLabel != null) {
-	                    fareLabel.setText(String.format("₱%.2f", newFare));
-	                }
-	            } catch (NumberFormatException ex) {
-	                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Invalid fare entered: " + newFareStr);
-	                alert.showAndWait(); 
-	            }
-	        });
-	    }
+		    Optional<String> result = dialog.showAndWait();
+		    result.ifPresent(newFareStr -> {
+		        try {
+		            double newFare = Double.parseDouble(newFareStr);
+		            updateFareInDriver(routeName, newFare);
+
+		            Button fareLabel = selectedRouteButtons.stream()
+		                .filter(btn -> btn.getText().contains(String.format("₱%.2f", fare)))
+		                .findFirst()
+		                .orElse(null);
+		            
+		            if (fareLabel != null) {
+		                fareLabel.setText(String.format("₱%.2f", newFare));
+		            }
+		        } catch (NumberFormatException ex) {
+		            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Invalid fare entered: " + newFareStr);
+		            alert.showAndWait();
+		        }
+		    });
+		}
 	private void updateFareInDriver(String routeName, double newFare) {
-    	
-	 	   String sql = "UPDATE SelectedRoutes SET fare = ? WHERE selected_route = ?";
-	 	    
-	 	    try (Connection conn = dbManager.getConnection();
-	 	            PreparedStatement pst = conn.prepareStatement(sql)) {
-	 	           
-	 	           pst.setDouble(1, newFare);
-	 	           pst.setString(2, routeName);
-	 	           
-	 	           int rowsAffected = pst.executeUpdate();
-	 	           
-	 	           if (rowsAffected > 0) {
-	 	                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Fare updated successfully for route: " + routeName);
-	 	                alert.showAndWait();
+	    String sql = "UPDATE SelectedRoutes SET fare = ? WHERE selected_route = ?";
+	    try (Connection conn = dbManager.getConnection();
+	         PreparedStatement pst = conn.prepareStatement(sql)) {
+	        
+	        pst.setDouble(1, newFare);
+	        pst.setString(2, routeName);
 
-	 	           } else {
-	 	                Alert alert = new Alert(Alert.AlertType.ERROR, "No records found for route: " + routeName);
-	 	                alert.showAndWait();
-
-	 	               System.out.println("No records found for route: " + routeName);
-	 	           }
-	 	       } catch (SQLException e) {
-	 	    	   Alert alert = new Alert(Alert.AlertType.ERROR, "Error updating fare for route: " + routeName);
-		                alert.showAndWait();
-	 	           e.printStackTrace();
-	 	       }
-	 	   }
+	        int rowsAffected = pst.executeUpdate();
+	        if (rowsAffected > 0) {
+	            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Fare updated successfully for route: " + routeName);
+	            alert.showAndWait();
+	        } else {
+	            Alert alert = new Alert(Alert.AlertType.ERROR, "No records found for route: " + routeName);
+	            alert.showAndWait();
+	            System.out.println("No records found for route: " + routeName);
+	        }
+	    } catch (SQLException e) {
+	        Alert alert = new Alert(Alert.AlertType.ERROR, "Error updating fare for route: " + routeName);
+	        alert.showAndWait();
+	        e.printStackTrace();
+	    }
+	}
 	    
 	
     private void fareUps(String routeName, double fare) {

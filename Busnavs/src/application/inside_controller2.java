@@ -50,7 +50,6 @@ public class inside_controller2 {
     @FXML
     public void initialize() {
         loadRouteButtons();
-        loaddriverbutton();
 
     }
     
@@ -71,98 +70,36 @@ public class inside_controller2 {
 
     // Method to load route buttons from the database
     public void loadRouteButtons() {
-    	
-    	  String query = "SELECT route_name, fare FROM routes";
-          try (Connection conn = dbManager.getConnection();
-               PreparedStatement pst = conn.prepareStatement(query);
-               ResultSet rs = pst.executeQuery()) {
-
-              List<HBox> buttonContainers = new ArrayList<>();
-              while (rs.next()) {
-              	
-                  String routeName = rs.getString("route_name");
-                  double fare = rs.getDouble("fare");
-
-                  Button routeButton = new Button(routeName);
-                  Button fareLabel = new Button(String.format("₱%.2f", fare));
-
-              //    fareLabel.setOnAction(e -> fareUps(routeName, fare));
-
-                  routeButton.setOnAction(e -> {
-                      handleRouteSelection(routeName, fare);
-                  });
-
-                  VBox buttonContainer = new VBox(routeButton, fareLabel);
-                  buttonContainer.setAlignment(null);
-                  routeButton.getStyleClass().add("route-button");
-
-                  fareLabel.getStyleClass().add("fare-button-passenger");
-                  fareLabels.put(routeName, fareLabel); // Populate the fareLabels map
-
-                  
-                  HBox hbox = new HBox(buttonContainer);
-                  buttonContainers.add(hbox);
-                  buttonContainer.setAlignment(Pos.CENTER); // Set alignment to center
-                  
-                  routeButton.setMaxWidth(Double.MAX_VALUE);
-
-
-              }
-              Platform.runLater(() -> {
-            	  h_box.getChildren().clear();
-            	  h_box.setAlignment(Pos.CENTER); // Ensure the alignment of HBox content
-
-            	  h_box.getChildren().addAll(buttonContainers);
-
-              });
-          } catch (SQLException ex) {
-              Platform.runLater(() -> {
-                  Alert alert = new Alert(Alert.AlertType.ERROR, "Error loading routes: " + ex.getMessage());
-                  alert.showAndWait();
-              });
-          }
-      }
-    
-    public void loaddriverbutton() {
-
-    	String query = "SELECT driver_name FROM driver";
+        String query = "SELECT route_name, fare FROM routes";
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pst = conn.prepareStatement(query);
              ResultSet rs = pst.executeQuery()) {
 
             List<HBox> buttonContainers = new ArrayList<>();
             while (rs.next()) {
-            	
-                String driver = rs.getString("driver_name");
-               
-                Button driverButton = new Button(driver);
+                String routeName = rs.getString("route_name");
+                double fare = rs.getDouble("fare");
 
-            //    fareLabel.setOnAction(e -> fareUps(routeName, fare));
+                Button routeButton = new Button(routeName);
+                Button fareLabel = new Button(String.format("₱%.2f", fare));
 
-                driverButton.setOnAction(e -> {
-                    handleRouteSelectionforDriver(driver);
+                routeButton.setOnAction(e -> {
+                    handleRouteSelection(routeButton); // Pass the button itself
                 });
 
-                VBox buttonContainer2 = new VBox(driverButton);
-                buttonContainer2.setAlignment(null);
-                driverButton.getStyleClass().add("route-button");
+                VBox buttonContainer = new VBox(routeButton, fareLabel);
+                buttonContainer.setAlignment(Pos.CENTER); // Set alignment to center
+                routeButton.getStyleClass().add("route-button");
+                fareLabel.getStyleClass().add("fare-button-passenger");
 
-
-                
-                HBox hbox = new HBox(buttonContainer2);
+                HBox hbox = new HBox(buttonContainer);
                 buttonContainers.add(hbox);
-                buttonContainer2.setAlignment(Pos.CENTER); // Set alignment to center
-                
-                driverButton.setMaxWidth(Double.MAX_VALUE);
-
-
+                routeButton.setMaxWidth(Double.MAX_VALUE);
             }
             Platform.runLater(() -> {
-            	h_box_fordriver.getChildren().clear();
-            	h_box_fordriver.setAlignment(Pos.CENTER); // Ensure the alignment of HBox content
-
-            	h_box_fordriver.getChildren().addAll(buttonContainers);
-
+                h_box.getChildren().clear();
+                h_box.setAlignment(Pos.CENTER); // Ensure the alignment of HBox content
+                h_box.getChildren().addAll(buttonContainers);
             });
         } catch (SQLException ex) {
             Platform.runLater(() -> {
@@ -171,108 +108,106 @@ public class inside_controller2 {
             });
         }
     }
-  
-  
     
 
-    private void handleRouteSelectionforDriver(String driver) {
+
+  
+    
+    private void updateDriverList(List<String> drivers) {
     	
-        Button s_driver = new Button(driver);
-        s_driver.getStyleClass().add("vbox_routebutton");
-        s_driver.setWrapText(true); // Enable text wrapping
-
-     
-        selectedRouteButtons.add(s_driver);
-
-       
-
-        s_driver.setOnAction(e -> handleRouteDeselection_forDriver(s_driver));
-        s_driver.setMaxWidth(Double.MAX_VALUE);
-     //   fareLabel.setOnAction(e -> fareUps_insideDriver(routeName, fare));
-//
-        
-     Platform.runLater(() -> {
-       	 
-    	 vbox.getChildren().clear();
-    	 vbox.getChildren().addAll(selectedRouteButtons);
-        });
-        
-   
-    
-
-    // Display an alert for the selected route
-    Platform.runLater(() -> {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Chosen route: " + s_driver);
-        alert.showAndWait();
-    });
-    
-
-}
-
-	private void handleRouteDeselection_forDriver(Button s_driver) {
-			selectedRouteButtons.remove(s_driver);
-      
-        
-        // Update the VBox to reflect the current state of selected routes
         Platform.runLater(() -> {
-        	vbox.getChildren().clear();
-        	vbox.getChildren().addAll(selectedRouteButtons);
+            // Clear the existing driver list (if any)
+        	h_box_fordriver.getChildren().clear(); // Assuming h_box is used for displaying drivers as well
+
+            // Add new driver buttons to the container
+            for (String driver : drivers) {
+                Button driverButton = new Button(driver);
+                driverButton.getStyleClass().add("driver-button");
+                h_box_fordriver.getChildren().add(driverButton);
+
+                // Optionally, add an action for each driver button
+                driverButton.setOnAction(e -> {
+                	
+                    handleDriverSelection(driver);
+                });
+            }
         });
     }
-	
 
-	private void handleRouteSelection(String routeName, double fare) {
-    	
-        Button s_route = new Button(routeName);
-        s_route.getStyleClass().add("vbox_routebutton");
-        s_route.setWrapText(true); // Enable text wrapping
 
-        Button fareLabel = new Button(String.format("₱%.2f", fare));
-        fareLabel.getStyleClass().add("fare-button-passenger");
-        selectedRouteButtons.add(s_route);
-
-        selectedRouteButtons.add(fareLabel);
-        
-        fareLabel.setMinWidth(150); // Or any fixed width you desire
-
-        s_route.setOnAction(e -> handleRouteDeselection( s_route, fareLabel));
-        s_route.setMaxWidth(Double.MAX_VALUE);
-     //   fareLabel.setOnAction(e -> fareUps_insideDriver(routeName, fare));
-//
-        
-     Platform.runLater(() -> {
-       	 
-    	 vbox.getChildren().clear();
-    	 vbox.getChildren().addAll(selectedRouteButtons);
-        });
-        
-   
-    
-
-    // Display an alert for the selected route
-    Platform.runLater(() -> {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Chosen route: " + routeName);
-        alert.showAndWait();
-    });
-    
-
-}
-    
-private void handleRouteDeselection( Button s_route, Button fareLabel) {
-    	
-        selectedRouteButtons.remove(s_route);
-        
-        selectedRouteButtons.remove(fareLabel);
-        
-        
  
 
-        // Update the VBox to reflect the current state of selected routes
-        Platform.runLater(() -> {
-        	vbox.getChildren().clear();
-        	vbox.getChildren().addAll(selectedRouteButtons);
-        });
+    // Method to update the UI with the list of drivers
+    private void handleRouteSelection(Button routeButton) {
+        String routeName = routeButton.getText(); // Extract the text from the button
+        String query = "SELECT driver_name FROM selectedroutes WHERE selected_route = ?";
+        try (Connection conn = dbManager.getConnection();
+             PreparedStatement pst = conn.prepareStatement(query)) {
+
+            pst.setString(1, routeName);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                List<String> drivers = new ArrayList<>();
+                while (rs.next()) {
+                    String driverName = rs.getString("driver_name");
+                    drivers.add(driverName);
+                }
+                // Call method to update UI with the list of drivers
+                updateDriverList(drivers);
+            }
+        } catch (SQLException ex) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error loading drivers: " + ex.getMessage());
+                alert.showAndWait();
+            });
+        }
     }
+    
+    
+    private void handleDriverSelection(String driverName) {
+        // Implement what should happen when a driver is selected
+    	
+    	 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Selected driver: " + driverName);
+         alert.showAndWait();
+         
+         Button dr_route = new Button(driverName);
+         dr_route.getStyleClass().add("fare-button-passenger");
+         dr_route.setWrapText(true); // Enable text wrapping
+
+ 
+         selectedRouteButtons.add(dr_route);
+
+         
+
+         dr_route.setOnAction(e -> handleRouteDeselection(dr_route));
+         dr_route.setMaxWidth(Double.MAX_VALUE);
+      //   fareLabel.setOnAction(e -> fareUps_insideDriver(routeName, fare));
+ //
+         
+      Platform.runLater(() -> {
+        	 
+     	 vbox.getChildren().clear();
+     	 vbox.getChildren().addAll(selectedRouteButtons);
+         });
+         
+    }
+
+  
+  
+	
+	private void handleRouteDeselection(Button dr_route) {
+		selectedRouteButtons.remove(dr_route);
+  
+    
+    // Update the VBox to reflect the current state of selected routes
+    Platform.runLater(() -> {
+    	vbox.getChildren().clear();
+    	vbox.getChildren().addAll(selectedRouteButtons);
+    });
+}
+
+    
+
 
     private void handledriverselect(String driverName) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Chosen driver: " + driverName);
