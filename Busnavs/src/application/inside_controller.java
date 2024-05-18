@@ -1,6 +1,7 @@
 package application;
 
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,18 +14,24 @@ import java.util.Optional;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.image.Image;
 
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class inside_controller {
 	
@@ -33,6 +40,11 @@ public class inside_controller {
 	  private List<Button> selectedRouteButtons = new ArrayList<Button>();
 	  private Map<String, Button> fareLabels = new HashMap<>();
 	  private List<String> routesToDelete = new ArrayList<>();
+	  
+	  private void applyStylesheet(Scene scene) {
+	        String cssPath = "application.css"; // Adjust this path as needed
+	        scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+	    }
 
 	@FXML
 	private String driverName; 
@@ -42,6 +54,9 @@ public class inside_controller {
     @FXML 
     private HBox hbox_route;
     
+    @FXML 
+    private HBox logout_box;
+
     @FXML
     private Label today;
     
@@ -89,33 +104,44 @@ public class inside_controller {
     }
   
     
-    public void initialize() {
+    public void initialize() throws IOException {
         loadRouteButtons();
         
         try {
-            // Load the driver image
             Image driverImage = new Image(getClass().getResource("/imageg/driver.png").toExternalForm());
-            
-            // Set the driver image to the imageView
             imageView.setImage(driverImage);
-            
-            // Load the logo image
             Image logoImage = new Image(getClass().getResource("/imageg/navvs.png").toExternalForm());
-            
-            // Set the logo image to the logo ImageView
             logo.setImage(logoImage);
         } catch (Exception e) {
             e.printStackTrace();
         }
-       
         
-      
+        Logout_account(null);
     }
 
     
-    
 
-    public void loadRouteButtons() {
+
+    @FXML
+    private void Logout_account(MouseEvent event) throws IOException {
+		   if (driverName != null && !driverName.isEmpty()) {
+			   
+			   Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainScene.fxml"));
+		        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		        Scene scene = new Scene(root);
+		        stage.setScene(scene);
+		        stage.show();
+		        applyStylesheet(scene); 
+	            	
+	            System.out.println("Logging out driver: " + driverName);
+
+	        } else {
+	            System.out.println("No driver is logged in.");
+	        }
+	    }		
+
+
+	public void loadRouteButtons() {
         String query = "SELECT route_name, fare FROM routes";
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pst = conn.prepareStatement(query);

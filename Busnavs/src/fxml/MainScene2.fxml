@@ -6,17 +6,25 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SceneController">
+
+
+
+<AnchorPane prefHeight="310.0" prefWidth="631.0" style="-fx-background-color: #4f566c;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SceneController">
    <children>
-      <AnchorPane prefHeight="386.0" prefWidth="600.0">
+      <AnchorPane layoutX="14.0" layoutY="18.0" prefHeight="242.0" prefWidth="179.0" style="-fx-background-color: #868DAC;" styleClass="pane">
          <children>
-            <Button fx:id="Logout" layoutX="28.0" layoutY="75.0" mnemonicParsing="false" onAction="#Logout" text="Back" />
-            <Button layoutX="294.0" layoutY="178.0" mnemonicParsing="false" onAction="#passenger_inside" prefHeight="30.0" prefWidth="119.0" text="Login" />
-            <TextField fx:id="login2" layoutX="255.0" layoutY="105.0" prefHeight="26.0" prefWidth="183.0" />
-            <Label layoutX="316.0" layoutY="145.0" text="PASSENGER ID" />
- 			<Button layoutX="258.0" layoutY="251.0" mnemonicParsing="false" onAction="#switchToScene3" prefHeight="25.0" prefWidth="125.0" text="Register">
-        </Button>
-                 </children>
+            <Button fx:id="Logout" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#Logout" prefHeight="25.0" prefWidth="90.0" styleClass="account_buttons" text="Back" />
+         </children>
       </AnchorPane>
-   </children>
-</VBox>
+      <AnchorPane layoutX="206.0" layoutY="18.0" prefHeight="242.0" prefWidth="410.0" style="-fx-background-color: #868DAC;" styleClass="pane">
+         <children>
+            <TextField fx:id="login2" alignment="CENTER" layoutX="57.0" layoutY="26.0" prefHeight="42.0" prefWidth="296.0" styleClass="t_field" />
+            <Label layoutX="179.0" layoutY="76.0" text="PASSENGER ID" />
+            <Button layoutX="135.0" layoutY="112.0" mnemonicParsing="false" onAction="#passenger_inside" prefHeight="65.0" prefWidth="144.0" styleClass="account_buttons" text="Login" />
+ 			<Button layoutX="145.0" layoutY="196.0" mnemonicParsing="false" onAction="#switchToScene3" prefHeight="25.0" prefWidth="125.0" styleClass="account_buttons" text="Register">
+        </Button>
+         </children>
+      </AnchorPane>
+           </children>
+</AnchorPane>
+

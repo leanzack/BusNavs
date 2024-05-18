@@ -113,7 +113,19 @@
     -fx-padding: 5px; /* Adjust padding */
     -fx-alignment: center; /* Center text within the button */
      -fx-font-weight: bold; /* Make the text bold */
-    	-fx-border-width: 10px 10px 10px 10px;
+   -fx-border-width: 10px 10px 10px 10px;
+	
+}
+
+.done_route {
+    -fx-background-color: #000000; /* Make the background transparent */
+    -fx-text-fill: #4A90E2; /* Set text color */
+    -fx-padding: 5px; /* Adjust padding */
+    -fx-alignment: center; /* Center text within the button */
+	-fx-border-width: 2px 2px 2px 2px;
+	-fx-border-radius: 20px;
+	   	-fx-background-radius: 20px;
+   
 	
 }
 .pane {
@@ -122,7 +134,42 @@
 	-fx-background-radius: 20px;
 }
 
-.add_route:hover {
+.logout {
+	-fx-border-width: 2px 2px 2px 2px;
+	-fx-border-radius: 20px;
+	-fx-background-radius: 20px;
+	
+}
+.t_field {
+	
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-border-color:  #FFFFFF; /* Red color example */
+    
+}
+
+
+.Logout_route {
+    -fx-text-fill: #4A90E2; /* Set text color */
+   	-fx-border-width: 2px 2px 2px 2px;
+	-fx-border-radius: 20px;
+	-fx-background-radius: 20px;
+	
+}
+
+.account_buttons {
+    -fx-text-fill: #4A90E2; /* Set text color */
+   	-fx-border-width: 2px 2px 2px 2px;
+	-fx-border-radius: 20px;
+	-fx-background-radius: 20px;
+	-fx-background-color: #000000; /* Make the background transparent */
+	
+}
+
+
+
+.add_route:hover, .done_route:hover, .Logout_route:hover, .account_buttons:hover {
     -fx-background-color: #FFFFFF; /* Make the background transparent */
     -fx-cursor: hand; /* Cursor change to indicate button is clickable */
 }
