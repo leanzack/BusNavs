@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
@@ -20,9 +21,9 @@
                         <HBox fx:id="h_box_fordriver" alignment="CENTER" prefHeight="128.0" prefWidth="785.0" style="-fx-background-color: #868DAC;" styleClass="hbox-container" />
                      </content>
                   </ScrollPane>
-                  <ScrollPane layoutX="251.0" layoutY="467.0" prefHeight="276.0" prefWidth="316.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+                  <ScrollPane layoutX="251.0" layoutY="490.0" prefHeight="225.0" prefWidth="292.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
                      <content>
-                        <VBox fx:id="vbox" prefHeight="274.0" prefWidth="314.0" style="-fx-background-color: #868DAC;" styleClass="hbox-container" />
+                        <VBox fx:id="vbox" prefHeight="223.0" prefWidth="290.0" style="-fx-background-color: #868DAC;" styleClass="hbox-container" />
                      </content>
                   </ScrollPane>
                   <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="251.0" layoutY="77.0" prefHeight="206.0" prefWidth="788.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
@@ -30,7 +31,9 @@
                         <HBox fx:id="h_box" alignment="CENTER_LEFT" prefHeight="204.0" prefWidth="785.0" style="-fx-background-color: #868DAC;" />
                      </content>
                   </ScrollPane>
-                  <Label alignment="CENTER" layoutX="534.0" layoutY="48.0" prefHeight="23.0" prefWidth="275.0" text="Select your routes today" textFill="WHITE" />	
+                  <Label alignment="CENTER" layoutX="534.0" layoutY="48.0" prefHeight="23.0" prefWidth="275.0" text="Select your routes today" textFill="WHITE" />
+                  <Button fx:id="selected" layoutX="317.0" layoutY="722.0" mnemonicParsing="false" onAction="#routeSelected" opacity="0.69" prefHeight="25.0" prefWidth="160.0" styleClass="done_route" text="Done" />
+                  <Label layoutX="347.0" layoutY="462.0" text="Ticket information " textFill="WHITE" />	
                  
                      </children>
 		</AnchorPane>

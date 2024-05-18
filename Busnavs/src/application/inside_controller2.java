@@ -209,12 +209,6 @@ public class inside_controller2 {
     
 
 
-    private void handledriverselect(String driverName) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Chosen driver: " + driverName);
-        alert.showAndWait();
-        Platform.runLater(() -> selectedDriverLabel.setText("Selected Driver: " + driverName));
-    
-    }
      
     public void handleDoneAction() {
         String routeName = selectedRouteLabel.getText().replace("Selected Route: ", "");
