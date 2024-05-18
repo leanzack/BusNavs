@@ -34,9 +34,10 @@ public class inside_controller2 {
     @FXML
     private HBox h_box; 
     @FXML
-    private HBox h_box1; 
+    private HBox h_box_fordriver; 
     @FXML
-    private VBox v_box;
+    private VBox vbox; 
+    
 
     @FXML
     private Label selectedDriverLabel; 
@@ -49,7 +50,8 @@ public class inside_controller2 {
     @FXML
     public void initialize() {
         loadRouteButtons();
-        loaddriverButton();
+        loaddriverbutton();
+
     }
     
     public void setPassemgerName(String PassengerName) {
@@ -94,7 +96,7 @@ public class inside_controller2 {
                   buttonContainer.setAlignment(null);
                   routeButton.getStyleClass().add("route-button");
 
-                  fareLabel.getStyleClass().add("fare-button");
+                  fareLabel.getStyleClass().add("fare-button-passenger");
                   fareLabels.put(routeName, fareLabel); // Populate the fareLabels map
 
                   
@@ -120,35 +122,113 @@ public class inside_controller2 {
               });
           }
       }
-  
-    public void loaddriverButton() {
-        String query = "SELECT driver_name FROM driver";
-        try (Connection conn2 = dbManager.getConnection();
-             PreparedStatement pst = conn2.prepareStatement(query);
-             ResultSet rs2 = pst.executeQuery()) {
+    
+    public void loaddriverbutton() {
 
-            while (rs2.next()) {
-                String driverName = rs2.getString("driver_name");
-                Button driverButton = new Button(driverName);
+    	String query = "SELECT driver_name FROM driver";
+        try (Connection conn = dbManager.getConnection();
+             PreparedStatement pst = conn.prepareStatement(query);
+             ResultSet rs = pst.executeQuery()) {
+
+            List<HBox> buttonContainers = new ArrayList<>();
+            while (rs.next()) {
+            	
+                String driver = rs.getString("driver_name");
+               
+                Button driverButton = new Button(driver);
+
+            //    fareLabel.setOnAction(e -> fareUps(routeName, fare));
+
+                driverButton.setOnAction(e -> {
+                    handleRouteSelectionforDriver(driver);
+                });
+
+                VBox buttonContainer2 = new VBox(driverButton);
+                buttonContainer2.setAlignment(null);
                 driverButton.getStyleClass().add("route-button");
-                driverButton.setOnAction(e -> handledriverselect(driverName));
 
-                Platform.runLater(() -> h_box1.getChildren().add(driverButton));
+
+                
+                HBox hbox = new HBox(buttonContainer2);
+                buttonContainers.add(hbox);
+                buttonContainer2.setAlignment(Pos.CENTER); // Set alignment to center
+                
+                driverButton.setMaxWidth(Double.MAX_VALUE);
+
+
             }
+            Platform.runLater(() -> {
+            	h_box_fordriver.getChildren().clear();
+            	h_box_fordriver.setAlignment(Pos.CENTER); // Ensure the alignment of HBox content
+
+            	h_box_fordriver.getChildren().addAll(buttonContainers);
+
+            });
         } catch (SQLException ex) {
-            ex.printStackTrace(); // Implement more user-friendly error handling
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error loading routes: " + ex.getMessage());
+                alert.showAndWait();
+            });
         }
     }
+  
+  
     
 
-    private void handleRouteSelection(String routeName, double fare) {
+    private void handleRouteSelectionforDriver(String driver) {
+    	
+        Button s_driver = new Button(driver);
+        s_driver.getStyleClass().add("vbox_routebutton");
+        s_driver.setWrapText(true); // Enable text wrapping
+
+     
+        selectedRouteButtons.add(s_driver);
+
+       
+
+        s_driver.setOnAction(e -> handleRouteDeselection_forDriver(s_driver));
+        s_driver.setMaxWidth(Double.MAX_VALUE);
+     //   fareLabel.setOnAction(e -> fareUps_insideDriver(routeName, fare));
+//
+        
+     Platform.runLater(() -> {
+       	 
+    	 vbox.getChildren().clear();
+    	 vbox.getChildren().addAll(selectedRouteButtons);
+        });
+        
+   
+    
+
+    // Display an alert for the selected route
+    Platform.runLater(() -> {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Chosen route: " + s_driver);
+        alert.showAndWait();
+    });
+    
+
+}
+
+	private void handleRouteDeselection_forDriver(Button s_driver) {
+			selectedRouteButtons.remove(s_driver);
+      
+        
+        // Update the VBox to reflect the current state of selected routes
+        Platform.runLater(() -> {
+        	vbox.getChildren().clear();
+        	vbox.getChildren().addAll(selectedRouteButtons);
+        });
+    }
+	
+
+	private void handleRouteSelection(String routeName, double fare) {
     	
         Button s_route = new Button(routeName);
         s_route.getStyleClass().add("vbox_routebutton");
         s_route.setWrapText(true); // Enable text wrapping
 
         Button fareLabel = new Button(String.format("₱%.2f", fare));
-        fareLabel.getStyleClass().add("fare-button");
+        fareLabel.getStyleClass().add("fare-button-passenger");
         selectedRouteButtons.add(s_route);
 
         selectedRouteButtons.add(fareLabel);
@@ -160,13 +240,13 @@ public class inside_controller2 {
      //   fareLabel.setOnAction(e -> fareUps_insideDriver(routeName, fare));
 //
         
-    /*    Platform.runLater(() -> {
+     Platform.runLater(() -> {
        	 
-            vbox_route.getChildren().clear();
-            vbox_route.getChildren().addAll(selectedRouteButtons);
+    	 vbox.getChildren().clear();
+    	 vbox.getChildren().addAll(selectedRouteButtons);
         });
         
-    */
+   
     
 
     // Display an alert for the selected route
@@ -189,8 +269,8 @@ private void handleRouteDeselection( Button s_route, Button fareLabel) {
 
         // Update the VBox to reflect the current state of selected routes
         Platform.runLater(() -> {
-        	h_box1.getChildren().clear();
-        	h_box1.getChildren().addAll(selectedRouteButtons);
+        	vbox.getChildren().clear();
+        	vbox.getChildren().addAll(selectedRouteButtons);
         });
     }
 
