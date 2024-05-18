@@ -33,7 +33,7 @@
                         <BorderPane layoutX="11.0" layoutY="6.0" prefHeight="206.0" prefWidth="800.0">
                          <center>
             <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="206.0" prefWidth="788.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
-              <HBox fx:id="hbox_route" alignment="CENTER_LEFT" prefHeight="204.0" prefWidth="785.0" style="-fx-background-color: #868DAC;">
+              <HBox fx:id="hbox_route" alignment="CENTER_LEFT" prefHeight="204.0" prefWidth="785.0" style="-fx-background-color: #868DAC;" styleClass="pane">
         </HBox>
             </ScrollPane>
       </center>
@@ -42,7 +42,7 @@
                    
                                        </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="235.0" layoutY="310.0" prefHeight="373.0" prefWidth="298.0" style="-fx-background-color: #868DAC;" styleClass="pane">
+                  <AnchorPane layoutX="235.0" layoutY="310.0" prefHeight="373.0" prefWidth="298.0" style="-fx-background-color: #868DAC;">
                      <children>
                         <BorderPane fx:id="border_visibility" layoutX="1.0" prefHeight="364.0" prefWidth="297.0" visible="false">
                            <top>
@@ -59,13 +59,13 @@
                         </BorderPane>
                      </children>
                   </AnchorPane>
-<AnchorPane fx:id="rd_anchor" layoutX="541.0" layoutY="310.0" prefHeight="409.0" prefWidth="518.0" style="-fx-background-color: #868DAC;" styleClass="pane" />
+<AnchorPane fx:id="rd_anchor" layoutX="541.0" layoutY="310.0" prefHeight="409.0" prefWidth="518.0" style="-fx-background-color: #868DAC;" />
                  
                                        </children>
 		</AnchorPane>
-			<AnchorPane layoutX="6.0" layoutY="4.0" prefHeight="722.0" prefWidth="217.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+			<AnchorPane layoutX="6.0" layoutY="4.0" prefHeight="722.0" prefWidth="217.0" style="-fx-background-color: #4f566c;">
 			   <children>
-                  <AnchorPane layoutX="13.0" layoutY="207.0" prefHeight="98.0" prefWidth="191.0" style="-fx-background-color: #868DAC;" styleClass="pane">
+                  <AnchorPane layoutX="13.0" layoutY="207.0" prefHeight="98.0" prefWidth="191.0" style="-fx-background-color: #868DAC;">
                      <children>
                         <ImageView fx:id="imageView" fitHeight="76.0" fitWidth="75.0" layoutX="14.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" styleClass="transparent-background" />
                         <Label fx:id="driverNameLabel" alignment="CENTER" layoutX="97.0" layoutY="26.0" prefHeight="27.0" prefWidth="94.0" text="Label" />

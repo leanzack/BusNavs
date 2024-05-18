@@ -33,6 +33,7 @@ public class SceneController {
 	        scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
 	    }
 	    public String driverName; 
+	    public String passengername; 
 	    public ImageView for_logo; 
 
 
@@ -193,6 +194,7 @@ public class SceneController {
 
 		                     controller2.setPassengerName(passengername);
 
+		                     this.passengername = passengername;
 		                     
 		                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		                     Scene scene = new Scene(root);

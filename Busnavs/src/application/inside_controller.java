@@ -295,11 +295,7 @@ public class inside_controller {
 	        if (rowsAffected > 0) {
 	            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Fare updated successfully for route: " + routeName);
 	            alert.showAndWait();
-	        } else {
-	            Alert alert = new Alert(Alert.AlertType.ERROR, "No records found for route: " + routeName);
-	            alert.showAndWait();
-	            System.out.println("No records found for route: " + routeName);
-	        }
+	        } 
 	    } catch (SQLException e) {
 	        Alert alert = new Alert(Alert.AlertType.ERROR, "Error updating fare for route: " + routeName);
 	        alert.showAndWait();
@@ -335,8 +331,8 @@ public class inside_controller {
     }
     
     public void routeSelected() {
-    
-        String updateQuery = "INSERT INTO SelectedRoutes (driver_name, selected_route, fare) VALUES (?, ?, ?);";
+   
+       String updateQuery = "INSERT INTO SelectedRoutes (driver_name, selected_route, fare) VALUES (?, ?, ?);";
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pst = conn.prepareStatement(updateQuery)) {
             
