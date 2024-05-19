@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <AnchorPane prefHeight="617.0" prefWidth="1074.0" style="-fx-background-color: #687197;" styleClass="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
 			<AnchorPane layoutY="-19.0" prefHeight="761.0" prefWidth="1156.0" style="-fx-background-color: #687197;" styleClass="pane">
@@ -37,7 +36,7 @@
                            <center>
                               <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="206.0" prefWidth="788.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
                                  <content>
-                                    <HBox fx:id="hbox" alignment="CENTER_LEFT" prefHeight="204.0" prefWidth="785.0" style="-fx-background-color: #868DAC;" styleClass="pane" />
+                                    <HBox fx:id="h_box" alignment="CENTER_LEFT" prefHeight="204.0" prefWidth="785.0" style="-fx-background-color: #868DAC;" styleClass="pane" />
                                  </content>
                               </ScrollPane>
                            </center>

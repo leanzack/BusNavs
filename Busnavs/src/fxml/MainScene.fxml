@@ -5,14 +5,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="310.0" prefWidth="631.0" style="-fx-background-color: #4f566c;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SceneController">
+<AnchorPane prefHeight="301.0" prefWidth="598.0" style="-fx-background-color: #4f566c;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SceneController">
    <children>
-      <AnchorPane layoutX="14.0" layoutY="18.0" prefHeight="242.0" prefWidth="179.0" style="-fx-background-color: #868DAC;" styleClass="pane">
-         <children>
-            <Button fx:id="Logout" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#Logout" prefHeight="25.0" prefWidth="90.0" styleClass="account_buttons" text="Back" />
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="206.0" layoutY="18.0" prefHeight="242.0" prefWidth="410.0" style="-fx-background-color: #868DAC;" styleClass="pane">
+      <AnchorPane layoutX="111.0" layoutY="27.0" prefHeight="242.0" prefWidth="455.0" style="-fx-background-color: #868DAC;" styleClass="pane">
          <children>
             <TextField fx:id="login" alignment="CENTER" layoutX="57.0" layoutY="26.0" prefHeight="42.0" prefWidth="296.0" styleClass="t_field" />
             <Label layoutX="179.0" layoutY="76.0" text="DRIVER ID" />
@@ -21,5 +16,6 @@
         </Button>
          </children>
       </AnchorPane>
+      <Button fx:id="Logout" layoutX="14.0" layoutY="37.0" mnemonicParsing="false" onAction="#Logout" prefHeight="25.0" prefWidth="90.0" styleClass="account_buttons" text="Back" />
            </children>
 </AnchorPane>

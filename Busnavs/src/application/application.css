@@ -57,9 +57,23 @@
     -fx-border-width: 2px; /* Border width */
 }
 
+.main-button{
+    -fx-background-color: transparent; /* White background for a cleaner look */
+    -fx-text-fill: #FFFFFF; /* Color text to match your previous button color */
+    -fx-font-size: 20px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 30px; /* Rounded corners */
+    -fx-padding: 30px 35px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 150px; /* Smaller minimum width */
+    -fx-alignment: center; /* Center text within the button */    
+     -fx-border-color: #000000; /* Border color */
+    -fx-border-width: 2px; /* Border width */
+}
 
 
-.route-button:hover, .driver-button:hover, .vbox_routebutton:ho{
+
+
+.route-button:hover, .driver-button:hover, .vbox_routebutton:hover, .main-button:hover{
 	 -fx-border-color: #e0e0e0; /* Border color */
     -fx-border-width: 2px; /* Border width */
     -fx-cursor: hand; /* Cursor change to indicate button is clickable */
@@ -230,6 +244,18 @@
     -fx-border-width: 10;
     -fx-background-color: #000000; /* Assuming a dark background for contrast */
     -fx-padding: 10;
+}
+
+.title-label {
+    -fx-font-size: 24px; /* Set the font size */
+    -fx-text-fill: #333333; /* Set the text color */
+    -fx-padding: 10px; /* Add padding around the label */
+    -fx-background-color: white; /* Set background color */
+    -fx-border-color: transparent; /* Set border color */
+    -fx-border-width: 2px; /* Set border width */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-radius: 5px; /* Match the border radius */
+    -fx-alignment: center; /* Center the text */
 }
 
 

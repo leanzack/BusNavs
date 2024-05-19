@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 
 public class inside_controller2 {
@@ -73,9 +75,10 @@ public class inside_controller2 {
 
     // Method to load route buttons from the database
     public void loadRouteButtons() {
-    	String query = "SELECT route_name, fare FROM routes " + 
-                "UNION ALL " + 
-                "SELECT selected_route AS route_name, fare AS fare FROM selectedroutes";
+    	String query = "SELECT route_name, fare FROM routes " +
+	               "UNION ALL " +
+	               "SELECT selected_route AS route_name, fare AS fare " +
+	               "FROM (SELECT DISTINCT selected_route, fare FROM selectedroutes) AS subquery";
     	
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pst = conn.prepareStatement(query);
@@ -199,10 +202,19 @@ public class inside_controller2 {
         
     }
     
+    
+    
+ 
+    
     public void routeActionselected() {
     	
+   
+        Random random = new Random();
+        int ticketId = generateTicketId(random);
 
-    	String updateQuery = "INSERT INTO ticket (route_name, driver_name, passenger_name, fare) VALUES (?, ?, ?, ?)";
+      
+
+    	String updateQuery = "INSERT INTO ticket (route_name, driver_name, passenger_name, fare, ticket_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             for (int i = 0; i < selectedRouteNamesForTicket.size(); i++) {
@@ -210,6 +222,9 @@ public class inside_controller2 {
                 pstmt.setString(2, selectedDriversForTicket.get(i));
                 pstmt.setString(3, passengername);
                 pstmt.setDouble(4, selectedFaresForTicket.get(i));
+                pstmt.setInt(5, ticketId);
+
+
                 pstmt.executeUpdate();
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Selection saved successfully!");
@@ -218,9 +233,18 @@ public class inside_controller2 {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to save selection: " + e.getMessage());
             alert.showAndWait();
         }
+             
     }
     
-}	
+    private int generateTicketId(Random random) {
+        // Generate a random integer between 1000 and 9999
+        return 1 + random.nextInt(1000);
+    }
+   
+    
+}
+
+
 
     
 

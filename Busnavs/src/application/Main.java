@@ -4,45 +4,39 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	
+ 
 
-    
+ 
+	@Override
     public void start(Stage primaryStage) {
-    	
-    	 
         try {
-        	
-        	
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/edit.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"));
+            Parent root = loader.load();
+
+ 
 
             Scene scene = new Scene(root);
+	        String cssPath = "application.css"; // Adjust this path as needed
+            scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
 
-        	   String cssPath = "application.css"; // Adjust this path as needed
-               scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
-
-        	
-     
-      
             primaryStage.setScene(scene);
-            primaryStage.show();
             primaryStage.setResizable(false);
             primaryStage.setTitle("Busnavs: Navigation and Ticketing");
-            primaryStage.getStyle();
-
-        } catch(Exception e) {
+            primaryStage.show();
+            
+            
+          
+          
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
-      
     }
    
 
@@ -62,4 +56,5 @@ public class Main extends Application {
         }
  
     }
+    
 }
