@@ -17,27 +17,32 @@
                <children>
                   <AnchorPane layoutX="229.0" layoutY="4.0" prefHeight="722.0" prefWidth="845.0" style="-fx-background-color: #4f566c;" styleClass="pane">
                      <children>
-	<Button fx:id="addRouteButton" layoutX="767.0" layoutY="33.0" mnemonicParsing="false" onAction="#addRouteAction" prefHeight="51.0" prefWidth="53.0" style="-fx-background-color: transparent;" styleClass="add_route" text="+" />
-                        <Label layoutX="711.0" layoutY="50.0" prefHeight="17.0" prefWidth="56.0" text="Add route" textFill="WHITE" />
-                        <Label layoutX="396.0" layoutY="25.0" text="Route List" textFill="WHITE" />
+	<Button fx:id="addRouteButton" layoutX="767.0" mnemonicParsing="false" onAction="#addRouteAction" prefHeight="51.0" prefWidth="53.0" style="-fx-background-color: transparent;" styleClass="add_route" text="+" />
+                        <Label layoutX="711.0" layoutY="17.0" prefHeight="17.0" prefWidth="56.0" text="Add route" textFill="WHITE" />
+                        <Label layoutX="396.0" layoutY="17.0" text="Route List" textFill="WHITE" />
                         <AnchorPane layoutX="6.0" layoutY="682.0" prefHeight="33.0" prefWidth="298.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                            <children>
             					<Button fx:id="selected" layoutX="62.0" layoutY="2.0" mnemonicParsing="false" onAction="#routeSelected" opacity="0.69" prefHeight="25.0" prefWidth="181.0" styleClass="done_route" text="Done" visible="false" />
 	                           </children>
                         </AnchorPane>
-                        <Label alignment="CENTER" layoutX="285.0" layoutY="47.0" prefHeight="23.0" prefWidth="275.0" text="Select your routes today" textFill="WHITE" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="235.0" layoutY="73.0" prefHeight="233.0" prefWidth="824.0" style="-fx-background-color: #868DAC;" styleClass="pane">
+                  <AnchorPane layoutX="236.0" layoutY="49.0" prefHeight="256.0" prefWidth="823.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                      <children>
-                        <ScrollPane layoutX="11.0" layoutY="6.0" prefHeight="212.0" prefWidth="803.0" style="-fx-background-color: #868DAC;" styleClass="my-scroll-pane">
-                           <content>
-           <HBox fx:id="hbox_route" alignment="CENTER_LEFT" prefHeight="197.0" prefWidth="801.0" style="-fx-background-color: #868DAC;">
+                        <BorderPane layoutX="14.0" layoutY="-1.0" prefHeight="248.0" prefWidth="793.0" style="-fx-background-color: #868DAC;">
+                           <center>
+                              <ScrollPane prefWidth="793.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+                                 <content>
+                 <HBox fx:id="hbox_route" alignment="CENTER_LEFT" prefHeight="209.5" prefWidth="791.0" style="-fx-background-color: #868DAC;" styleClass="hbox-container">
         </HBox>
-                           </content>
-                        </ScrollPane>
-                   
-                                                   </children>
+                                 </content>
+                              </ScrollPane>
+                           </center>
+                           <top>
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="275.0" text="Select your routes today" textFill="WHITE" BorderPane.alignment="CENTER" />
+                           </top>
+                        </BorderPane>
+                     </children>
                   </AnchorPane>
                   <AnchorPane layoutX="235.0" layoutY="310.0" prefHeight="373.0" prefWidth="298.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                      <children>
