@@ -13,7 +13,7 @@
     <children>
 			<AnchorPane layoutY="-19.0" prefHeight="761.0" prefWidth="1156.0" style="-fx-background-color: #687197;" styleClass="pane">
          <children>
-            <Label layoutX="573.0" layoutY="327.0" text="Available driver in your selected route" textFill="WHITE" />
+            <Label layoutX="573.0" layoutY="333.0" text="Available driver in your selected route" textFill="WHITE" />
             <ScrollPane layoutX="251.0" layoutY="350.0" prefHeight="121.0" prefWidth="777.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
                <content>
                   <HBox fx:id="h_box_fordriver" alignment="CENTER" prefHeight="119.0" prefWidth="775.0" style="-fx-background-color: #868DAC;" styleClass="hbox-container" />
@@ -27,7 +27,7 @@
             <Label alignment="CENTER" layoutX="535.0" layoutY="35.0" prefHeight="23.0" prefWidth="275.0" text="Select your routes today" textFill="WHITE" />
   <Button fx:id="selected" layoutX="317.0" layoutY="722.0" mnemonicParsing="false" onAction="#routeActionselected" opacity="0.69" prefHeight="25.0" prefWidth="160.0" styleClass="done_route" text="Done" />
             
-                        <Label layoutX="347.0" layoutY="462.0" text="Ticket information " textFill="WHITE" />
+                        <Label layoutX="349.0" layoutY="471.0" text="Route information" textFill="WHITE" />
             <BorderPane layoutX="266.0" layoutY="58.0" prefHeight="269.0" prefWidth="836.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                <top>
                   <AnchorPane prefHeight="269.0" prefWidth="776.0" BorderPane.alignment="CENTER">
@@ -36,7 +36,7 @@
                            <center>
                               <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="206.0" prefWidth="788.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
                                  <content>
-                                    <HBox fx:id="h_box" alignment="CENTER_LEFT" prefHeight="204.0" prefWidth="785.0" style="-fx-background-color: #868DAC;" styleClass="pane" />
+                                    <HBox fx:id="hbox_route" alignment="CENTER_LEFT" prefHeight="204.0" prefWidth="785.0" style="-fx-background-color: #868DAC;" styleClass="pane" />
                                  </content>
                               </ScrollPane>
                            </center>

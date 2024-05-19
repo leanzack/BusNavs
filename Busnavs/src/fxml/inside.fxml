@@ -11,33 +11,33 @@
 
 <BorderPane prefHeight="724.0" prefWidth="1084.0" style="-fx-background-color: #687197;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <AnchorPane prefHeight="719.0" prefWidth="1084.0" style="-fx-background-color: transparent;" styleClass="root">
+      <AnchorPane prefHeight="719.0" prefWidth="1084.0" styleClass="root">
           <children>
 			<AnchorPane prefHeight="741.0" prefWidth="1084.0" style="-fx-background-color: #687197;" styleClass="main-panel">
                <children>
                   <AnchorPane layoutX="229.0" layoutY="4.0" prefHeight="722.0" prefWidth="845.0" style="-fx-background-color: #4f566c;" styleClass="pane">
                      <children>
-	<Button fx:id="addRouteButton" layoutX="767.0" layoutY="22.0" mnemonicParsing="false" onAction="#addRouteAction" prefHeight="51.0" prefWidth="53.0" style="-fx-background-color: transparent;" styleClass="add_route" text="+" />
-                        <Label layoutX="711.0" layoutY="39.0" prefHeight="17.0" prefWidth="56.0" text="Add route" textFill="WHITE" />
-                        <Label layoutX="396.0" layoutY="14.0" text="Route List" textFill="WHITE" />
+	<Button fx:id="addRouteButton" layoutX="767.0" layoutY="33.0" mnemonicParsing="false" onAction="#addRouteAction" prefHeight="51.0" prefWidth="53.0" style="-fx-background-color: transparent;" styleClass="add_route" text="+" />
+                        <Label layoutX="711.0" layoutY="50.0" prefHeight="17.0" prefWidth="56.0" text="Add route" textFill="WHITE" />
+                        <Label layoutX="396.0" layoutY="25.0" text="Route List" textFill="WHITE" />
                         <AnchorPane layoutX="6.0" layoutY="682.0" prefHeight="33.0" prefWidth="298.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                            <children>
             					<Button fx:id="selected" layoutX="62.0" layoutY="2.0" mnemonicParsing="false" onAction="#routeSelected" opacity="0.69" prefHeight="25.0" prefWidth="181.0" styleClass="done_route" text="Done" visible="false" />
 	                           </children>
                         </AnchorPane>
-                        <Label alignment="CENTER" layoutX="285.0" layoutY="36.0" prefHeight="23.0" prefWidth="275.0" text="Select your routes today" textFill="WHITE" />
+                        <Label alignment="CENTER" layoutX="285.0" layoutY="47.0" prefHeight="23.0" prefWidth="275.0" text="Select your routes today" textFill="WHITE" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="235.0" layoutY="75.0" prefHeight="231.0" prefWidth="824.0" style="-fx-background-color: #868DAC;" styleClass="pane">
+                  <AnchorPane layoutX="235.0" layoutY="73.0" prefHeight="233.0" prefWidth="824.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                      <children>
-                        <ScrollPane layoutX="11.0" layoutY="6.0" prefHeight="225.0" prefWidth="787.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+                        <ScrollPane layoutX="11.0" layoutY="6.0" prefHeight="212.0" prefWidth="803.0" style="-fx-background-color: #868DAC;" styleClass="my-scroll-pane">
                            <content>
-           <HBox fx:id="hbox_route" alignment="CENTER_LEFT" prefHeight="204.0" prefWidth="785.0" style="-fx-background-color: #868DAC;">
+           <HBox fx:id="hbox_route" alignment="CENTER_LEFT" prefHeight="197.0" prefWidth="801.0" style="-fx-background-color: #868DAC;">
         </HBox>
                            </content>
                         </ScrollPane>
                    
-                                       </children>
+                                                   </children>
                   </AnchorPane>
                   <AnchorPane layoutX="235.0" layoutY="310.0" prefHeight="373.0" prefWidth="298.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                      <children>
@@ -65,14 +65,15 @@
                   <AnchorPane layoutX="13.0" layoutY="207.0" prefHeight="98.0" prefWidth="191.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                      <children>
                         <ImageView fx:id="imageView" fitHeight="76.0" fitWidth="75.0" layoutX="14.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" styleClass="transparent-background" />
-                        <Label alignment="CENTER" layoutX="93.0" layoutY="61.0" prefHeight="17.0" prefWidth="90.0" text="Driver" />
-				                <Label fx:id="driverNameLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="85.0" layoutY="20.0" prefHeight="27.0" prefWidth="105.0" text="Label" />
+                        <Label fx:id="driverNameLabel" alignment="CENTER" layoutX="97.0" layoutY="26.0" prefHeight="27.0" prefWidth="94.0" text="Label" />
+                        <Label alignment="CENTER" layoutX="101.0" layoutY="62.0" prefHeight="17.0" prefWidth="90.0" text="Driver" />
                      </children>
                   </AnchorPane>
                   <ImageView fx:id="logo" fitHeight="122.0" fitWidth="186.0" layoutX="16.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" styleClass="pane" />
 				        <AnchorPane fx:id="logout_frame" layoutX="13.0" layoutY="673.0" prefHeight="42.0" prefWidth="191.0" style="-fx-background-color: #868DAC;" styleClass="logout">
 				            <children>
-                        <Button fx:id="Logout" layoutX="61.0" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#Logout_account" prefHeight="27.0" prefWidth="69.0" style="-fx-background-color: #FFFFFF;" styleClass="Logout_route" text="Logout" />
+				                <Label fx:id="driverNameLabel" alignment="CENTER" layoutX="96.0" layoutY="8.0" prefHeight="27.0" prefWidth="94.0" text="Label" />
+                        <Button fx:id="Logout" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#Logout_account" prefHeight="27.0" prefWidth="69.0" style="-fx-background-color: #FFFFFF;" styleClass="Logout_route" text="Logout" />
 				            </children>
 				        </AnchorPane>
     </children>
