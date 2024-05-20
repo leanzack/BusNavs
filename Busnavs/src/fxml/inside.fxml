@@ -31,7 +31,8 @@
       </AnchorPane>
                         <AnchorPane layoutX="3.0" layoutY="307.0" prefHeight="408.0" prefWidth="827.0" style="-fx-background-color: #4f566c;" styleClass="pane">
                            <children>
-                              <BorderPane fx:id="border_visibility" prefHeight="364.0" prefWidth="297.0">
+                              <AnchorPane layoutX="299.0" layoutY="196.0" prefHeight="152.0" prefWidth="499.0" style="-fx-background-color: #4f566c;" styleClass="pane" />
+                              <BorderPane fx:id="border_visibility" layoutX="14.0" layoutY="14.0" prefHeight="227.0" prefWidth="297.0">
                                  <top>
                                     <Label fx:id="today" text="Your routes" textFill="WHITE" BorderPane.alignment="CENTER" />
                                  </top>
@@ -39,18 +40,30 @@
                                  
                                                                                             <ScrollPane fx:id="myScrollPane" fitToWidth="true" prefHeight="383.0" prefWidth="297.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
                                        <content>
-                                        <VBox fx:id="vbox_route" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="345.0" prefWidth="295.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />                                                               
+                                        <VBox fx:id="vbox_route" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="208.0" prefWidth="295.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />                                                               
                                        </content>
                                     </ScrollPane>
                                  </right>
                               </BorderPane>
-                              <ScrollPane fx:id="myScrollPane1" fitToWidth="true" layoutX="303.0" layoutY="6.0" prefHeight="170.0" prefWidth="491.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+                              <ScrollPane fx:id="myScrollPane1" fitToWidth="true" layoutX="322.0" layoutY="14.0" prefHeight="348.0" prefWidth="491.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
                                  <content>
-                                    <VBox fx:id="route_list" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="168.0" prefWidth="489.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
+                                    <VBox fx:id="route_list" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="346.0" prefWidth="489.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
                                  </content>
                               </ScrollPane>
-                              <Label fx:id="today1" layoutX="384.0" layoutY="6.0" text="Current Routes" textFill="#f8f8f8" />
-            					<Button fx:id="selected" layoutX="73.0" layoutY="379.0" mnemonicParsing="false" onAction="#donerouteSelected" opacity="0.69" prefHeight="21.0" prefWidth="151.0" styleClass="done_route" text="Done" />
+                              <Label fx:id="today1" layoutX="528.0" layoutY="6.0" text="Current Routes" textFill="#f8f8f8" />
+            					<Button fx:id="selected" layoutX="514.0" layoutY="362.0" mnemonicParsing="false" onAction="#donerouteSelected" opacity="0.69" prefHeight="31.0" prefWidth="151.0" styleClass="done_route" text="Done" />
+                              <BorderPane fx:id="list_visibility1" layoutX="14.0" layoutY="235.0" prefHeight="166.0" prefWidth="297.0">
+                                 <top>
+                                    <Label fx:id="today11" text="Ticket Information" textFill="WHITE" BorderPane.alignment="CENTER" />
+                                 </top>
+                                 <center>
+                                    <ScrollPane fx:id="myScrollPane11" fitToWidth="true" prefHeight="135.0" prefWidth="491.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
+                                       <content>
+                                          <VBox fx:id="ticket_list" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="147.0" prefWidth="295.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
+                                       </content>
+                                    </ScrollPane>
+                                 </center>
+                              </BorderPane>
                            </children>
                         </AnchorPane>
                      </children>

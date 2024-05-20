@@ -115,8 +115,8 @@ public class inside_controller {
         loadRouteButtons();   
        // queryTickets();
         updateNewVBoxWithSelectedRoutes();
+        donerouteSelected();
        
-        
         try {
             Image driverImage = new Image(getClass().getResource("/imageg/driver.png").toExternalForm());
             imageView.setImage(driverImage);
@@ -238,7 +238,9 @@ public class inside_controller {
 	                    hBox.setAlignment(Pos.CENTER);  // Center the buttons within the HBox
 
 	                    // Attach event handler to routeButton for deselection
-	                    routeButton.setOnAction(event -> deselectRoute(routeName));
+	                   s routeButton.setOnAction(event -> deselectRoute(routeName));
+
+	             
 	                    //fareButton.setOnAction(event -> deselectRoute(routeName));
 	                fareButton.setOnAction(e -> fareUps_insideDriver(routeName, fare));
 
@@ -269,11 +271,7 @@ public class inside_controller {
 		        return; // Exit the method to prevent adding the route again
 		    }
 
-    	
-
-    	border_visibility.setVisible(true);
-      	today.setVisible(true);
-      	selected.setVisible(true);
+    
      
 
       	 if (!selectedRouteNamesForDriver.contains(routeName)) {
@@ -363,11 +361,7 @@ public class inside_controller {
 	            // Show success message
 	            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Selected routes added successfully for driver: " + driverName);
 	            alert.showAndWait();
-	        } else {
-	            // Show error message
-	            Alert alert = new Alert(Alert.AlertType.ERROR, "No new routes selected or all routes already exist for the driver.");
-	            alert.showAndWait();
-	        }
+	        } 
 	    } catch (SQLException e) {
 	        // Handle SQL exception
 	        e.printStackTrace();
@@ -444,6 +438,7 @@ public class inside_controller {
 	    selectedRouteButtons.remove(fareLabel);
 	    loadRouteButtons();
         updateNewVBoxWithSelectedRoutes();
+        
 	    // Update the VBox to reflect the current state of selected routes
 	    Platform.runLater(() -> {
 	        vbox_route.getChildren().clear();

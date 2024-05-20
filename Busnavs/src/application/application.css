@@ -46,10 +46,10 @@
 
 .vbox_routebutton {
    -fx-background-color: transparent; /* White background for a cleaner look */
-    -fx-text-fill: #000000; /* Color text to match your previous button color */
-    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
-    -fx-border-radius: 30px; /* Rounded corners */
-    -fx-padding: 30px 35px; /* Reduced padding for a less chunky feel */
+    -fx-text-fill: white; /* Color text to match your previous button color */
+    -fx-font-size: 12px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius:10px; /* Rounded corners */
+    -fx-padding: 10px 15px; /* Reduced padding for a less chunky feel */
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
     -fx-min-width: 150px; /* Smaller minimum width */
     -fx-alignment: center; /* Center text within the button */    
