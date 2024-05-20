@@ -57,6 +57,10 @@ public class inside_controller {
     
     @FXML 
     private VBox vbox_route;
+    
+    @FXML 
+    private VBox route_list;
+  
   
     @FXML 
     private BorderPane border_visibility;
@@ -77,6 +81,8 @@ public class inside_controller {
     private String selectedRouteName;
     @FXML 
     private double fareLabel;
+    
+    
   
  
  
@@ -101,8 +107,7 @@ public class inside_controller {
     
     public void initialize() throws IOException {
         loadRouteButtons();
-        
-    
+       
         
         try {
             Image driverImage = new Image(getClass().getResource("/imageg/driver.png").toExternalForm());
@@ -136,17 +141,16 @@ public class inside_controller {
 	            	
 	            System.out.println("Logging out driver: " + driverName);
 
-	        } else {
-	            System.out.println("No driver is logged in.");
-	        }
+	        } 
 	    }		
 
 
 	public void loadRouteButtons() {
 		String query = "SELECT route_name, fare FROM routes " +
-	               "UNION ALL " +
-	               "SELECT selected_route AS route_name, fare AS fare " +
-	               "FROM (SELECT DISTINCT selected_route, fare FROM selectedroutes) AS subquery";
+                "UNION ALL " +
+                "SELECT selected_route AS route_name, fare AS fare " +
+                "FROM (SELECT DISTINCT selected_route, fare FROM selectedroutes) AS subquery " +
+                "WHERE NOT EXISTS (SELECT 1 FROM routes WHERE routes.route_name = subquery.selected_route AND routes.fare = subquery.fare)";
 
 
         try (Connection conn = dbManager.getConnection();
@@ -195,8 +199,18 @@ public class inside_controller {
     
 
 	private void handleRouteSelection(String routeName, double fare) {
+		
+		 if (selectedRouteNamesForDriver.contains(routeName)) {
+		        // Display an alert if the route is already selected
+		        Platform.runLater(() -> {
+		            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Route already selected: " + routeName);
+		            alert.showAndWait();
+		        });
+		        return; // Exit the method to prevent adding the route again
+		    }
+
     	
-    
+
     	border_visibility.setVisible(true);
       	today.setVisible(true);
       	selected.setVisible(true);
@@ -241,11 +255,20 @@ public class inside_controller {
          
 	}
 	
-	public void routeSelected() {
+	public void donerouteSelected() {
 	    // Insert the selected routes for the current driver into the selectedroutes table
-	    insertSelectedRoutesForDriver();
+	    insertSelectedRoutesForDriver();	    
+	
 	    
+	    updateNewVBoxWithSelectedRoutes();
+
+	    Platform.runLater(() -> {
+	        vbox_route.getChildren().clear();
+	    });
 	}
+	   
+	    
+	
 
 	private void insertSelectedRoutesForDriver() {
 	    String insertQuery = "INSERT INTO selectedroutes (driver_name, selected_route, fare) VALUES (?, ?, ?)";
@@ -297,15 +320,7 @@ public class inside_controller {
 	
 	    
 	}
-	
-	private void clearthelist() {
-	    selectedRouteNamesForDriver.clear();
-	    selectedRouteButtons.clear();
-	    fareLabels.clear();
-	    selectedRouteNames.clear();
 
-		  
-	}
 
 
 	private double getFareForRoute(String routeName) {
@@ -338,8 +353,8 @@ public class inside_controller {
 	        alert.showAndWait();
 	    }
 	    
-        selectedRouteNamesForDriver.clear();
-        selectedRouteButtons.clear();
+  
+	    
 	 
 	    
 	    // Throw an exception if fare is not found for the route
@@ -347,10 +362,8 @@ public class inside_controller {
 	}
 
 	private void handleRouteDeselection(String routeName, Button s_route, Button fareLabel) {
-	    // Remove the deselected route from the list of selected routes for the driver
 	    selectedRouteNamesForDriver.remove(routeName);
 
-	    // Remove the deselected route and fare label buttons from the list of selected route buttons
 	    selectedRouteButtons.remove(s_route);
 	    selectedRouteButtons.remove(fareLabel);
 
@@ -386,6 +399,8 @@ public class inside_controller {
 		            alert.showAndWait();
 		        }
 		        loadRouteButtons();
+			    selectedRouteNamesForDriver.clear();
+
 		    });
 		}
 	
@@ -409,6 +424,7 @@ public class inside_controller {
 	        e.printStackTrace();
 	    }
 	    loadRouteButtons();
+	    vbox_route.getChildren().clear();
 	}
 	    
 	
@@ -436,6 +452,7 @@ public class inside_controller {
                 
             }
             loadRouteButtons();
+
         });
     }
     
@@ -468,6 +485,7 @@ public class inside_controller {
   	      
   	       }
   	   loadRouteButtons();
+
   	   }
     
     public void routeSelected2() {
@@ -506,8 +524,7 @@ public class inside_controller {
             e.printStackTrace(); // You can replace this with logging or other error handling
             
         }
-        loadRouteButtons();
-    }
+        loadRouteButtons();    }
     
 
     private double queryFareForRoute(String routeName) throws SQLException {
@@ -666,6 +683,27 @@ private void insertTODB(String routeName, double fare) {
 				    alert.setTitle("Error");
 				    alert.setHeaderText("Error");
 				    alert.showAndWait();		
+			}
+			
+			private void updateNewVBoxWithSelectedRoutes() {
+			    Platform.runLater(() -> {
+			        // Clear the existing children in the VBox to avoid duplicates
+			        route_list.getChildren().clear();
+			        
+			        // Iterate over the selectedRouteNamesForDriver list to display routes and fares
+			        for (String routeName : selectedRouteNamesForDriver) {
+			            double fare = getFareForRoute(routeName); // Get the fare for the route
+			            
+			            // Create a new Button for each route with fare
+			            Button routeButton = new Button(routeName);
+			            Button fareButton = new Button("₱" + String.format("%.2f", fare));
+			            routeButton.getStyleClass().add("fare-button");
+			            fareButton.getStyleClass().add("fare-button");
+
+			            route_list.getChildren().add(routeButton);
+			            route_list.getChildren().add(fareButton);
+			        }
+			    });
 			}
 
 
