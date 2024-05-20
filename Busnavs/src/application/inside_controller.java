@@ -88,7 +88,7 @@ public class inside_controller {
     @FXML
     private String selectedRouteName;
     @FXML 
-    private double fareLabel;
+    private Button fareLabel;
     
     
   
@@ -113,7 +113,7 @@ public class inside_controller {
     public void initialize() throws IOException {
     
         loadRouteButtons();   
-        queryTickets();
+       // queryTickets();
         updateNewVBoxWithSelectedRoutes();
        
         
@@ -280,18 +280,12 @@ public class inside_controller {
              selectedRouteNamesForDriver.add(routeName);
          }
       	 
-             Button s_route = new Button(routeName);
-             s_route.getStyleClass().add("vbox_routebutton");
-             s_route.setWrapText(true); // Enable text wrapping
+      	Button s_route = new Button(String.format("%s - ₱%.2f", routeName, fare));
+      	s_route.getStyleClass().add("vbox_routebutton");
+      	s_route.setWrapText(true); // Enable text wrapping
 
-             Button fareLabel = new Button(String.format("₱%.2f", fare));
-             selectedRouteButtons.add(s_route);
-             fareLabel.getStyleClass().add("fare-button");
-
-             selectedRouteButtons.add(fareLabel);
+      	selectedRouteButtons.add(s_route);
              
-             fareLabel.setMinWidth(150); // Or any fixed width you desire
-            // fareLabel.setOnAction(e -> fareUps_insideDriver(routeName, fare));
 
              s_route.setOnAction(e -> handleRouteDeselection(routeName, s_route, fareLabel));
              s_route.setMaxWidth(Double.MAX_VALUE);
@@ -325,7 +319,6 @@ public class inside_controller {
 	    
 		
       	
-      	list_visibility.setVisible(true);
 	    updateNewVBoxWithSelectedRoutes();
 	    loadRouteButtons();
 	    Platform.runLater(() -> {
@@ -818,7 +811,7 @@ private void insertTODB(String routeName, double fare) {
 			        updateNewVBoxWithSelectedRoutes();
 			    }
 			
-
+/*
 			 public void queryTickets() {
 				    String query = "SELECT ticket_id, passenger_name, fare, route_name FROM ticket WHERE driver_name = ?";
 
@@ -855,6 +848,7 @@ private void insertTODB(String routeName, double fare) {
 				        showErrorAlert("Error loading tickets: " + ex.getMessage());
 				    }
 				}
+			*/
 
 		    private void showErrorAlert(String message) {
 		        Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -20,11 +20,6 @@
       				<Button fx:id="addRouteButton" layoutX="767.0" mnemonicParsing="false" onAction="#addRouteAction" prefHeight="51.0" prefWidth="53.0" style="-fx-background-color: transparent;" styleClass="add_route" text="+" />
                         <Label layoutX="711.0" layoutY="17.0" prefHeight="17.0" prefWidth="56.0" text="Add route" textFill="WHITE" />
                         <Label layoutX="404.0" layoutY="17.0" text="Route List" textFill="WHITE" />
-                        <AnchorPane layoutX="6.0" layoutY="682.0" prefHeight="33.0" prefWidth="298.0" style="-fx-background-color: #4f566c;" styleClass="pane">
-                           <children>
-            					<Button fx:id="selected" layoutX="62.0" layoutY="2.0" mnemonicParsing="false" onAction="#donerouteSelected" opacity="0.69" prefHeight="25.0" prefWidth="181.0" styleClass="done_route" text="Done" visible="false" />
-      	                           </children>
-                        </AnchorPane>
                       <AnchorPane layoutX="5.0" layoutY="58.0" prefHeight="242.0" prefWidth="825.0" style="-fx-background-color: #4f566c;" styleClass="pane">
       <children>
         <ScrollPane hbarPolicy="ALWAYS" layoutX="8.0" layoutY="3.0" prefHeight="219.0" prefWidth="810.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" vbarPolicy="NEVER">
@@ -34,59 +29,30 @@
         </ScrollPane>
       </children>
       </AnchorPane>
-                        <AnchorPane layoutX="307.0" layoutY="307.0" prefHeight="408.0" prefWidth="523.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+                        <AnchorPane layoutX="3.0" layoutY="307.0" prefHeight="408.0" prefWidth="827.0" style="-fx-background-color: #4f566c;" styleClass="pane">
                            <children>
-                              <AnchorPane layoutX="12.0" layoutY="204.0" prefHeight="152.0" prefWidth="499.0" style="-fx-background-color: #4f566c;" styleClass="pane">
-                                 <children>
-                                    <BorderPane fx:id="list_visibility1" layoutX="1.0" prefHeight="171.0" prefWidth="491.0">
-                                       <top>
-                                          <Label fx:id="today11" text="Ticket Information" BorderPane.alignment="CENTER" />
-                                       </top>
-                                       <right>
-                                          <ScrollPane fx:id="myScrollPane11" fitToWidth="true" prefHeight="251.0" prefWidth="491.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
-                                             <content>
-                                                <VBox fx:id="ticket_list" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="152.0" prefWidth="295.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
-                                             </content>
-                                          </ScrollPane>
-                                       </right>
-                                    </BorderPane>
-                                 </children>
-                              </AnchorPane>
+                              <BorderPane fx:id="border_visibility" prefHeight="364.0" prefWidth="297.0">
+                                 <top>
+                                    <Label fx:id="today" text="Your routes" textFill="WHITE" BorderPane.alignment="CENTER" />
+                                 </top>
+                                 <right>
+                                 
+                                                                                            <ScrollPane fx:id="myScrollPane" fitToWidth="true" prefHeight="383.0" prefWidth="297.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
+                                       <content>
+                                        <VBox fx:id="vbox_route" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="345.0" prefWidth="295.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />                                                               
+                                       </content>
+                                    </ScrollPane>
+                                 </right>
+                              </BorderPane>
+                              <ScrollPane fx:id="myScrollPane1" fitToWidth="true" layoutX="303.0" layoutY="6.0" prefHeight="170.0" prefWidth="491.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+                                 <content>
+                                    <VBox fx:id="route_list" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="168.0" prefWidth="489.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
+                                 </content>
+                              </ScrollPane>
+                              <Label fx:id="today1" layoutX="384.0" layoutY="6.0" text="Current Routes" textFill="#f8f8f8" />
+            					<Button fx:id="selected" layoutX="73.0" layoutY="379.0" mnemonicParsing="false" onAction="#donerouteSelected" opacity="0.69" prefHeight="21.0" prefWidth="151.0" styleClass="done_route" text="Done" />
                            </children>
                         </AnchorPane>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="235.0" layoutY="310.0" prefHeight="373.0" prefWidth="298.0" style="-fx-background-color: #4f566c;" styleClass="pane">
-                     <children>
-                        <BorderPane fx:id="border_visibility" layoutX="1.0" prefHeight="364.0" prefWidth="297.0">
-                           <top>
-                              <Label fx:id="today" text="Your routes" BorderPane.alignment="CENTER" />
-                           </top>
-                           <right>
-                           
-                                                                    <ScrollPane fx:id="myScrollPane" fitToWidth="true" prefHeight="333.0" prefWidth="297.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
-                                 <content>
-                                  <VBox fx:id="vbox_route" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="353.0" prefWidth="196.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />                                                               
-                                 </content>
-                              </ScrollPane>
-                           </right>
-                        </BorderPane>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="550.0" layoutY="319.0" prefHeight="152.0" prefWidth="499.0" style="-fx-background-color: #4f566c;" styleClass="pane">
-                     <children>
-                        <BorderPane fx:id="list_visibility" layoutX="1.0" prefHeight="171.0" prefWidth="491.0">
-                           <top>
-                              <Label fx:id="today1" text="Current Routes" BorderPane.alignment="CENTER" />
-                           </top>
-                           <right>
-                              <ScrollPane fx:id="myScrollPane1" fitToWidth="true" prefHeight="251.0" prefWidth="491.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
-                                 <content>
-                                    <VBox fx:id="route_list" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="152.0" prefWidth="295.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
-                                 </content>
-                              </ScrollPane>
-                           </right>
-                        </BorderPane>
                      </children>
                   </AnchorPane>
             
