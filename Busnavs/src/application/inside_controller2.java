@@ -125,11 +125,12 @@ public class inside_controller2 {
     }
     // Method to load route buttons from the database
     public void loadRouteButtons() {
-    	String query = "SELECT route_name, fare FROM routes " +
-	               "UNION ALL " +
-	               "SELECT selected_route AS route_name, fare AS fare " +
-	               "FROM (SELECT DISTINCT selected_route, fare FROM selectedroutes) AS subquery";
-    	
+    	String query = "SELECT route_name, fare, null as driver_name FROM routes " +
+                "UNION ALL " +
+                "SELECT selected_route AS route_name, fare AS fare, driver_name " +
+                "FROM (SELECT DISTINCT selected_route, fare, driver_name FROM selectedroutes) AS subquery " +
+                "WHERE NOT EXISTS (SELECT 1 FROM routes WHERE routes.route_name = subquery.selected_route AND routes.fare = subquery.fare)";
+ 	
         try (Connection conn = dbManager.getConnection();
              PreparedStatement pst = conn.prepareStatement(query);
              ResultSet rs = pst.executeQuery()) {
@@ -139,7 +140,14 @@ public class inside_controller2 {
                 String routeName = rs.getString("route_name");
                 double fare = rs.getDouble("fare");
 
-                Button routeButton = new Button(routeName);
+                String routeDriver = rs.getString("driver_name"); // Retrieve driver's name
+                String buttonLabel;
+                if (routeDriver != null) {
+                    buttonLabel = routeName + " (" + routeDriver + ")";
+                } else {
+                    buttonLabel = routeName;
+                }
+                Button routeButton = new Button(buttonLabel);
                 Button fareLabel = new Button(String.format("₱%.2f", fare));
                 routeButton.getStyleClass().add("route-button");
                 fareLabel.getStyleClass().add("fare-button-passenger");

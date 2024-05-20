@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -37,7 +36,22 @@
       </AnchorPane>
                         <AnchorPane layoutX="307.0" layoutY="307.0" prefHeight="408.0" prefWidth="523.0" style="-fx-background-color: #4f566c;" styleClass="pane">
                            <children>
-                              <ListView fx:id="routeed_list1" layoutX="25.0" layoutY="197.0" prefHeight="200.0" prefWidth="474.0" styleClass="pane" />
+                              <AnchorPane layoutX="12.0" layoutY="204.0" prefHeight="152.0" prefWidth="499.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+                                 <children>
+                                    <BorderPane fx:id="list_visibility1" layoutX="1.0" prefHeight="171.0" prefWidth="491.0">
+                                       <top>
+                                          <Label fx:id="today11" text="Ticket Information" BorderPane.alignment="CENTER" />
+                                       </top>
+                                       <right>
+                                          <ScrollPane fx:id="myScrollPane11" fitToWidth="true" prefHeight="251.0" prefWidth="491.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
+                                             <content>
+                                                <VBox fx:id="ticket_list" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="152.0" prefWidth="295.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
+                                             </content>
+                                          </ScrollPane>
+                                       </right>
+                                    </BorderPane>
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
                      </children>
