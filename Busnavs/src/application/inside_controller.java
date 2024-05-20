@@ -246,10 +246,8 @@ public class inside_controller {
 
              s_route.setOnAction(e -> handleRouteDeselection(routeName, s_route, fareLabel));
              s_route.setMaxWidth(Double.MAX_VALUE);
+
              fareLabel.setOnAction(e -> fareUps_insideDriver(routeName, fare));
-
-
-             
              Platform.runLater(() -> {
             	 
                  vbox_route.getChildren().clear();
@@ -306,6 +304,7 @@ public class inside_controller {
 	            }
 	        }
 	        
+	        
 	        // Execute the batch insert
 	        int[] rowsAffected = pstmt.executeBatch();
 	        
@@ -345,6 +344,7 @@ public class inside_controller {
 	        pstmt.setString(1, driverName);
 	        pstmt.setString(2, routeName);
 	        pstmt.setDouble(3, fare);
+	        
 	        try (ResultSet rs = pstmt.executeQuery()) {
 	            if (rs.next()) {
 	                int count = rs.getInt(1);
@@ -409,7 +409,7 @@ public class inside_controller {
 	        vbox_route.getChildren().addAll(selectedRouteButtons);
 	    });
 	}
-	private void fareUps_insideDriver(String routeName, double fare) {
+private void fareUps_insideDriver(String routeName, double fare) {
 		
 		 TextInputDialog dialog = new TextInputDialog(String.format("%.2f", fare));
 		    dialog.setTitle("Update Fare");
@@ -422,50 +422,104 @@ public class inside_controller {
 		        	  double newFare = Double.parseDouble(newFareStr);
 		              updateFareInDriver(routeName, newFare);
 
-		              // Update the fare label in the selectedRouteButtons list
 		              for (int i = 0; i < selectedRouteButtons.size(); i++) {
-		                  Button button = selectedRouteButtons.get(i);
-		                  if (button.getText().equals(routeName)) {
-		                      Button fareLabelButton = selectedRouteButtons.get(i + 1);
-		                      fareLabelButton.setText(String.format("₱%.2f", newFare));
-		                      break;
-		                  }
-		              }
-		          }
+			                Button button = selectedRouteButtons.get(i);
+			                if (button.getText().equals(routeName)) {
+			                    Button fareLabelButton = selectedRouteButtons.get(i + 1);
+			                    fareLabelButton.setText(String.format("₱%.2f", newFare));
+			                    break;
+			                }
+		              }		 
+		              
+		       
+
+		              // Refresh the VBox or other UI components if needed
+		              updateNewVBoxWithSelectedRoutes();
+		           
+		        }
+		        
 		        catch (NumberFormatException ex) {
 		            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Invalid fare entered: " + newFareStr);
 		            alert.showAndWait();
 		        }
-		        loadRouteButtons();
-		        updateNewVBoxWithSelectedRoutes();
-			   
+		      			   
 
 		    });
 		}
 	
-	private void updateFareInDriver(String routeName, double newFare) {
-	    String sql = "UPDATE selectedroutes SET fare = ? WHERE selected_route = ? AND driver_name = ?";
-	    
-	    try (Connection conn = dbManager.getConnection();
-	         PreparedStatement pst = conn.prepareStatement(sql)) {
+private void updateFareInDriver(String routeName, double newFare) {
+    String sql = "UPDATE selectedroutes SET fare = ? WHERE selected_route = ? AND driver_name = ?";
 
-	        pst.setDouble(1, newFare);
-	        pst.setString(2, routeName);
-	        pst.setString(3, driverName);
-	        int rowsAffected = pst.executeUpdate();
-	        if (rowsAffected > 0) {
-	            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Fare updated successfully for route: " + routeName);
-	            alert.showAndWait();
-	        }
-	    } catch (SQLException e) {
-	        Alert alert = new Alert(Alert.AlertType.ERROR, "Error updating fare for route: " + routeName);
-	        alert.showAndWait();
-	        e.printStackTrace();
-	    }
-	    loadRouteButtons();
-        updateNewVBoxWithSelectedRoutes();	}
+    try (Connection conn = dbManager.getConnection();
+         PreparedStatement pst = conn.prepareStatement(sql)) {
+
+        pst.setDouble(1, newFare);
+        pst.setString(2, routeName);
+        pst.setString(3, driverName);
+        int rowsAffected = pst.executeUpdate();
+        if (rowsAffected > 0) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Fare updated successfully for route: " + routeName);
+            alert.showAndWait();
+
+            // Update the fare label in the selectedRouteButtons list
+            for (int i = 0; i < selectedRouteButtons.size(); i++) {
+                Button button = selectedRouteButtons.get(i);
+                if (button.getText().equals(routeName)) {
+                    Button fareLabelButton = selectedRouteButtons.get(i + 1);
+                    fareLabelButton.setText(String.format("₱%.2f", newFare));
+                    break;
+                }
+            }
+
+       
+            updateNewVBoxWithSelectedRoutes();
+        }
+    } catch (SQLException e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, "Error updating fare for route: " + routeName);
+        alert.showAndWait();
+        e.printStackTrace();
+    }
+}
 	    
-	
+public void routeSelected2() {
+    String insertQuery = "INSERT IGNORE INTO SelectedRoutes (driver_name, selected_route, fare) VALUES (?, ?, ?)";
+    
+    try (Connection conn = dbManager.getConnection();
+         PreparedStatement pst = conn.prepareStatement(insertQuery)) {
+        
+        for (String routeName : selectedRouteNames) {
+            // Query the fare for the selected route from the database
+            double fare = queryFareForRoute(routeName);
+            
+            pst.setString(1, driverName);
+            pst.setString(2, routeName);
+            pst.setDouble(3, fare); // Set the fare obtained from the database
+            pst.addBatch(); // Add the current route to the batch
+        }
+
+        int[] rowsAffected = pst.executeBatch(); // Execute the batch insert
+        
+        // Check if any rows were affected
+        boolean success = false;
+        for (int row : rowsAffected) {
+            if (row > 0) {
+                success = true;
+                break;
+            }
+        }
+
+        if (success) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Driver data updated successfully. Routes: " + String.join(", ", selectedRouteNames));
+            alert.showAndWait();
+        }
+        
+    } catch (SQLException e) {
+        e.printStackTrace(); // You can replace this with logging or other error handling
+        
+    } loadRouteButtons();
+    updateNewVBoxWithSelectedRoutes();
+}
+
     private void fareUps(String routeName, double fare) {
     	
         TextInputDialog dialog = new TextInputDialog(String.format("%.2f", fare));
@@ -527,44 +581,7 @@ public class inside_controller {
 
   	   }
     
-    public void routeSelected2() {
-        String insertQuery = "INSERT IGNORE INTO SelectedRoutes (driver_name, selected_route, fare) VALUES (?, ?, ?)";
-        
-        try (Connection conn = dbManager.getConnection();
-             PreparedStatement pst = conn.prepareStatement(insertQuery)) {
-            
-            for (String routeName : selectedRouteNames) {
-                // Query the fare for the selected route from the database
-                double fare = queryFareForRoute(routeName);
-                
-                pst.setString(1, driverName);
-                pst.setString(2, routeName);
-                pst.setDouble(3, fare); // Set the fare obtained from the database
-                pst.addBatch(); // Add the current route to the batch
-            }
-
-            int[] rowsAffected = pst.executeBatch(); // Execute the batch insert
-            
-            // Check if any rows were affected
-            boolean success = false;
-            for (int row : rowsAffected) {
-                if (row > 0) {
-                    success = true;
-                    break;
-                }
-            }
-
-            if (success) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Driver data updated successfully. Routes: " + String.join(", ", selectedRouteNames));
-                alert.showAndWait();
-            }
-            
-        } catch (SQLException e) {
-            e.printStackTrace(); // You can replace this with logging or other error handling
-            
-        } loadRouteButtons();
-        updateNewVBoxWithSelectedRoutes();
-    }
+   
 
     private double queryFareForRoute(String routeName) throws SQLException {
         String fareQuery = "SELECT fare FROM routes WHERE route_name = ?";
@@ -756,7 +773,8 @@ private void insertTODB(String routeName, double fare) {
 
 			                    // Attach event handler to routeButton for deselection
 			                    routeButton.setOnAction(event -> deselectRoute(routeName));
-			                    routeButton.setOnAction(event -> deselectRoute(routeName));
+			                    fareButton.setOnAction(event -> deselectRoute(routeName));
+			                   // fareButton.setOnAction(e -> fareUps_insideDriver(routeName, fare));
 
 
 			                    hBox.getChildren().addAll(routeButton, fareButton);
@@ -788,7 +806,7 @@ private void insertTODB(String routeName, double fare) {
 					            alert.showAndWait();
 			            } else {
 			            	 Alert alert = new Alert(Alert.AlertType.NONE, "No route found to deselect for driver " + driverName);
-
+			            	   alert.showAndWait();
 			            }
 			        } catch (SQLException e) {
 			            e.printStackTrace();
