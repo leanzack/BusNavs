@@ -206,8 +206,56 @@ public class inside_controller {
         } catch (SQLException ex) {
             showErrorAlert("Error loading routes: " + ex.getMessage());
         }
-        updateNewVBoxWithSelectedRoutes();
+
     }
+	
+	
+	
+	private void updateNewVBoxWithSelectedRoutes() {
+	    Platform.runLater(() -> {
+	        route_list.getChildren().clear(); // Clear existing content before adding new routes
+
+	        // Query the database for selected routes and fares based on the driver's name
+	        String query = "SELECT DISTINCT selected_route, fare FROM selectedroutes WHERE driver_name = ?";
+
+	        try (Connection conn = dbManager.getConnection();
+	             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+	            pstmt.setString(1, driverName); // Set the driver's name as a parameter
+
+	            try (ResultSet rs = pstmt.executeQuery()) {
+	                while (rs.next()) {
+	                    String routeName = rs.getString("selected_route");
+	                    double fare = rs.getDouble("fare");
+
+	                    Button routeButton = new Button(routeName);
+	                    Button fareButton = new Button("₱" + String.format("%.2f", fare));
+	                    routeButton.getStyleClass().add("fare-button");
+	                    fareButton.getStyleClass().add("fare-button");
+
+	                    HBox hBox = new HBox();
+	                    hBox.setSpacing(10);  // Adjust the spacing as needed
+	                    hBox.setAlignment(Pos.CENTER);  // Center the buttons within the HBox
+
+	                    // Attach event handler to routeButton for deselection
+	                    routeButton.setOnAction(event -> deselectRoute(routeName));
+	                    //fareButton.setOnAction(event -> deselectRoute(routeName));
+	                fareButton.setOnAction(e -> fareUps_insideDriver(routeName, fare));
+
+
+	                    hBox.getChildren().addAll(routeButton, fareButton);
+
+	                    route_list.getChildren().add(hBox);
+	                }
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            // Handle SQL exception
+	            Alert alert = new Alert(Alert.AlertType.ERROR, "Error retrieving selected routes: " + e.getMessage());
+	            alert.showAndWait();
+	        }
+	    });
+	}
     
 
 	private void handleRouteSelection(String routeName, double fare) {
@@ -237,17 +285,17 @@ public class inside_controller {
              s_route.setWrapText(true); // Enable text wrapping
 
              Button fareLabel = new Button(String.format("₱%.2f", fare));
-             fareLabel.getStyleClass().add("fare-button");
              selectedRouteButtons.add(s_route);
+             fareLabel.getStyleClass().add("fare-button");
 
              selectedRouteButtons.add(fareLabel);
              
              fareLabel.setMinWidth(150); // Or any fixed width you desire
+            // fareLabel.setOnAction(e -> fareUps_insideDriver(routeName, fare));
 
              s_route.setOnAction(e -> handleRouteDeselection(routeName, s_route, fareLabel));
              s_route.setMaxWidth(Double.MAX_VALUE);
 
-             fareLabel.setOnAction(e -> fareUps_insideDriver(routeName, fare));
              Platform.runLater(() -> {
             	 
                  vbox_route.getChildren().clear();
@@ -301,10 +349,11 @@ public class inside_controller {
 	                pstmt.setString(2, routeName); // Set the selected route name
 	                pstmt.setDouble(3, getFareForRoute(routeName)); // Set the fare for the route
 	                pstmt.addBatch(); 
+	                
 	            }
 	        }
 	        
-	        
+
 	        // Execute the batch insert
 	        int[] rowsAffected = pstmt.executeBatch();
 	        
@@ -332,8 +381,7 @@ public class inside_controller {
 	        Alert alert = new Alert(Alert.AlertType.ERROR, "Error inserting selected routes for driver: " + e.getMessage());
 	        alert.showAndWait();
 	    }
-        loadRouteButtons();
-        updateNewVBoxWithSelectedRoutes();
+       
 
 	}
 
@@ -430,13 +478,10 @@ private void fareUps_insideDriver(String routeName, double fare) {
 			                    break;
 			                }
 		              }		 
-		              
-		       
-
-		              // Refresh the VBox or other UI components if needed
 		              updateNewVBoxWithSelectedRoutes();
-		           
+
 		        }
+		        
 		        
 		        catch (NumberFormatException ex) {
 		            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Invalid fare entered: " + newFareStr);
@@ -468,7 +513,9 @@ private void updateFareInDriver(String routeName, double newFare) {
                     Button fareLabelButton = selectedRouteButtons.get(i + 1);
                     fareLabelButton.setText(String.format("₱%.2f", newFare));
                     break;
+                    
                 }
+                
             }
 
        
@@ -743,53 +790,7 @@ private void insertTODB(String routeName, double fare) {
 			    
 			
 		
-			
-			
-			private void updateNewVBoxWithSelectedRoutes() {
-			    Platform.runLater(() -> {
-			        route_list.getChildren().clear(); // Clear existing content before adding new routes
-
-			        // Query the database for selected routes and fares based on the driver's name
-			        String query = "SELECT DISTINCT selected_route, fare FROM selectedroutes WHERE driver_name = ?";
-
-			        try (Connection conn = dbManager.getConnection();
-			             PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-			            pstmt.setString(1, driverName); // Set the driver's name as a parameter
-
-			            try (ResultSet rs = pstmt.executeQuery()) {
-			                while (rs.next()) {
-			                    String routeName = rs.getString("selected_route");
-			                    double fare = rs.getDouble("fare");
-
-			                    Button routeButton = new Button(routeName);
-			                    Button fareButton = new Button("₱" + String.format("%.2f", fare));
-			                    routeButton.getStyleClass().add("fare-button");
-			                    fareButton.getStyleClass().add("fare-button");
-
-			                    HBox hBox = new HBox();
-			                    hBox.setSpacing(10);  // Adjust the spacing as needed
-			                    hBox.setAlignment(Pos.CENTER);  // Center the buttons within the HBox
-
-			                    // Attach event handler to routeButton for deselection
-			                    routeButton.setOnAction(event -> deselectRoute(routeName));
-			                    fareButton.setOnAction(event -> deselectRoute(routeName));
-			                   // fareButton.setOnAction(e -> fareUps_insideDriver(routeName, fare));
-
-
-			                    hBox.getChildren().addAll(routeButton, fareButton);
-
-			                    route_list.getChildren().add(hBox);
-			                }
-			            }
-			        } catch (SQLException e) {
-			            e.printStackTrace();
-			            // Handle SQL exception
-			            Alert alert = new Alert(Alert.AlertType.ERROR, "Error retrieving selected routes: " + e.getMessage());
-			            alert.showAndWait();
-			        }
-			    });
-			}
+	
 			 private void deselectRoute(String routeName) {
 			        String deleteQuery = "DELETE FROM selectedroutes WHERE driver_name = ? AND selected_route = ?";
 
@@ -818,42 +819,43 @@ private void insertTODB(String routeName, double fare) {
 			    }
 			
 
-			public void queryTickets() {
-			    String query = "SELECT ticket_id, passenger_name, fare, route_name FROM ticket WHERE driver_name = ?";
+			 public void queryTickets() {
+				    String query = "SELECT ticket_id, passenger_name, fare, route_name FROM ticket WHERE driver_name = ?";
 
-			    try (Connection conn = dbManager.getConnection();
-			         PreparedStatement pst = conn.prepareStatement(query)) {
+				    try (Connection conn = dbManager.getConnection();
+				         PreparedStatement pst = conn.prepareStatement(query)) {
 
-			        pst.setString(1, driverName); // Set the driverName as a parameter
+				        pst.setString(1, driverName); // Set the driverName as a parameter
 
-			        try (ResultSet rs = pst.executeQuery()) {
-			            VBox ticketVBox = new VBox(); // Create a VBox to hold ticket details
-			            while (rs.next()) {
-			                String ticketId = rs.getString("ticket_id");
-			                String passengerName = rs.getString("passenger_name");
-			                double fare = rs.getDouble("fare");
-			                String routeName = rs.getString("route_name");
+				        try (ResultSet rs = pst.executeQuery()) {
+				            VBox ticketVBox = new VBox(); // Create a VBox to hold ticket details
+				            while (rs.next()) {
+				                String ticketId = rs.getString("ticket_id");
+				                String passengerName = rs.getString("passenger_name");
+				                double fare = rs.getDouble("fare");
+				                String routeName = rs.getString("route_name");
 
-			                String ticketDetails = String.format("Ticket ID: %s\nPassenger: %s\nFare: ₱%.2f\nRoute: %s",
-			                        ticketId, passengerName, fare, routeName);
+				                String ticketDetails = String.format("Ticket ID: %s\nPassenger: %s\nFare: ₱%.2f\nRoute: %s",
+				                        ticketId, passengerName, fare, routeName);
 
-			                Label ticketLabel = new Label(ticketDetails);
-			                ticketLabel.setWrapText(true);
-			                
-			                // Add the ticket details label to the VBox
-			                ticketVBox.getChildren().add(ticketLabel);
-			            }
-			            
-			            // Replace the existing VBox content with the new ticket VBox
-			            Platform.runLater(() -> {
-			            	ticket_list.getChildren().setAll(ticketVBox);
-			            });
-			        }
-			    } catch (SQLException ex) {
-			        ex.printStackTrace(); // Print the stack trace for debugging
-			        showErrorAlert("Error loading tickets: " + ex.getMessage());
-			    }
-			}
+				                Label ticketLabel = new Label(ticketDetails);
+				                ticketLabel.setWrapText(true);
+				                
+				                // Add the ticket details label to the VBox
+				                ticketVBox.getChildren().add(ticketLabel);
+				            }
+				            
+				            // Replace the existing VBox content with the new ticket VBox
+				            Platform.runLater(() -> {
+				            	ticket_list.getChildren().setAll(ticketVBox);
+				            });
+				        }
+				    } catch (SQLException ex) {
+				        ex.printStackTrace(); // Print the stack trace for debugging
+				        showErrorAlert("Error loading tickets: " + ex.getMessage());
+				    }
+				}
+
 		    private void showErrorAlert(String message) {
 		        Alert alert = new Alert(Alert.AlertType.ERROR);
 		        alert.setTitle("Error");
