@@ -1,4 +1,5 @@
 package application;
+
 import javafx.event.ActionEvent;  
 
 import java.io.IOException;
@@ -67,6 +68,7 @@ public class SceneController {
         stage.show();	
         applyStylesheet(scene); 
 	}
+	 
 	 @FXML
 	public void Logout(ActionEvent event) throws IOException {
 		    Alert alert = new Alert(AlertType.CONFIRMATION);

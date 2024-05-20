@@ -1,6 +1,5 @@
 package application;
 
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,8 +48,7 @@ public class inside_controller {
     @FXML 
     private HBox hbox_route;
     
-    @FXML 
-    private HBox logout_box;
+  
 
     @FXML
     private Label today;
@@ -89,9 +87,6 @@ public class inside_controller {
     
     
 
-    // Constructor
-    public inside_controller() {
-    }
     
     // Method to set driver name
     public void setDriverName(String driverName) {
@@ -262,6 +257,11 @@ public class inside_controller {
 	    
 	    updateNewVBoxWithSelectedRoutes();
 
+	    
+		border_visibility.setVisible(false);
+      	today.setVisible(false);
+      	selected.setVisible(false);
+      	
 	    Platform.runLater(() -> {
 	        vbox_route.getChildren().clear();
 	    });
@@ -687,25 +687,23 @@ private void insertTODB(String routeName, double fare) {
 			
 			private void updateNewVBoxWithSelectedRoutes() {
 			    Platform.runLater(() -> {
-			        // Clear the existing children in the VBox to avoid duplicates
 			        route_list.getChildren().clear();
 			        
-			        // Iterate over the selectedRouteNamesForDriver list to display routes and fares
 			        for (String routeName : selectedRouteNamesForDriver) {
-			            double fare = getFareForRoute(routeName); // Get the fare for the route
-			            
-			            // Create a new Button for each route with fare
+			            double fare = getFareForRoute(routeName); 
 			            Button routeButton = new Button(routeName);
 			            Button fareButton = new Button("₱" + String.format("%.2f", fare));
 			            routeButton.getStyleClass().add("fare-button");
 			            fareButton.getStyleClass().add("fare-button");
 
-			            route_list.getChildren().add(routeButton);
-			            route_list.getChildren().add(fareButton);
+			            HBox hBox = new HBox();
+			            hBox.setSpacing(10);  // Adjust the spacing as needed
+			            hBox.getChildren().addAll(routeButton, fareButton);
+
+			            route_list.getChildren().add(hBox);
 			        }
 			    });
 			}
-
 
     
 }

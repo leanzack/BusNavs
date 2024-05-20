@@ -1,13 +1,25 @@
 package application;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.application.Platform;
+
+
+
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +27,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 
 public class inside_controller2 {
@@ -27,7 +38,13 @@ public class inside_controller2 {
 	    private List<String> selectedRouteNamesForTicket = new ArrayList<>();
 	    private List<String> selectedDriversForTicket = new ArrayList<>();
 	    private List<Double> selectedFaresForTicket = new ArrayList<>();
-
+	    
+	   //Current value of the ticket
+	    private List<String> selectedDriverNames = new ArrayList<>();
+	    private List<String> selectedRouteNames = new ArrayList<>();
+	    private List<Integer> selectedTicketIds = new ArrayList<>();
+	    private List<Double> selectedFares = new ArrayList<>();
+	    
 
     @FXML
     private Label passen;
@@ -42,7 +59,11 @@ public class inside_controller2 {
     @FXML
     private VBox vbox; 
 
+    
+    
  
+    @FXML
+    private ListView<String> view;
     
     @FXML
     private Button selectedRoute; 
@@ -54,25 +75,54 @@ public class inside_controller2 {
     @FXML
     private Label fixed_fare;
     
+    @FXML
+    private Button selected;
+    
+    @FXML
+    private Label routelist_label;
+    
+   
+
+
+    private void applyStylesheet(Scene scene) {
+        String cssPath = "application.css"; // Adjust this path as needed
+        scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+    }
+
+    
+    
+ 
+    
+    public void setPassengerName(String passengername) {
+        this.passengername = passengername;
+
+        if (passen != null) {
+        	passen.setText(passengername);
+        }
+    }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         loadRouteButtons();
+        Logout_account2(null);
        
     }
-    
- 
 
- 
+   
+    @FXML
+    private void Logout_account2(MouseEvent event) throws IOException {
+        if (passengername != null && !passengername.isEmpty()) {
 
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainScene2.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+            applyStylesheet(scene);
 
-    
-    
-    // Method to set passenger name
-    public void setPassengerName(String passengername) {
-        Platform.runLater(() -> passen.setText(passengername));
+            System.out.println("Logging out driver: " + passengername);
+        }
     }
-
     // Method to load route buttons from the database
     public void loadRouteButtons() {
     	String query = "SELECT route_name, fare FROM routes " +
@@ -173,13 +223,17 @@ public class inside_controller2 {
         loadRouteButtons();
     }
     
-    
+ 
     private void handleDriverSelection(String driverName, String routeName, double fare) {
         // Implement what should happen when a driver is selected
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Selected driver: " + driverName);
         alert.showAndWait();
 
+        selected.setVisible(true);
+ 
+        
+        routelist_label.setVisible(true);
         selectedDrivers.add(driverName);
         selectedRouteNamesForTicket.add(routeName);
         selectedDriversForTicket.add(driverName);
@@ -202,17 +256,31 @@ public class inside_controller2 {
         
     }
     
-    
-    
- 
+    private int generateTicketId(Random random) {
+        // Generate a random integer between 1000 and 9999
+        return 1 + random.nextInt(1000);
+    }
     
     public void routeActionselected() {
     	
-   
         Random random = new Random();
-        int ticketId = generateTicketId(random);
+        int identity = generateTicketId(random);
 
       
+        String passengerName = passen.getText(); 
+
+        if (passengerName != null && !passengerName.isEmpty()) {
+        	
+    	
+            // Insert the current passenger name into the list
+            selectedTicketIds.add(identity);
+            selectedFares.add(selectedFaresForTicket.get(0)); 
+
+            selectedDriverNames.add(selectedDriversForTicket.get(0)); 
+            selectedRouteNames.add(selectedRouteNamesForTicket.get(0)); 
+
+            refreshPassengerListView();
+
 
     	String updateQuery = "INSERT INTO ticket (route_name, driver_name, passenger_name, fare, ticket_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = dbManager.getConnection();
@@ -222,7 +290,7 @@ public class inside_controller2 {
                 pstmt.setString(2, selectedDriversForTicket.get(i));
                 pstmt.setString(3, passengername);
                 pstmt.setDouble(4, selectedFaresForTicket.get(i));
-                pstmt.setInt(5, ticketId);
+                pstmt.setInt(5, identity);
 
 
                 pstmt.executeUpdate();
@@ -233,16 +301,33 @@ public class inside_controller2 {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to save selection: " + e.getMessage());
             alert.showAndWait();
         }
-             
+        
+
+    }
     }
     
-    private int generateTicketId(Random random) {
-        // Generate a random integer between 1000 and 9999
-        return 1 + random.nextInt(1000);
+    
+    private void refreshPassengerListView() {
+        Platform.runLater(() -> {
+            view.getItems().clear(); // Clear the existing items
+            for (int i = 0; i < selectedDriverNames.size(); i++) {
+                String ticketInfo = "Driver: " + selectedDriverNames.get(i) + ", Route: " + selectedRouteNames.get(i) +
+                                    ", Ticket ID: " + selectedTicketIds.get(i) + ", Fare: " + selectedFares.get(i);
+                view.getItems().add(ticketInfo);
+            }
+        });
     }
+}
+    
+    
+    
+    
+    
    
     
-}
+
+
+
 
 
 
