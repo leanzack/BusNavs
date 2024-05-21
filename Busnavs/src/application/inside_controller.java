@@ -63,7 +63,7 @@ public class inside_controller {
     private VBox route_list;
   
     @FXML 
-    private VBox ticket_list;
+    private HBox ticket_list;
   
   
     @FXML 
@@ -104,6 +104,7 @@ public class inside_controller {
         if (driverNameLabel != null) {
             driverNameLabel.setText(driverName);
         }
+        queryTicketsByDriver(driverName);
 
 
     }
@@ -115,7 +116,7 @@ public class inside_controller {
        // queryTickets();
         updateNewVBoxWithSelectedRoutes();
         donerouteSelected();
-      
+
         try {
             Image driverImage = new Image(getClass().getResource("/imageg/driver.png").toExternalForm());
             imageView.setImage(driverImage);
@@ -233,9 +234,7 @@ public class inside_controller {
 	                    routeButton.getStyleClass().add("fare-button");
 	                    fareButton.getStyleClass().add("fare-button");
 
-	                    HBox hBox = new HBox();
-	                    hBox.setSpacing(10);  // Adjust the spacing as needed
-	                    hBox.setAlignment(Pos.CENTER);  // Center the buttons within the HBox
+	                   
 
 	                    // Attach event handler to routeButton for deselection
 	                    routeButton.setOnAction(event -> deselectRoute(routeName));
@@ -244,7 +243,9 @@ public class inside_controller {
 	                    //fareButton.setOnAction(event -> deselectRoute(routeName));
 	                fareButton.setOnAction(e -> fareUps_insideDriver(routeName, fare));
 
-
+	                HBox hBox = new HBox();
+                    hBox.setSpacing(10);  // Adjust the spacing as needed
+                    hBox.setAlignment(Pos.CENTER);  // Center the buttons within the HBox
 	                    hBox.getChildren().addAll(routeButton, fareButton);
 
 	                    route_list.getChildren().add(hBox);
@@ -819,47 +820,93 @@ private void insertTODB(String routeName, double fare) {
 			        alert.showAndWait();
 			    }
 			}
+			 private void queryTicketsByDriver(String driverName) {
+			        try {
+			            // Establish connection
+			            PreparedStatement statement = dbManager.getConnection().prepareStatement(
+			                    "SELECT ticket_id, route_name, fare FROM ticket WHERE driver_name = ?");
+			            statement.setString(1, driverName);
 
-			 public void queryTickets() {
-				 
-				    String query = "SELECT ticket_id, passenger_name, fare, route_name FROM ticket WHERE driver_name = ?";
+			            try (ResultSet rs = statement.executeQuery()) {
+			            	 while (rs.next()) {        
+			            	        int ticketId = rs.getInt("ticket_id");
+			            	        String routeName = rs.getString("route_name");
+			            	        double fare = rs.getDouble("fare");
 
-				    try (Connection conn = dbManager.getConnection();
-				         PreparedStatement pst = conn.prepareStatement(query)) {
+			            	        // Create buttons for ticket ID, passenger name, fare, and route name
+			            	        Button ticketIdButton = new Button("Ticket ID: " + ticketId);
+			            	        Button routeNameButton = new Button("Route: " + routeName);
+			            	        Button fareButton = new Button("Fare: ₱" + String.format("%.2f", fare));
+			            	        
+			            	        // Apply CSS classes to style the buttons
+			            	        ticketIdButton.getStyleClass().addAll("ticket");
+			            	        routeNameButton.getStyleClass().addAll("ticket");
+			            	        fareButton.getStyleClass().addAll("ticket");
 
-				        pst.setString(1, driverName); // Set the driverName as a parameter
+			            	        // Create a VBox to stack buttons vertically
+			            	        VBox vbox = new VBox();
+			            	        vbox.setAlignment(Pos.CENTER); // Center the buttons vertically
+			            	        vbox.setSpacing(5); // Adjust the spacing between buttons
+			            	        vbox.getChildren().addAll(ticketIdButton, routeNameButton, fareButton);
 
-				        try (ResultSet rs = pst.executeQuery()) {
-				            VBox ticketVBox = new VBox(); // Create a VBox to hold ticket details
-				            while (rs.next()) {
-				                String ticketId = rs.getString("ticket_id");
-				                String passengerName = rs.getString("passenger_name");
-				                double fare = rs.getDouble("fare");
-				                String routeName = rs.getString("route_name");
+			            	        // Add the VBox to the ticket_list VBox
+			            	        ticket_list.getChildren().add(vbox);
+			            	        
+			            	        ticketIdButton.setOnAction(event -> {
+			                            saveFareAndRoute(driverName, routeName, fare);
 
-				                String ticketDetails = String.format("Ticket ID: %s\nPassenger: %s\nFare: ₱%.2f\nRoute: %s",
-				                        ticketId, passengerName, fare, routeName);
-
-				                Label ticketLabel = new Label(ticketDetails);
-				                ticketLabel.setWrapText(true);
-				                
-				                // Add the ticket details label to the VBox
-				                ticketVBox.getChildren().add(ticketLabel);
-				            }
-				            
-				            // Replace the existing VBox content with the new ticket VBox
-				            Platform.runLater(() -> {
-				            	ticket_list.getChildren().setAll(ticketVBox);
-				            });
-				        }
-				    } catch (SQLException ex) {
-				        ex.printStackTrace(); // Print the stack trace for debugging
-				        showErrorAlert("Error loading tickets: " + ex.getMessage());
-				    }
-				}
+			            	        });
+			            }
+			            }
+			        } catch (SQLException e) {
+			            e.printStackTrace();
+			        }
+			 }
+			 
 			
 
-		    private void showErrorAlert(String message) {
+			 private void saveFareAndRoute(String driverName, String routeName, double fare) {
+				    try {
+				        // Establish connection
+				        Connection connection = dbManager.getConnection();
+				        
+				        // Prepare SQL statement
+				        String sql = "UPDATE driver SET route_name = ?, fare = ? WHERE driver_name = ?";
+
+				        PreparedStatement statement = connection.prepareStatement(sql);
+				        
+				        // Set parameters
+				        statement.setString(1, driverName);
+				        statement.setString(2, routeName);
+				        statement.setDouble(3, fare);
+				        
+				        // Execute the SQL statement to insert fare and route into the database
+				        int rowsInserted = statement.executeUpdate();
+				        
+				        if (rowsInserted > 0) { 
+
+				            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Getting the passenger successfully for route: " + routeName + " with fare: ₱" + String.format("%.2f", fare));
+				            alert.showAndWait();
+				        } else {
+				            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to save fare and route for driver: " + driverName);
+				            alert.showAndWait();
+
+				        }
+				        
+				        // Close the statement and connection
+				        statement.close();
+				        connection.close();
+				        
+				    } catch (SQLException e) {
+				        e.printStackTrace();
+				    }
+				}
+
+				
+			
+
+
+			private void showErrorAlert(String message) {
 		        Alert alert = new Alert(Alert.AlertType.ERROR);
 		        alert.setTitle("Error");
 		        alert.setHeaderText("Error");

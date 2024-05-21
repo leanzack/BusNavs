@@ -105,6 +105,7 @@ public class inside_controller2 {
     public void initialize() throws IOException {
         loadRouteButtons();
         Logout_account2(null);
+        
        
     }
 
@@ -277,6 +278,7 @@ public class inside_controller2 {
       
         String passengerName = passen.getText(); 
 
+        
         if (passengerName != null && !passengerName.isEmpty()) {
         	
     	

@@ -13,9 +13,9 @@
    <center>
       <AnchorPane prefHeight="719.0" prefWidth="1084.0" styleClass="root">
           <children>
-			<AnchorPane prefHeight="741.0" prefWidth="1084.0" style="-fx-background-color: #687197;" styleClass="main-panel">
+			<AnchorPane prefHeight="852.0" prefWidth="1084.0" style="-fx-background-color: #687197;" styleClass="main-panel">
                <children>
-                  <AnchorPane layoutX="229.0" layoutY="4.0" prefHeight="722.0" prefWidth="845.0" style="-fx-background-color: #868DAC;" styleClass="pane">
+                  <AnchorPane layoutX="229.0" layoutY="4.0" prefHeight="844.0" prefWidth="845.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                      <children>
       				<Button fx:id="addRouteButton" layoutX="767.0" mnemonicParsing="false" onAction="#addRouteAction" prefHeight="51.0" prefWidth="53.0" style="-fx-background-color: transparent;" styleClass="add_route" text="+" />
                         <Label layoutX="711.0" layoutY="17.0" prefHeight="17.0" prefWidth="56.0" text="Add route" textFill="WHITE" />
@@ -29,15 +29,15 @@
         </ScrollPane>
       </children>
       </AnchorPane>
-                        <AnchorPane layoutX="3.0" layoutY="307.0" prefHeight="408.0" prefWidth="827.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+                        <AnchorPane layoutX="3.0" layoutY="307.0" prefHeight="518.0" prefWidth="827.0" style="-fx-background-color: #4f566c;" styleClass="pane">
                            <children>
-                              <BorderPane fx:id="border_visibility" layoutX="14.0" layoutY="14.0" prefHeight="208.0" prefWidth="297.0">
+                              <BorderPane fx:id="border_visibility" layoutX="11.0" layoutY="14.0" prefHeight="208.0" prefWidth="300.0">
                                  <top>
                                     <Label fx:id="today" prefHeight="17.0" prefWidth="91.0" text="Selected routes" textFill="WHITE" BorderPane.alignment="CENTER" />
                                  </top>
                                  <center>
                                  
-                                                                                                  <ScrollPane fx:id="myScrollPane" fitToWidth="true" prefHeight="383.0" prefWidth="297.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
+                                                                                                  <ScrollPane fx:id="myScrollPane" fitToWidth="true" prefHeight="160.0" prefWidth="305.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" BorderPane.alignment="CENTER">
                                        <content>
                                         <VBox fx:id="vbox_route" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="158.0" prefWidth="295.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />                                                               
                                        </content>
@@ -47,14 +47,17 @@
                   					<Button fx:id="selected" mnemonicParsing="false" onAction="#donerouteSelected" opacity="0.69" prefHeight="31.0" prefWidth="169.0" styleClass="done_route" text="Confirm" BorderPane.alignment="CENTER" />
                                  </bottom>
                               </BorderPane>
-                              <ScrollPane fx:id="myScrollPane1" fitToWidth="true" layoutX="322.0" layoutY="26.0" prefHeight="336.0" prefWidth="491.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+                              <ScrollPane fx:id="myScrollPane1" fitToWidth="true" layoutX="322.0" layoutY="26.0" prefHeight="202.0" prefWidth="497.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
                                  <content>
-                                    <VBox fx:id="route_list" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="346.0" prefWidth="489.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
+                                    <VBox fx:id="route_list" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="200.0" prefWidth="489.0" spacing="5" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
                                  </content>
                               </ScrollPane>
                               <Label fx:id="today1" layoutX="528.0" layoutY="6.0" text="Current Routes" textFill="#f8f8f8" />
-                              <HBox fx:id="ticket" layoutX="22.0" layoutY="248.0" prefHeight="135.0" prefWidth="287.0" />
-                              <Label fx:id="today11" layoutX="123.0" layoutY="228.0" prefHeight="18.0" prefWidth="78.0" text="Passenger" textFill="#f8f8f8" />
+                              <ScrollPane hbarPolicy="ALWAYS" layoutX="9.0" layoutY="295.0" prefHeight="218.0" prefWidth="810.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" vbarPolicy="NEVER">
+                                 <content>
+                                    <HBox fx:id="ticket_list" alignment="CENTER" prefHeight="206.0" prefWidth="809.0" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
+                                 </content>
+                              </ScrollPane>
                            </children>
                         </AnchorPane>
                      </children>
@@ -63,7 +66,7 @@
                  
                                        </children>
 		</AnchorPane>
-			<AnchorPane layoutX="6.0" layoutY="4.0" prefHeight="722.0" prefWidth="217.0" style="-fx-background-color: #868DAC;" styleClass="pane">
+			<AnchorPane layoutX="6.0" layoutY="4.0" prefHeight="844.0" prefWidth="217.0" style="-fx-background-color: #868DAC;" styleClass="pane">
 			   <children>
                   <AnchorPane layoutX="13.0" layoutY="207.0" prefHeight="98.0" prefWidth="191.0" style="-fx-background-color: #4f566c;" styleClass="pane">
                      <children>
@@ -73,7 +76,7 @@
                      </children>
                   </AnchorPane>
                   <ImageView fx:id="logo" fitHeight="122.0" fitWidth="186.0" layoutX="16.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" styleClass="pane" />
-				        <AnchorPane fx:id="logout_frame" layoutX="13.0" layoutY="673.0" prefHeight="42.0" prefWidth="191.0" style="-fx-background-color: #4f566c;" styleClass="logout">
+				        <AnchorPane fx:id="logout_frame" layoutX="16.0" layoutY="788.0" prefHeight="42.0" prefWidth="191.0" style="-fx-background-color: #4f566c;" styleClass="logout">
 				            <children>
                         <Button fx:id="Logout" layoutX="61.0" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#Logout_account" prefHeight="27.0" prefWidth="69.0" style="-fx-background-color: #FFFFFF;" styleClass="Logout_route" text="Logout" />
 				            </children>

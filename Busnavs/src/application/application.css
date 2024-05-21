@@ -107,6 +107,25 @@
     -fx-min-width: 150px; /* Smaller minimum width */
     -fx-alignment: center; /* Center text within the button */
 }
+
+.ticket {	
+    -fx-background-color:  #868DAC; /* White background for a cleaner look */
+    -fx-text-fill: white; /* Color text to match your previous button color */
+    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-radius: 15px; /* Ensures the background matches the border radius */
+    -fx-padding: 10px 20px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 150px; /* Smaller minimum width */
+    -fx-alignment: center; /* Center text within the button */
+}
+.ticket:hover {
+	 -fx-border-color: black; /* Border color */
+    -fx-border-width: 3px; /* Border width */
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+
+}
+
 .transparent-background {
     -fx-background-color:  #687197;
 }
