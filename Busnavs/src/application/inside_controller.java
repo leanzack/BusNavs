@@ -22,7 +22,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -76,8 +75,8 @@ public class inside_controller {
 
     @FXML 
     private Button addRouteButton;
- 
-    
+     
+  
     @FXML 
     private Button selected;
     @FXML
@@ -116,7 +115,7 @@ public class inside_controller {
        // queryTickets();
         updateNewVBoxWithSelectedRoutes();
         donerouteSelected();
-       
+      
         try {
             Image driverImage = new Image(getClass().getResource("/imageg/driver.png").toExternalForm());
             imageView.setImage(driverImage);
@@ -215,6 +214,7 @@ public class inside_controller {
 	    Platform.runLater(() -> {
 	        route_list.getChildren().clear(); // Clear existing content before adding new routes
 
+	
 	        // Query the database for selected routes and fares based on the driver's name
 	        String query = "SELECT DISTINCT selected_route, fare FROM selectedroutes WHERE driver_name = ?";
 
@@ -238,7 +238,7 @@ public class inside_controller {
 	                    hBox.setAlignment(Pos.CENTER);  // Center the buttons within the HBox
 
 	                    // Attach event handler to routeButton for deselection
-	                   s routeButton.setOnAction(event -> deselectRoute(routeName));
+	                    routeButton.setOnAction(event -> deselectRoute(routeName));
 
 	             
 	                    //fareButton.setOnAction(event -> deselectRoute(routeName));
@@ -256,12 +256,15 @@ public class inside_controller {
 	            Alert alert = new Alert(Alert.AlertType.ERROR, "Error retrieving selected routes: " + e.getMessage());
 	            alert.showAndWait();
 	        }
+	        loadRouteButtons();
 	    });
 	}
     
 
 	private void handleRouteSelection(String routeName, double fare) {
-		
+	    border_visibility.setVisible(true);
+	    selected.setVisible(true);
+
 		 if (selectedRouteNamesForDriver.contains(routeName)) {
 		        // Display an alert if the route is already selected
 		        Platform.runLater(() -> {
@@ -308,16 +311,20 @@ public class inside_controller {
 	}
 	
 	
+	
+	
 	public void donerouteSelected() {
 	    // Insert the selected routes for the current driver into the selectedroutes table
 	    insertSelectedRoutesForDriver();	    
 	
 	    
-
+	    updateNewVBoxWithSelectedRoutes();
+	      border_visibility.setVisible(false);
+	        selected.setVisible(false);
+	        
 	    
 		
       	
-	    updateNewVBoxWithSelectedRoutes();
 	    loadRouteButtons();
 	    Platform.runLater(() -> {
 	    });
@@ -733,81 +740,88 @@ private void insertTODB(String routeName, double fare) {
 			}
 		
 			private void deleteRoute(String routeName, double fare) {
+			    String deleteQueryRoutes = "DELETE FROM routes WHERE route_name = ?";
+			    String deleteQuerySelectedRoutes = "DELETE FROM selectedroutes WHERE selected_route = ?";
 
-				
-				 String deleteQueryRoutes = "DELETE FROM routes WHERE route_name = ?";
-				    String deleteQuerySelectedRoutes = "DELETE FROM selectedroutes WHERE selected_route = ?";
+			    try (Connection conn = dbManager.getConnection();
+			         PreparedStatement pstRoutes = conn.prepareStatement(deleteQueryRoutes);
+			         PreparedStatement pstSelectedRoutes = conn.prepareStatement(deleteQuerySelectedRoutes)) {
 
-				    try (Connection conn = dbManager.getConnection();
-				         PreparedStatement pstRoutes = conn.prepareStatement(deleteQueryRoutes);
-				         PreparedStatement pstSelectedRoutes = conn.prepareStatement(deleteQuerySelectedRoutes)) {
-			         
-				        conn.setAutoCommit(false);  // Start transaction
-			        
+			        conn.setAutoCommit(false);  // Start transaction
 
-				        pstRoutes.setString(1, routeName);
-				        int rowsAffectedRoutes = pstRoutes.executeUpdate();
+			        pstRoutes.setString(1, routeName);
+			        int rowsAffectedRoutes = pstRoutes.executeUpdate();
 
-				        pstSelectedRoutes.setString(1, routeName);
-				        int rowsAffectedSelectedRoutes = pstSelectedRoutes.executeUpdate();
+			        pstSelectedRoutes.setString(1, routeName);
+			        int rowsAffectedSelectedRoutes = pstSelectedRoutes.executeUpdate();
 
-			        
-				        if (rowsAffectedRoutes > 0 || rowsAffectedSelectedRoutes > 0) {
-				            conn.commit();  // Commit transaction
+			        if (rowsAffectedRoutes > 0 || rowsAffectedSelectedRoutes > 0) {
+			            conn.commit();  // Commit transaction
+			            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Route deleted successfully!");
+			            alert.showAndWait();
 
-			        
-				            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Route deleted successfully!");
-				            alert.showAndWait();
+			            // Update UI after successful deletion
+			            Platform.runLater(() -> {
+			                removeRouteFromUI(routeName);
+			            });
 			        } else {
-			       
 			            conn.rollback();  
 			            Alert alert = new Alert(Alert.AlertType.INFORMATION, "No routes were deleted.");
 			            alert.showAndWait();
 			        }
 			    } catch (SQLException e) {
-			      
 			        Alert alert = new Alert(Alert.AlertType.ERROR);
 			        alert.setTitle("Database Error");
 			        alert.setHeaderText(null);
 			        alert.setContentText("An error occurred while deleting route " + routeName + " from the database: " + e.getMessage());
 			        alert.showAndWait();
 			    }
-			    loadRouteButtons();
-			    updateNewVBoxWithSelectedRoutes();
 			}
-			    
-			
-		
-	
-			 private void deselectRoute(String routeName) {
-			        String deleteQuery = "DELETE FROM selectedroutes WHERE driver_name = ? AND selected_route = ?";
 
-			        try (Connection conn = dbManager.getConnection();
-			             PreparedStatement pstmt = conn.prepareStatement(deleteQuery)) {
+			private void removeRouteFromUI(String routeName) {
+			    // Remove the deselected route from the UI
+			    for (Node node : route_list.getChildren()) {
+			        HBox hBox = (HBox) node;
+			        Button routeButton = (Button) hBox.getChildren().get(0);
+			        if (routeButton.getText().equals(routeName)) {
+			            route_list.getChildren().remove(node);
+			            break;
+			        }
+			    }
+			}
 
-			            pstmt.setString(1, driverName);
-			            pstmt.setString(2, routeName);
+			private void deselectRoute(String routeName) {
+			    String deleteQuery = "DELETE FROM selectedroutes WHERE driver_name = ? AND selected_route = ?";
 
-			            int affectedRows = pstmt.executeUpdate();
-			            if (affectedRows > 0) {
-			            	
-			            	 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Route " + routeName + " successfully deselected for driver " + driverName);
-					            alert.showAndWait();
-			            } else {
-			            	 Alert alert = new Alert(Alert.AlertType.NONE, "No route found to deselect for driver " + driverName);
-			            	   alert.showAndWait();
-			            }
-			        } catch (SQLException e) {
-			            e.printStackTrace();
-			            // Handle SQL exception
-			            Alert alert = new Alert(Alert.AlertType.ERROR, "Error deselecting route: " + e.getMessage());
+			    try (Connection conn = dbManager.getConnection();
+			         PreparedStatement pstmt = conn.prepareStatement(deleteQuery)) {
+
+			        pstmt.setString(1, driverName);
+			        pstmt.setString(2, routeName);
+
+			        int affectedRows = pstmt.executeUpdate();
+			        if (affectedRows > 0) {
+			            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Route " + routeName + " successfully deselected for driver " + driverName);
+			            alert.showAndWait();
+
+			            // Update UI after successful deselection
+			            Platform.runLater(() -> {
+			                removeRouteFromUI(routeName);
+			            });
+			        } else {
+			            Alert alert = new Alert(Alert.AlertType.NONE, "No route found to deselect for driver " + driverName);
 			            alert.showAndWait();
 			        }
-			        updateNewVBoxWithSelectedRoutes();
+			    } catch (SQLException e) {
+			        e.printStackTrace();
+			        // Handle SQL exception
+			        Alert alert = new Alert(Alert.AlertType.ERROR, "Error deselecting route: " + e.getMessage());
+			        alert.showAndWait();
 			    }
-			
-/*
+			}
+
 			 public void queryTickets() {
+				 
 				    String query = "SELECT ticket_id, passenger_name, fare, route_name FROM ticket WHERE driver_name = ?";
 
 				    try (Connection conn = dbManager.getConnection();
@@ -843,7 +857,7 @@ private void insertTODB(String routeName, double fare) {
 				        showErrorAlert("Error loading tickets: " + ex.getMessage());
 				    }
 				}
-			*/
+			
 
 		    private void showErrorAlert(String message) {
 		        Alert alert = new Alert(Alert.AlertType.ERROR);
