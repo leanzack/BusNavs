@@ -222,7 +222,7 @@ public class inside_controller {
 	        try (Connection conn = dbManager.getConnection();
 	             PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-	            pstmt.setString(1, driverName); // Set the driver's name as a parameter
+	            pstmt.setString(1, driverName); 
 
 	            try (ResultSet rs = pstmt.executeQuery()) {
 	                while (rs.next()) {
@@ -840,8 +840,8 @@ private void insertTODB(String routeName, double fare) {
 			            	        
 			            	        // Apply CSS classes to style the buttons
 			            	        ticketIdButton.getStyleClass().addAll("ticket");
-			            	        routeNameButton.getStyleClass().addAll("ticket");
-			            	        fareButton.getStyleClass().addAll("ticket");
+			            	        routeNameButton.getStyleClass().addAll("other_ticket");
+			            	        fareButton.getStyleClass().addAll("other_ticket");
 
 			            	        // Create a VBox to stack buttons vertically
 			            	        VBox vbox = new VBox();
@@ -870,31 +870,51 @@ private void insertTODB(String routeName, double fare) {
 				        // Establish connection
 				        Connection connection = dbManager.getConnection();
 				        
-				        // Prepare SQL statement
-				        String sql = "UPDATE driver SET route_name = ?, fare = ? WHERE driver_name = ?";
+				        // Prepare SQL statement to fetch current route names and fares
+				        String fetchSql = "SELECT route_name, fare FROM driver WHERE driver_name = ?";
+				        PreparedStatement fetchStatement = connection.prepareStatement(fetchSql);
+				        fetchStatement.setString(1, driverName);
 
-				        PreparedStatement statement = connection.prepareStatement(sql);
+				        ResultSet resultSet = fetchStatement.executeQuery();
 				        
-				        // Set parameters
-				        statement.setString(1, driverName);
-				        statement.setString(2, routeName);
-				        statement.setDouble(3, fare);
-				        
-				        // Execute the SQL statement to insert fare and route into the database
-				        int rowsInserted = statement.executeUpdate();
-				        
-				        if (rowsInserted > 0) { 
+				        if (resultSet.next()) {
+				            String currentRoutes = resultSet.getString("route_name");
+				            double currentFare = resultSet.getDouble("fare");
 
-				            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Getting the passenger successfully for route: " + routeName + " with fare: ₱" + String.format("%.2f", fare));
-				            alert.showAndWait();
+				            // Concatenate the new route name with the current route names
+				            String updatedRoutes = (currentRoutes == null || currentRoutes.isEmpty()) ? routeName : currentRoutes + ", " + routeName;
+				            // Add the new fare to the current fare
+				            double updatedFare = currentFare + fare;
+
+				            // Prepare SQL statement to update route names and fares
+				            String updateSql = "UPDATE driver SET route_name = ?, fare = ? WHERE driver_name = ?";
+				            PreparedStatement updateStatement = connection.prepareStatement(updateSql);
+				            
+				            // Set parameters
+				            updateStatement.setString(1, updatedRoutes);
+				            updateStatement.setDouble(2, updatedFare);
+				            updateStatement.setString(3, driverName);
+				            
+				            // Execute the SQL statement to update fare and route into the database
+				            int rowsUpdated = updateStatement.executeUpdate();
+				            
+				            if (rowsUpdated > 0) { 
+				                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Getting the passenger successfully for route: " + routeName + " with fare: ₱" + String.format("%.2f", fare));
+				                alert.showAndWait();
+				            } else {
+				                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to save fare and route for driver: " + driverName);
+				                alert.showAndWait();
+				            }
+				            
+				            // Close the update statement
+				            updateStatement.close();
 				        } else {
-				            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to save fare and route for driver: " + driverName);
+				            Alert alert = new Alert(Alert.AlertType.ERROR, "Driver not found: " + driverName);
 				            alert.showAndWait();
-
 				        }
 				        
-				        // Close the statement and connection
-				        statement.close();
+				        // Close the fetch statement and connection
+				        fetchStatement.close();
 				        connection.close();
 				        
 				    } catch (SQLException e) {
