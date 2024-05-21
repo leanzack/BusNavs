@@ -30,6 +30,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class inside_controller {
@@ -49,8 +50,8 @@ public class inside_controller {
     private Label driverNameLabel;
     @FXML 
     private HBox hbox_route;
+   
     
-  
 
     @FXML
     private Label today;
@@ -65,7 +66,20 @@ public class inside_controller {
     @FXML 
     private HBox ticket_list;
   
-  
+    @FXML
+    private Label incomeLabel;
+
+    @FXML
+    private Label fareLabel2;
+
+    @FXML
+    private Label routeLabel;
+
+    @FXML
+    private VBox incomeVBox;
+
+    @FXML
+    private VBox routeIncomeVBox;
     @FXML 
     private BorderPane border_visibility;
     
@@ -900,6 +914,9 @@ private void insertTODB(String routeName, double fare) {
 				            if (rowsUpdated > 0) { 
 				                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Getting the passenger successfully for route: " + routeName + " with fare: ₱" + String.format("%.2f", fare));
 				                alert.showAndWait();
+				                
+				                updateVBoxWithFareAndRoute(driverName);
+
 				            } else {
 				                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to save fare and route for driver: " + driverName);
 				                alert.showAndWait();
@@ -924,6 +941,40 @@ private void insertTODB(String routeName, double fare) {
 				
 			
 
+
+			 private void updateVBoxWithFareAndRoute(String driverName) {
+			        try {
+			            // Establish connection
+			        	 Connection connection = dbManager.getConnection();
+
+			             // Prepare SQL statement to fetch current route names and fares
+			             String fetchSql = "SELECT route_name, fare FROM driver WHERE driver_name = ?";
+			             PreparedStatement fetchStatement = connection.prepareStatement(fetchSql);
+			             fetchStatement.setString(1, driverName);
+
+			             ResultSet resultSet = fetchStatement.executeQuery();
+
+			             if (resultSet.next()) {
+			                 String routes = resultSet.getString("route_name");
+			                 double fareValue = resultSet.getDouble("fare");
+
+			                 // Clear the VBoxes and add new information
+			                 incomeVBox.getChildren().clear();
+			                 incomeVBox.getChildren().add(new Label(String.format("%.2f", fareValue)));
+
+			                 routeIncomeVBox.getChildren().clear();
+			                 routeIncomeVBox.getChildren().add(new Label(routes));
+			             } else {
+			                 Alert alert = new Alert(Alert.AlertType.ERROR, "Driver not found: " + driverName);
+			                 alert.showAndWait();
+			             }
+			             fetchStatement.close();
+			             connection.close();
+			        } catch (SQLException e) {
+			            e.printStackTrace();
+			        }
+			    }
+			
 
 			private void showErrorAlert(String message) {
 		        Alert alert = new Alert(Alert.AlertType.ERROR);

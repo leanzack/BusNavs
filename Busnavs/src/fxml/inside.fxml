@@ -90,6 +90,25 @@
                         <Button fx:id="Logout" layoutX="61.0" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#Logout_account" prefHeight="27.0" prefWidth="69.0" style="-fx-background-color: #FFFFFF;" styleClass="Logout_route" text="Logout" />
 				            </children>
 				        </AnchorPane>
+                 <AnchorPane layoutX="16.0" layoutY="335.0" prefHeight="248.0" prefWidth="191.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+    <children>
+        <!-- Existing labels -->
+        <Label fx:id="incomeLabel" alignment="CENTER" layoutX="14.0" layoutY="9.0" prefHeight="27.0" prefWidth="78.0" text="Income" textFill="WHITE" />
+        <Label alignment="CENTER" layoutX="100.0" layoutY="9.0" prefHeight="28.0" prefWidth="77.0" text="Route" textFill="WHITE" />
+                        <ScrollPane layoutX="14.0" layoutY="38.0" prefHeight="197.0" prefWidth="80.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+                           <content>
+              
+              <!-- Additional space for list items -->
+              <VBox fx:id="incomeVBox" prefHeight="195.0" prefWidth="78.0" spacing="5.0" style="-fx-background-color: #868DAC;" styleClass="hbox-container" />
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="100.0" layoutY="40.0" prefHeight="195.0" prefWidth="79.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+                           <content>
+              <VBox fx:id="routeIncomeVBox" prefHeight="193.0" prefWidth="77.0" spacing="5.0" style="-fx-background-color: #868DAC;" styleClass="hbox-container" />
+                           </content>
+                        </ScrollPane>
+    </children>
+</AnchorPane>
     </children>
 			</AnchorPane>
           </children>
