@@ -122,7 +122,7 @@
 
 .other_ticket {	
     -fx-background-color:  #868DAC; /* White background for a cleaner look */
-    -fx-text-fill: white; /* Color text to match your previous button color */
+    -fx-text-fill: black; /* Color text to match your previous button color */
     -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
     -fx-border-radius: 5px; /* Rounded corners */
     -fx-background-radius: 15px; /* Ensures the background matches the border radius */

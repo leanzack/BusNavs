@@ -12,14 +12,15 @@
     <children>
       <AnchorPane layoutX="245.0" layoutY="7.0" prefHeight="761.0" prefWidth="905.0" style="-fx-background-color: #868DAC;" styleClass="pane">
          <children>
-            <AnchorPane layoutX="453.0" layoutY="476.0" prefHeight="231.0" prefWidth="405.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+            <AnchorPane layoutX="396.0" layoutY="476.0" prefHeight="231.0" prefWidth="495.0" style="-fx-background-color: #4f566c;" styleClass="pane">
                <children>
-                  <VBox fx:id="view" prefHeight="231.0" prefWidth="432.0" />
+                  <VBox fx:id="view" layoutX="22.0" layoutY="23.0" prefHeight="182.0" prefWidth="451.0" />
                </children>
             </AnchorPane>
       <Button fx:id="selected" layoutX="94.0" layoutY="713.0" mnemonicParsing="false" onAction="#routeActionselected" opacity="0.69" prefHeight="34.0" prefWidth="184.0" styleClass="done_route" text="Done" textFill="WHITE" visible="false" />
             
-                              <Label fx:id="routelist_label" layoutX="126.0" layoutY="448.0" prefHeight="18.0" prefWidth="121.0" text="Route information" textFill="WHITE" />
+                              <Label fx:id="routelist_label" layoutX="126.0" layoutY="448.0" prefHeight="18.0" prefWidth="124.0" text="Route Information" textFill="WHITE" />
+            <Label fx:id="routelist_label1" layoutX="582.0" layoutY="448.0" prefHeight="18.0" prefWidth="124.0" text="Ticket Information" textFill="WHITE" />
          </children>
       </AnchorPane>
       <Label layoutX="590.0" layoutY="278.0" prefHeight="18.0" prefWidth="233.0" text="Available driver in your selected route" textFill="WHITE" />
@@ -39,9 +40,9 @@
       </BorderPane>
       <AnchorPane layoutX="264.0" layoutY="484.0" prefHeight="231.0" prefWidth="334.0" style="-fx-background-color: #4f566c;" styleClass="pane">
          <children>
-            <ScrollPane layoutX="73.0" layoutY="19.0" prefHeight="193.0" prefWidth="226.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+            <ScrollPane layoutX="66.0" layoutY="19.0" prefHeight="193.0" prefWidth="202.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
                <content>
-                  <VBox fx:id="vbox" alignment="CENTER" prefHeight="191.0" prefWidth="224.0" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
+                  <VBox fx:id="vbox" alignment="CENTER" prefHeight="191.0" prefWidth="200.0" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
                </content>
             </ScrollPane>
          </children>

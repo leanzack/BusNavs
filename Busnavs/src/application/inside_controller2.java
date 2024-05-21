@@ -240,9 +240,7 @@ public class inside_controller2 {
         selected.setVisible(true);     
         routelist_label.setVisible(true);
         
-        // Show a confirmation alert for the selected driver
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Selected driver: " + driverName);
-        alert.showAndWait();
+ 
 
         // Clear the existing selections in the VBox
         vbox.getChildren().clear();
@@ -282,32 +280,35 @@ public class inside_controller2 {
     }
     
     public void routeActionselected() {
-    	
+        // Clear the existing selections in the view
         vbox.getChildren().clear();
         view.getChildren().clear();
 
         
-       
+        selectedTicketIds.clear();
+        selectedFares.clear();
+        selectedDriverNames.clear();
+        selectedRouteNames.clear();
+        
         Random random = new Random();
         int identity = generateTicketId(random);
 
-        String passengerName = passen.getText(); 
+        String passengerName = passen.getText();
 
         if (passengerName != null && !passengerName.isEmpty()) {
-
             // Clear previous selections (if necessary)
             selectedTicketIds.add(identity);
-            selectedFares.add(selectedFaresForTicket.get(0)); 
-            selectedDriverNames.add(selectedDriversForTicket.get(0)); 
-            selectedRouteNames.add(selectedRouteNamesForTicket.get(0)); 
+            selectedFares.add(selectedFaresForTicket.get(0));
+            selectedDriverNames.add(selectedDriversForTicket.get(0));
+            selectedRouteNames.add(selectedRouteNamesForTicket.get(0));
 
-            
+            refreshPassengerListView();
 
             String checkQuery = "SELECT COUNT(*) FROM ticket WHERE route_name = ? AND driver_name = ? AND passenger_name = ? AND fare = ?";
             String insertQuery = "INSERT INTO ticket (route_name, driver_name, passenger_name, fare, ticket_id) "
-                                + "SELECT ?, ?, ?, ?, ? "
-                                + "FROM DUAL "
-                                + "WHERE NOT EXISTS (SELECT 1 FROM ticket WHERE route_name = ? AND driver_name = ?)";
+                               + "SELECT ?, ?, ?, ?, ? "
+                               + "FROM DUAL "
+                               + "WHERE NOT EXISTS (SELECT 1 FROM ticket WHERE route_name = ? AND driver_name = ?)";
             try (Connection conn = dbManager.getConnection()) {
                 boolean duplicateFound = false;
                 for (int i = 0; i < selectedRouteNamesForTicket.size(); i++) {
@@ -353,42 +354,50 @@ public class inside_controller2 {
         }
         loadRouteButtons();
     }
-
     private void refreshPassengerListView() {
+    	   selected.setVisible(false);    
         Platform.runLater(() -> {
             view.getChildren().clear(); // Clear the existing items
-            
-            for (int i = 0; i < selectedDriverNames.size(); i++) {
-                HBox hbox = new HBox();
-                hbox.setSpacing(10); // Set spacing between elements in the HBox
 
-                Button driverLabel = new Button("Driver: " + selectedDriverNames.get(i));
-                Button routeLabel = new Button("Route: " + selectedRouteNames.get(i));
-                Button ticketIdLabel = new Button("Ticket ID: " + selectedTicketIds.get(i));
-                Button fareLabel = new Button("Fare: ₱" + String.format("%.2f", selectedFares.get(i)));
-                ticketIdLabel.getStyleClass().addAll("other_ticket");
-                driverLabel.getStyleClass().addAll("other_ticket");
-                routeLabel.getStyleClass().addAll("other_ticket");
-                fareLabel.getStyleClass().addAll("other_ticket");
-                // Add the labels to the HBox
-                
-                VBox vbox = new VBox();
-    	        vbox.setAlignment(Pos.CENTER); // Center the buttons vertically
-    	        vbox.setSpacing(5); // Adjust the spacing between buttons
-    	        
-                hbox.getChildren().addAll(driverLabel, routeLabel, ticketIdLabel, fareLabel);
-                
-                // Add the HBox to the main view HBox
-                view.getChildren().add(hbox);
-                
+            // Create a new list to track added items and avoid duplicates
+            List<String> addedItems = new ArrayList<>();
+
+            for (int i = 0; i < selectedDriverNames.size(); i++) {
+                String driverName = selectedDriverNames.get(i);
+                String routeName = selectedRouteNames.get(i);
+                int ticketId = selectedTicketIds.get(i);
+                double fare = selectedFares.get(i);
+
+                String ticketInfo = driverName + routeName + ticketId + fare;
+                if (!addedItems.contains(ticketInfo)) {
+                    addedItems.add(ticketInfo);
+
+                    VBox vbox = new VBox();
+                    vbox.setAlignment(Pos.CENTER); // Center the buttons vertically
+                    vbox.setSpacing(5); // Adjust the spacing between buttons
+
+                    Button driverLabel = new Button("Driver: " + driverName);
+                    Button routeLabel = new Button("Route: " + routeName);
+                    Button ticketIdLabel = new Button("Ticket ID: " + ticketId);
+                    Button fareLabel = new Button("Fare: ₱" + String.format("%.2f", fare));
+
+                    driverLabel.getStyleClass().addAll("other_ticket");
+                    routeLabel.getStyleClass().addAll("other_ticket");
+                    ticketIdLabel.getStyleClass().addAll("other_ticket");
+                    fareLabel.getStyleClass().addAll("other_ticket");
+
+                    vbox.getChildren().addAll(driverLabel, routeLabel, ticketIdLabel, fareLabel);
+
+                    // Add the VBox to the main view HBox
+                    view.getChildren().add(vbox);
+                }
             }
             loadRouteButtons();
         });
-    
+        
     }
+    
 }
-    
-    
     
     
     
