@@ -63,7 +63,7 @@ public class inside_controller2 {
     
  
     @FXML
-    private ListView<String> view;
+    private VBox view;
     
     @FXML
     private Button selectedRoute; 
@@ -187,6 +187,8 @@ public class inside_controller2 {
         Platform.runLater(() -> {
             // Clear the existing driver list (if any)
         	h_box_fordriver.getChildren().clear(); // Assuming h_box is used for displaying drivers as well
+        	view.getChildren().clear(); // Assuming h_box is used for displaying drivers as well
+
 
             // Add new driver buttons to the container
             for (String driver : drivers) {
@@ -201,6 +203,7 @@ public class inside_controller2 {
                 });
             }
         });
+        loadRouteButtons();
     }
 
 
@@ -234,35 +237,43 @@ public class inside_controller2 {
     
  
     private void handleDriverSelection(String driverName, String routeName, double fare) {
-        // Implement what should happen when a driver is selected
-
+        selected.setVisible(true);     
+        routelist_label.setVisible(true);
+        
+        // Show a confirmation alert for the selected driver
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Selected driver: " + driverName);
         alert.showAndWait();
 
-        selected.setVisible(true);
- 
+        // Clear the existing selections in the VBox
+        vbox.getChildren().clear();
+        view.getChildren().clear();
+
+        // Update the selections
+        selectedDrivers.clear();
+        selectedRouteNamesForTicket.clear();
+        selectedDriversForTicket.clear();
+        selectedFaresForTicket.clear();
         
-        routelist_label.setVisible(true);
         selectedDrivers.add(driverName);
         selectedRouteNamesForTicket.add(routeName);
         selectedDriversForTicket.add(driverName);
         selectedFaresForTicket.add(fare);
         
-        // Update UI to display selected options (optional)
+        // Create new UI elements for the selected options
         Button dr_buts = new Button(driverName);
         Button routeButton = new Button(routeName);
         Button fareLabel = new Button(String.format("₱%.2f", fare));
 
+        dr_buts.getStyleClass().add("fare-button-passenger");
         routeButton.getStyleClass().add("fare-button-passenger");
         fareLabel.getStyleClass().add("fare-button-passenger");
-        dr_buts.getStyleClass().add("fare-button-passenger");
 
-        // Create an HBox to contain the labels
-        VBox driverInfoBox = new VBox(dr_buts, fareLabel, routeButton);
+        // Create a VBox to contain the labels
+        VBox driverInfoBox = new VBox(dr_buts, routeButton, fareLabel);
         driverInfoBox.setSpacing(10); // Set spacing between labels
 
+        // Add the VBox to the main VBox
         vbox.getChildren().add(driverInfoBox);
-        
     }
     
     private int generateTicketId(Random random) {
@@ -272,60 +283,108 @@ public class inside_controller2 {
     
     public void routeActionselected() {
     	
+        vbox.getChildren().clear();
+        view.getChildren().clear();
+
+        
+       
         Random random = new Random();
         int identity = generateTicketId(random);
 
-      
         String passengerName = passen.getText(); 
 
-        
         if (passengerName != null && !passengerName.isEmpty()) {
-        	
-    	
-            // Insert the current passenger name into the list
+
+            // Clear previous selections (if necessary)
             selectedTicketIds.add(identity);
             selectedFares.add(selectedFaresForTicket.get(0)); 
-
             selectedDriverNames.add(selectedDriversForTicket.get(0)); 
             selectedRouteNames.add(selectedRouteNamesForTicket.get(0)); 
 
-            refreshPassengerListView();
+            
 
+            String checkQuery = "SELECT COUNT(*) FROM ticket WHERE route_name = ? AND driver_name = ? AND passenger_name = ? AND fare = ?";
+            String insertQuery = "INSERT INTO ticket (route_name, driver_name, passenger_name, fare, ticket_id) "
+                                + "SELECT ?, ?, ?, ?, ? "
+                                + "FROM DUAL "
+                                + "WHERE NOT EXISTS (SELECT 1 FROM ticket WHERE route_name = ? AND driver_name = ?)";
+            try (Connection conn = dbManager.getConnection()) {
+                boolean duplicateFound = false;
+                for (int i = 0; i < selectedRouteNamesForTicket.size(); i++) {
+                    try (PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
+                        checkStmt.setString(1, selectedRouteNamesForTicket.get(i));
+                        checkStmt.setString(2, selectedDriversForTicket.get(i));
+                        checkStmt.setString(3, passengerName);
+                        checkStmt.setDouble(4, selectedFaresForTicket.get(i));
 
-    	String updateQuery = "INSERT INTO ticket (route_name, driver_name, passenger_name, fare, ticket_id) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = dbManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            for (int i = 0; i < selectedRouteNamesForTicket.size(); i++) {
-                pstmt.setString(1, selectedRouteNamesForTicket.get(i));
-                pstmt.setString(2, selectedDriversForTicket.get(i));
-                pstmt.setString(3, passengername);
-                pstmt.setDouble(4, selectedFaresForTicket.get(i));
-                pstmt.setInt(5, identity);
+                        ResultSet rs = checkStmt.executeQuery();
+                        if (rs.next() && rs.getInt(1) > 0) {
+                            // Entry already exists, show alert and set flag
+                            duplicateFound = true;
+                            Alert alert = new Alert(Alert.AlertType.ERROR, "Duplicate entry: The passenger has already been added with the same route and fare.");
+                            alert.showAndWait();
+                            break; // Exit the loop as a duplicate is found
+                        }
+                    }
+                }
 
+                if (!duplicateFound) {
+                    // Proceed with insert only if no duplicate is found
+                    try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
+                        for (int i = 0; i < selectedRouteNamesForTicket.size(); i++) {
+                            insertStmt.setString(1, selectedRouteNamesForTicket.get(i));
+                            insertStmt.setString(2, selectedDriversForTicket.get(i));
+                            insertStmt.setString(3, passengerName);
+                            insertStmt.setDouble(4, selectedFaresForTicket.get(i));
+                            insertStmt.setInt(5, identity);
+                            insertStmt.setString(6, selectedRouteNamesForTicket.get(i)); // Set parameters for the WHERE clause
+                            insertStmt.setString(7, selectedDriversForTicket.get(i)); // Set parameters for the WHERE clause
 
-                pstmt.executeUpdate();
+                            insertStmt.executeUpdate();
+                        }
+                    }
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Selection saved successfully!");
+                    alert.showAndWait();
+                }
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to save selection: " + e.getMessage());
+                alert.showAndWait();
             }
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Selection saved successfully!");
-            alert.showAndWait();
-        } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to save selection: " + e.getMessage());
-            alert.showAndWait();
         }
-        
+        loadRouteButtons();
+    }
 
-    }
-    }
-    
-    
     private void refreshPassengerListView() {
         Platform.runLater(() -> {
-            view.getItems().clear(); // Clear the existing items
+            view.getChildren().clear(); // Clear the existing items
+            
             for (int i = 0; i < selectedDriverNames.size(); i++) {
-                String ticketInfo = "Driver: " + selectedDriverNames.get(i) + ", Route: " + selectedRouteNames.get(i) +
-                                    ", Ticket ID: " + selectedTicketIds.get(i) + ", Fare: " + selectedFares.get(i);
-                view.getItems().add(ticketInfo);
+                HBox hbox = new HBox();
+                hbox.setSpacing(10); // Set spacing between elements in the HBox
+
+                Button driverLabel = new Button("Driver: " + selectedDriverNames.get(i));
+                Button routeLabel = new Button("Route: " + selectedRouteNames.get(i));
+                Button ticketIdLabel = new Button("Ticket ID: " + selectedTicketIds.get(i));
+                Button fareLabel = new Button("Fare: ₱" + String.format("%.2f", selectedFares.get(i)));
+                ticketIdLabel.getStyleClass().addAll("other_ticket");
+                driverLabel.getStyleClass().addAll("other_ticket");
+                routeLabel.getStyleClass().addAll("other_ticket");
+                fareLabel.getStyleClass().addAll("other_ticket");
+                // Add the labels to the HBox
+                
+                VBox vbox = new VBox();
+    	        vbox.setAlignment(Pos.CENTER); // Center the buttons vertically
+    	        vbox.setSpacing(5); // Adjust the spacing between buttons
+    	        
+                hbox.getChildren().addAll(driverLabel, routeLabel, ticketIdLabel, fareLabel);
+                
+                // Add the HBox to the main view HBox
+                view.getChildren().add(hbox);
+                
             }
+            loadRouteButtons();
         });
+    
     }
 }
     

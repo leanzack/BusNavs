@@ -802,9 +802,7 @@ private void insertTODB(String routeName, double fare) {
 
 			        int affectedRows = pstmt.executeUpdate();
 			        if (affectedRows > 0) {
-			            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Route " + routeName + " successfully deselected for driver " + driverName);
-			            alert.showAndWait();
-
+			       
 			            // Update UI after successful deselection
 			            Platform.runLater(() -> {
 			                removeRouteFromUI(routeName);
@@ -819,6 +817,7 @@ private void insertTODB(String routeName, double fare) {
 			        Alert alert = new Alert(Alert.AlertType.ERROR, "Error deselecting route: " + e.getMessage());
 			        alert.showAndWait();
 			    }
+			    loadRouteButtons();
 			}
 			 private void queryTicketsByDriver(String driverName) {
 			        try {
@@ -837,15 +836,15 @@ private void insertTODB(String routeName, double fare) {
 			            	        Button ticketIdButton = new Button("Ticket ID: " + ticketId);
 			            	        Button routeNameButton = new Button("Route: " + routeName);
 			            	        Button fareButton = new Button("Fare: ₱" + String.format("%.2f", fare));
-			            	        
+
 			            	        // Apply CSS classes to style the buttons
 			            	        ticketIdButton.getStyleClass().addAll("ticket");
-			            	        routeNameButton.getStyleClass().addAll("other_ticket");
-			            	        fareButton.getStyleClass().addAll("other_ticket");
+			            	        routeNameButton.getStyleClass().addAll("ticket");
+			            	        fareButton.getStyleClass().addAll("ticket");
 
 			            	        // Create a VBox to stack buttons vertically
 			            	        VBox vbox = new VBox();
-			            	        vbox.setAlignment(Pos.CENTER); // Center the buttons vertically
+			            	        vbox.setAlignment(Pos.TOP_CENTER); // Align the buttons to the top center
 			            	        vbox.setSpacing(5); // Adjust the spacing between buttons
 			            	        vbox.getChildren().addAll(ticketIdButton, routeNameButton, fareButton);
 
