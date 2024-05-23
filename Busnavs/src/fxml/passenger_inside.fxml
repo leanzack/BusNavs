@@ -75,6 +75,7 @@
                   <Label fx:id="passen1" alignment="CENTER" layoutY="33.0" prefHeight="40.0" prefWidth="85.0" text="sample image" textFill="WHITE" />
                </children>
             </AnchorPane>
+            <Label fx:id="routelist_label11" layoutX="51.0" layoutY="189.0" prefHeight="18.0" prefWidth="124.0" text="Ticket Information" textFill="WHITE" />
 			    </children>
 			</AnchorPane>
     </children>
