@@ -89,24 +89,25 @@
 				        </AnchorPane>
                  <AnchorPane layoutX="16.0" layoutY="335.0" prefHeight="443.0" prefWidth="191.0" style="-fx-background-color: #4f566c;" styleClass="pane">
     <children>
-        <!-- Existing labels -->
-        <Label fx:id="incomeLabel" alignment="CENTER" layoutX="57.0" layoutY="14.0" prefHeight="27.0" prefWidth="78.0" text="Income" textFill="WHITE" />
-                        <AnchorPane layoutX="15.0" layoutY="38.0" prefHeight="76.0" prefWidth="165.0" style="-fx-background-color: #FFFFFF;" styleClass="pane">
+                        <AnchorPane layoutX="15.0" layoutY="27.0" prefHeight="70.0" prefWidth="165.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                            <children>
               
                                 <!-- Additional space for list items -->
-              <VBox fx:id="incomeVBox" alignment="CENTER" layoutX="3.0" layoutY="10.0" prefHeight="57.0" prefWidth="159.0" spacing="5.0" style="-fx-background-color: #FFFFFF;" styleClass="hbox-container" />
+              <VBox fx:id="incomeVBox" alignment="CENTER" layoutX="3.0" layoutY="14.0" prefHeight="42.0" prefWidth="159.0" spacing="5.0" style="-fx-background-color: #868DAC;" styleClass="hbox-container" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane layoutX="13.0" layoutY="132.0" prefHeight="76.0" prefWidth="165.0" style="-fx-background-color: #FFFFFF;" styleClass="pane">
+                        <AnchorPane layoutX="14.0" layoutY="138.0" prefHeight="256.0" prefWidth="164.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                            <children>
-                              <ScrollPane layoutX="3.0" layoutY="10.0" prefHeight="284.0" prefWidth="161.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+                              <ScrollPane fx:id="myScrollPane2" fitToWidth="true" layoutX="9.0" layoutY="17.0" prefHeight="223.0" prefWidth="147.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
                                  <content>
-                                    <VBox fx:id="incomeVBoxforroute" alignment="TOP_CENTER" prefHeight="281.0" prefWidth="159.0" spacing="5.0" style="-fx-background-color: #FFFFFF;" styleClass="hbox-container" />
+                                    <VBox fx:id="incomeVBoxforroute" alignment="TOP_CENTER" layoutX="197.0" layoutY="315.0" prefHeight="221.0" prefWidth="145.0" spacing="5" style="-fx-background-color: #868DAC;" styleClass="hbox-container" />
                                  </content>
                               </ScrollPane>
                            </children>
                         </AnchorPane>
+                        <Label fx:id="incomeLabel1" alignment="CENTER" layoutX="53.0" layoutY="105.0" prefHeight="27.0" prefWidth="87.0" text="Route Selected" textFill="WHITE" />
+        <!-- Existing labels -->
+        <Label fx:id="incomeLabel" alignment="CENTER" layoutX="62.0" layoutY="-3.0" prefHeight="27.0" prefWidth="78.0" text="Income" textFill="WHITE" />
     </children>
 </AnchorPane>
     </children>

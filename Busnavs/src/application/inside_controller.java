@@ -926,13 +926,18 @@ private void insertTODB(String routeName, double fare) {
 			            	        // Add the VBox to the ticket_list VBox
 			            	        ticket_list.getChildren().add(vbox);
 			            	        
+			            	        
+			            	        incomeVBoxforroute.getChildren().clear();
+
+			            	        selected_ticket_List.add(" "); // Add the route to the selectedRoutes ArrayList\
+					                incomeVBoxforroute.getChildren().add(new Label(" "));
+
+					                  
 			            	        ticketIdButton.setOnAction(event -> {
 			            	        	
 			                            saveFareAndRoute(driverName, routeName, fare);
-			                            selected_ticket_List.add(" "); // Add the route to the selectedRoutes ArrayList
 
 			                            selected_ticket_List.add(routeName); // Add the route to the selectedRoutes ArrayList
-						                  incomeVBoxforroute.getChildren().add(new Label(" "));
 
 			            	        });
 			            }
@@ -1012,48 +1017,64 @@ private void insertTODB(String routeName, double fare) {
 
 
 			 private void updateVBoxWithFareAndRoute(String driverName) {
-			        try {
-			            // Establish connection
-			        	 Connection connection = dbManager.getConnection();
+				    try {
+				        // Establish connection
+				        Connection connection = dbManager.getConnection();
 
-			             // Prepare SQL statement to fetch current route names and fares
-			             String fetchSql = "SELECT fare FROM driver WHERE driver_name = ?";
-			             PreparedStatement fetchStatement = connection.prepareStatement(fetchSql);
-			             fetchStatement.setString(1, driverName);
+				        // Prepare SQL statement to fetch current route names and fares
+				        String fetchSql = "SELECT route_name, fare FROM driver WHERE driver_name = ?";
+				        PreparedStatement fetchStatement = connection.prepareStatement(fetchSql);
+				        fetchStatement.setString(1, driverName);
 
-			             ResultSet resultSet = fetchStatement.executeQuery();
+				        ResultSet resultSet = fetchStatement.executeQuery();
 
-			             if (resultSet.next()) {
-			                 double fareValue = resultSet.getDouble("fare");
+				        if (resultSet.next()) {
+				            String routeNames = resultSet.getString("route_name");
+				            double fareValue = resultSet.getDouble("fare");
+				      
+				            Label fareButton = new Label(String.format("₱: %.2f ", fareValue));
 
+	            	        fareButton.getStyleClass().addAll("white-label");
+
+				      
+				            
 			                 incomeVBox.getChildren().clear();
-			                 incomeVBox.getChildren().add(new Label(String.format("₱: %.2f", fareValue)));
-			                 
-			                 
-			             
-
-			                 
+			                 incomeVBox.getChildren().add(fareButton);
 
 
-			              for (String item : selected_ticket_List) {
-			            	  
-			                  incomeVBoxforroute.getChildren().add(new Label(" " + item));
+			                 incomeVBoxforroute.getChildren().clear();
+
+			              // Add a dummy label
+			              Label dummyLabel = new Label(" ");
+			              incomeVBoxforroute.getChildren().add(dummyLabel);
+
+			              // Apply the "white-label" style class to the dummy label
+			              dummyLabel.getStyleClass().addAll("white-label");
+
+			              // Add route names one by one
+			              if (routeNames != null && !routeNames.isEmpty()) {
+			                  String[] routes = routeNames.split(", ");
+			                  for (String route : routes) {
+			                      Label routeLabel = new Label(" " + route);
+			                      // Apply the "white-label" style class to the routeLabel
+			                      routeLabel.getStyleClass().addAll("white-label");
+			                      incomeVBoxforroute.getChildren().add(routeLabel);
+			                  }
 			              }
-			            
 
-			               
+				        } else {
+				            Alert alert = new Alert(Alert.AlertType.ERROR, "Driver not found: " + driverName);
+				            alert.showAndWait();
+				        }
 
-			             } else {
-			                 Alert alert = new Alert(Alert.AlertType.ERROR, "Driver not found: " + driverName);
-			                 alert.showAndWait();
-			             }
-			             fetchStatement.close();
-			             connection.close();
-			        } catch (SQLException e) {
-			            e.printStackTrace();
-			        }
-			    }
-			
+				        fetchStatement.close();
+				        connection.close();
+				    }    catch (SQLException e) {
+				    
+				            e.printStackTrace();
+				        
+				    }
+				}
 
 			private void showErrorAlert(String message) {
 		        Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -66,6 +66,10 @@ public class inside_controller2 {
     private VBox view;
     
     @FXML
+    private VBox view1;
+    
+    
+    @FXML
     private Button selectedRoute; 
     
     @FXML
@@ -188,6 +192,7 @@ public class inside_controller2 {
             // Clear the existing driver list (if any)
         	h_box_fordriver.getChildren().clear(); // Assuming h_box is used for displaying drivers as well
         	view.getChildren().clear(); // Assuming h_box is used for displaying drivers as well
+        	view1.getChildren().clear(); // Assuming h_box is used for displaying drivers as well
 
 
             // Add new driver buttons to the container
@@ -245,6 +250,7 @@ public class inside_controller2 {
         // Clear the existing selections in the VBox
         vbox.getChildren().clear();
         view.getChildren().clear();
+        view1.getChildren().clear();
 
         // Update the selections
         selectedDrivers.clear();
@@ -283,6 +289,7 @@ public class inside_controller2 {
         // Clear the existing selections in the view
         vbox.getChildren().clear();
         view.getChildren().clear();
+        view1.getChildren().clear();
 
         
         selectedTicketIds.clear();
@@ -355,9 +362,10 @@ public class inside_controller2 {
         loadRouteButtons();
     }
     private void refreshPassengerListView() {
-    	   selected.setVisible(false);    
+        selected.setVisible(false);
         Platform.runLater(() -> {
             view.getChildren().clear(); // Clear the existing items
+            view1.getChildren().clear();
 
             // Create a new list to track added items and avoid duplicates
             List<String> addedItems = new ArrayList<>();
@@ -372,29 +380,49 @@ public class inside_controller2 {
                 if (!addedItems.contains(ticketInfo)) {
                     addedItems.add(ticketInfo);
 
+                    // Create vbox for view
                     VBox vbox = new VBox();
                     vbox.setAlignment(Pos.CENTER); // Center the buttons vertically
                     vbox.setSpacing(5); // Adjust the spacing between buttons
 
-                    Button driverLabel = new Button("Driver: " + driverName);
-                    Button routeLabel = new Button("Route: " + routeName);
-                    Button ticketIdLabel = new Button("Ticket ID: " + ticketId);
-                    Button fareLabel = new Button("Fare: ₱" + String.format("%.2f", fare));
+                    // Create vbox for view1
+                    VBox vbox1 = new VBox();
+                    vbox1.setAlignment(Pos.CENTER); // Center the buttons vertically
+                    vbox1.setSpacing(5); // Adjust the spacing between buttons
 
-                    driverLabel.getStyleClass().addAll("other_ticket");
-                    routeLabel.getStyleClass().addAll("other_ticket");
-                    ticketIdLabel.getStyleClass().addAll("other_ticket");
-                    fareLabel.getStyleClass().addAll("other_ticket");
+                    // Create and style buttons for view
+                    Button driverLabelView = new Button("Driver: " + driverName);
+                    Button routeLabelView = new Button("Route: " + routeName);
+                    Button ticketIdLabelView = new Button("Ticket ID: " + ticketId);
+                    Button fareLabelView = new Button("Fare: ₱" + String.format("%.2f", fare));
 
-                    vbox.getChildren().addAll(driverLabel, routeLabel, ticketIdLabel, fareLabel);
+                    driverLabelView.getStyleClass().addAll("other_ticket");
+                    routeLabelView.getStyleClass().addAll("other_ticket");
+                    ticketIdLabelView.getStyleClass().addAll("other_ticket");
+                    fareLabelView.getStyleClass().addAll("other_ticket");
+
+                    vbox.getChildren().addAll(driverLabelView, routeLabelView, ticketIdLabelView, fareLabelView);
+
+                    // Create and style buttons for view1
+                    Button driverLabelView1 = new Button("Driver: " + driverName);
+                    Button routeLabelView1 = new Button("Route: " + routeName);
+                    Button ticketIdLabelView1 = new Button("Ticket ID: " + ticketId);
+                    Button fareLabelView1 = new Button("Fare: ₱" + String.format("%.2f", fare));
+
+                    driverLabelView1.getStyleClass().addAll("other_ticket");
+                    routeLabelView1.getStyleClass().addAll("other_ticket");
+                    ticketIdLabelView1.getStyleClass().addAll("other_ticket");
+                    fareLabelView1.getStyleClass().addAll("other_ticket");
+
+                    vbox1.getChildren().addAll(driverLabelView1, routeLabelView1, ticketIdLabelView1, fareLabelView1);
 
                     // Add the VBox to the main view HBox
                     view.getChildren().add(vbox);
+                    view1.getChildren().add(vbox1);
                 }
             }
             loadRouteButtons();
         });
-        
     }
     
 }
