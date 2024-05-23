@@ -30,7 +30,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class inside_controller {
@@ -42,6 +41,8 @@ public class inside_controller {
 	  private List<String> selectedRouteNamesForDriver = new ArrayList<>(); // New list to store routes selected by the current driver
 
       List<Label> ticketLabels = new ArrayList<>();
+      private List<String> selected_ticket_List = new ArrayList<>(); // LinkedList to store selected routes
+
 
 	@FXML
 	private String driverName; 
@@ -68,6 +69,10 @@ public class inside_controller {
   
     @FXML
     private Label incomeLabel;
+    
+    
+ 
+    
 
     @FXML
     private Label fareLabel2;
@@ -77,9 +82,11 @@ public class inside_controller {
 
     @FXML
     private VBox incomeVBox;
-
+    
     @FXML
-    private VBox routeIncomeVBox;
+    private VBox incomeVBoxforroute;
+    
+    
     @FXML 
     private BorderPane border_visibility;
     
@@ -119,7 +126,7 @@ public class inside_controller {
             driverNameLabel.setText(driverName);
         }
         queryTicketsByDriver(driverName);
-
+ 
 
     }
   
@@ -180,18 +187,27 @@ public class inside_controller {
                 while (rs.next()) {
                     String routeName = rs.getString("route_name");
                     double fare = rs.getDouble("fare");
-                    
+                    Button deleteRouteAction = new Button("Delete");
+
                     String routeDriver = rs.getString("driver_name"); // Retrieve driver's name
                     String buttonLabel;
+                    
                     if (routeDriver != null) {
                         buttonLabel = routeName + " (" + routeDriver + ")";
                     } else {
                         buttonLabel = routeName;
                     }
-
                     Button routeButton = new Button(buttonLabel);
                     Button fareLabel = new Button(String.format("₱%.2f", fare));
-                    Button deleteRouteAction = new Button("Delete");
+                    
+                    if (routeDriver != null) {
+                        deleteRouteAction.setDisable(true);
+                        fareLabel.setDisable(true);
+                        routeButton.setDisable(true);
+                    }
+                    
+
+                 
 
                     fareLabel.setOnAction(e -> fareUps(routeName, fare));
                     routeButton.setOnAction(e -> handleRouteSelection(routeName, fare));
@@ -280,48 +296,67 @@ public class inside_controller {
 	    border_visibility.setVisible(true);
 	    selected.setVisible(true);
 
-		 if (selectedRouteNamesForDriver.contains(routeName)) {
-		        // Display an alert if the route is already selected
-		        Platform.runLater(() -> {
-		            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Route already selected: " + routeName);
-		            alert.showAndWait();
-		        });
-		        return; // Exit the method to prevent adding the route again
-		    }
+	    // Check if the route exists in the database
+	    try (Connection conn = dbManager.getConnection()) {
+	        String checkRouteQuery = "SELECT COUNT(*) FROM routes WHERE route_name = ?";
+	        try (PreparedStatement pstCheckRoute = conn.prepareStatement(checkRouteQuery)) {
+	            pstCheckRoute.setString(1, routeName);
+	            ResultSet resultSet = pstCheckRoute.executeQuery();
+	            resultSet.next();
+	            int routeCount = resultSet.getInt(1);
 
-    
-     
+	            if (routeCount == 0) {
+	                // Route doesn't exist, show error alert and return
+	                Platform.runLater(() -> {
+	                    Alert alert = new Alert(Alert.AlertType.ERROR, "Route doesn't exist: " + routeName);
+	                    alert.showAndWait();
+	                });
+	                return;
+	            }
+	        }
+	    } catch (SQLException e) {
+	        // Handle database error
+	        Platform.runLater(() -> {
+	            Alert alert = new Alert(Alert.AlertType.ERROR, "Database error: " + e.getMessage());
+	            alert.showAndWait();
+	        });
+	        return;
+	    }
 
-      	 if (!selectedRouteNamesForDriver.contains(routeName)) {
-             selectedRouteNamesForDriver.add(routeName);
-         }
-      	 
-      	Button s_route = new Button(String.format("%s - ₱%.2f", routeName, fare));
-      	s_route.getStyleClass().add("vbox_routebutton");
-      	s_route.setWrapText(true); // Enable text wrapping
+	    // Proceed with adding the route if it doesn't already exist
+	    if (selectedRouteNamesForDriver.contains(routeName)) {
+	        // Display an alert if the route is already selected
+	        Platform.runLater(() -> {
+	            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Route already selected: " + routeName);
+	            alert.showAndWait();
+	        });
+	        return; // Exit the method to prevent adding the route again
+	    }
 
-      	selectedRouteButtons.add(s_route);
-             
+	    selectedRouteNamesForDriver.add(routeName);
 
-             s_route.setOnAction(e -> handleRouteDeselection(routeName, s_route, fareLabel));
-             s_route.setMaxWidth(Double.MAX_VALUE);
+	    Button s_route = new Button(String.format("%s - ₱%.2f", routeName, fare));
+	    s_route.getStyleClass().add("vbox_routebutton");
+	    s_route.setWrapText(true); // Enable text wrapping
+	    selectedRouteButtons.add(s_route);
 
-             Platform.runLater(() -> {
-            	 
-                 vbox_route.getChildren().clear();
-                 vbox_route.getChildren().addAll(selectedRouteButtons);
-             });
-             
+	    s_route.setOnAction(e -> handleRouteDeselection(routeName, s_route, fareLabel));
+	    s_route.setMaxWidth(Double.MAX_VALUE);
 
-             loadRouteButtons();
-             updateNewVBoxWithSelectedRoutes();
+	    Platform.runLater(() -> {
+	        vbox_route.getChildren().clear();
+	        vbox_route.getChildren().addAll(selectedRouteButtons);
+	    });
 
-         // Display an alert for the selected route
-         Platform.runLater(() -> {
-             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Chosen route: " + routeName);
-             alert.showAndWait();
+	    loadRouteButtons();
+	    updateNewVBoxWithSelectedRoutes();
 
-         });
+	    // Display an alert for the selected route
+	    Platform.runLater(() -> {
+	        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Chosen route: " + routeName);
+	        alert.showAndWait();
+	    });
+	
          
 	}
 	
@@ -755,34 +790,44 @@ private void insertTODB(String routeName, double fare) {
 			}
 		
 			private void deleteRoute(String routeName, double fare) {
-			    String deleteQueryRoutes = "DELETE FROM routes WHERE route_name = ?";
-			    String deleteQuerySelectedRoutes = "DELETE FROM selectedroutes WHERE selected_route = ?";
+			    String deleteQuery;
+			    
+			    try (Connection conn = dbManager.getConnection()) {
+			        // Check if the route exists in the routes table
+			        String checkRouteQuery = "SELECT COUNT(*) FROM routes WHERE route_name = ?";
+			        try (PreparedStatement pstCheckRoute = conn.prepareStatement(checkRouteQuery)) {
+			            pstCheckRoute.setString(1, routeName);
+			            ResultSet resultSet = pstCheckRoute.executeQuery();
+			            resultSet.next();
+			            int routeCount = resultSet.getInt(1);
 
-			    try (Connection conn = dbManager.getConnection();
-			         PreparedStatement pstRoutes = conn.prepareStatement(deleteQueryRoutes);
-			         PreparedStatement pstSelectedRoutes = conn.prepareStatement(deleteQuerySelectedRoutes)) {
+			            // If the route exists in the routes table, delete from routes table; otherwise, delete from selectedroutes table
+			            if (routeCount > 0) {
+			                deleteQuery = "DELETE FROM routes WHERE route_name = ?";
+			            } else {
+			                deleteQuery = "DELETE FROM selectedroutes WHERE selected_route = ?";
+			            }
 
-			        conn.setAutoCommit(false);  // Start transaction
+			            try (PreparedStatement pst = conn.prepareStatement(deleteQuery)) {
+			                conn.setAutoCommit(false);  // Start transaction
+			                pst.setString(1, routeName);
+			                int rowsAffected = pst.executeUpdate();
 
-			        pstRoutes.setString(1, routeName);
-			        int rowsAffectedRoutes = pstRoutes.executeUpdate();
+			                if (rowsAffected > 0) {
+			                    conn.commit();  // Commit transaction
+			                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Route deleted successfully!");
+			                    alert.showAndWait();
 
-			        pstSelectedRoutes.setString(1, routeName);
-			        int rowsAffectedSelectedRoutes = pstSelectedRoutes.executeUpdate();
-
-			        if (rowsAffectedRoutes > 0 || rowsAffectedSelectedRoutes > 0) {
-			            conn.commit();  // Commit transaction
-			            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Route deleted successfully!");
-			            alert.showAndWait();
-
-			            // Update UI after successful deletion
-			            Platform.runLater(() -> {
-			                removeRouteFromUI(routeName);
-			            });
-			        } else {
-			            conn.rollback();  
-			            Alert alert = new Alert(Alert.AlertType.INFORMATION, "No routes were deleted.");
-			            alert.showAndWait();
+			                    // Update UI after successful deletion
+			                    Platform.runLater(() -> {
+			                        removeRouteFromUI(routeName);
+			                    });
+			                } else {
+			                    conn.rollback();  
+			                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "No routes were deleted.");
+			                    alert.showAndWait();
+			                }
+			            }
 			        }
 			    } catch (SQLException e) {
 			        Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -793,17 +838,10 @@ private void insertTODB(String routeName, double fare) {
 			    }
 			}
 
-			private void removeRouteFromUI(String routeName) {
-			    // Remove the deselected route from the UI
-			    for (Node node : route_list.getChildren()) {
-			        HBox hBox = (HBox) node;
-			        Button routeButton = (Button) hBox.getChildren().get(0);
-			        if (routeButton.getText().equals(routeName)) {
-			            route_list.getChildren().remove(node);
-			            break;
-			        }
-			    }
-			}
+			
+		
+
+	
 
 			private void deselectRoute(String routeName) {
 			    String deleteQuery = "DELETE FROM selectedroutes WHERE driver_name = ? AND selected_route = ?";
@@ -817,13 +855,11 @@ private void insertTODB(String routeName, double fare) {
 			        int affectedRows = pstmt.executeUpdate();
 			        if (affectedRows > 0) {
 			       
-			            // Update UI after successful deselection
 			            Platform.runLater(() -> {
 			                removeRouteFromUI(routeName);
 			            });
 			        } else {
-			            Alert alert = new Alert(Alert.AlertType.NONE, "No route found to deselect for driver " + driverName);
-			            alert.showAndWait();
+			           
 			        }
 			    } catch (SQLException e) {
 			        e.printStackTrace();
@@ -833,11 +869,32 @@ private void insertTODB(String routeName, double fare) {
 			    }
 			    loadRouteButtons();
 			}
+			
+			private void removeRouteFromUI(String routeName) {
+			    // Remove the deselected route from the UI
+			    for (Node node : route_list.getChildren()) {
+			        HBox hBox = (HBox) node;
+			        Button routeButton = (Button) hBox.getChildren().get(0);
+			        if (routeButton.getText().equals(routeName)) {
+			            route_list.getChildren().remove(node);
+			            break;
+			        }
+			    }
+			}
 			 private void queryTicketsByDriver(String driverName) {
+				 
 			        try {
+			        	
+			            if (selected_ticket_List.contains(driverName)) {
+			                Alert alert = new Alert(Alert.AlertType.ERROR, "The route is already selected: " + driverName);
+			                alert.showAndWait();
+			                return; // Exit the method
+			            }
+
+			            
 			            // Establish connection
 			            PreparedStatement statement = dbManager.getConnection().prepareStatement(
-			                    "SELECT ticket_id, route_name, fare FROM ticket WHERE driver_name = ?");
+			                    "SELECT ticket_id, route_name, fare, passenger_name FROM ticket WHERE driver_name = ?");
 			            statement.setString(1, driverName);
 
 			            try (ResultSet rs = statement.executeQuery()) {
@@ -845,28 +902,37 @@ private void insertTODB(String routeName, double fare) {
 			            	        int ticketId = rs.getInt("ticket_id");
 			            	        String routeName = rs.getString("route_name");
 			            	        double fare = rs.getDouble("fare");
+			            	        String passenger_name = rs.getString("passenger_name");
 
-			            	        // Create buttons for ticket ID, passenger name, fare, and route name
+
+			            	        Label passButton = new Label("Passenger: " + passenger_name);
 			            	        Button ticketIdButton = new Button("Ticket ID: " + ticketId);
-			            	        Button routeNameButton = new Button("Route: " + routeName);
-			            	        Button fareButton = new Button("Fare: ₱" + String.format("%.2f", fare));
+			            	        Label routeNameButton = new Label("Route: " + routeName);
+			            	        Label fareButton = new Label("Fare: ₱" + String.format("%.2f", fare));
 
 			            	        // Apply CSS classes to style the buttons
 			            	        ticketIdButton.getStyleClass().addAll("ticket");
-			            	        routeNameButton.getStyleClass().addAll("ticket");
-			            	        fareButton.getStyleClass().addAll("ticket");
+			            	        routeNameButton.getStyleClass().addAll("white-label");
+			            	        fareButton.getStyleClass().addAll("white-label");
+			            	        passButton.getStyleClass().addAll("white-label");
+
 
 			            	        // Create a VBox to stack buttons vertically
 			            	        VBox vbox = new VBox();
 			            	        vbox.setAlignment(Pos.TOP_CENTER); // Align the buttons to the top center
 			            	        vbox.setSpacing(5); // Adjust the spacing between buttons
-			            	        vbox.getChildren().addAll(ticketIdButton, routeNameButton, fareButton);
+			            	        vbox.getChildren().addAll(ticketIdButton, passButton, routeNameButton, fareButton);
 
 			            	        // Add the VBox to the ticket_list VBox
 			            	        ticket_list.getChildren().add(vbox);
 			            	        
 			            	        ticketIdButton.setOnAction(event -> {
+			            	        	
 			                            saveFareAndRoute(driverName, routeName, fare);
+			                            selected_ticket_List.add(" "); // Add the route to the selectedRoutes ArrayList
+
+			                            selected_ticket_List.add(routeName); // Add the route to the selectedRoutes ArrayList
+						                  incomeVBoxforroute.getChildren().add(new Label(" "));
 
 			            	        });
 			            }
@@ -894,6 +960,9 @@ private void insertTODB(String routeName, double fare) {
 				            String currentRoutes = resultSet.getString("route_name");
 				            double currentFare = resultSet.getDouble("fare");
 
+				    
+
+				            
 				            // Concatenate the new route name with the current route names
 				            String updatedRoutes = (currentRoutes == null || currentRoutes.isEmpty()) ? routeName : currentRoutes + ", " + routeName;
 				            // Add the new fare to the current fare
@@ -948,22 +1017,32 @@ private void insertTODB(String routeName, double fare) {
 			        	 Connection connection = dbManager.getConnection();
 
 			             // Prepare SQL statement to fetch current route names and fares
-			             String fetchSql = "SELECT route_name, fare FROM driver WHERE driver_name = ?";
+			             String fetchSql = "SELECT fare FROM driver WHERE driver_name = ?";
 			             PreparedStatement fetchStatement = connection.prepareStatement(fetchSql);
 			             fetchStatement.setString(1, driverName);
 
 			             ResultSet resultSet = fetchStatement.executeQuery();
 
 			             if (resultSet.next()) {
-			                 String routes = resultSet.getString("route_name");
 			                 double fareValue = resultSet.getDouble("fare");
 
-			                 // Clear the VBoxes and add new information
 			                 incomeVBox.getChildren().clear();
-			                 incomeVBox.getChildren().add(new Label(String.format("%.2f", fareValue)));
+			                 incomeVBox.getChildren().add(new Label(String.format("₱: %.2f", fareValue)));
+			                 
+			                 
+			             
 
-			                 routeIncomeVBox.getChildren().clear();
-			                 routeIncomeVBox.getChildren().add(new Label(routes));
+			                 
+
+
+			              for (String item : selected_ticket_List) {
+			            	  
+			                  incomeVBoxforroute.getChildren().add(new Label(" " + item));
+			              }
+			            
+
+			               
+
 			             } else {
 			                 Alert alert = new Alert(Alert.AlertType.ERROR, "Driver not found: " + driverName);
 			                 alert.showAndWait();

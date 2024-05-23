@@ -281,57 +281,59 @@ public class SceneController {
 		 
 	 
 	 @FXML
-	 public void register() throws IOException{
-		 if (driver_id != null && !driver_id.getText().trim().isEmpty()) {
-		        String driverID = driver_id.getText().trim(); 
-		        String driverNAME = driver_name.getText().trim();
+	 public void register() throws IOException {
+	     if (driver_id != null && !driver_id.getText().trim().isEmpty()) {
+	         String driverID = driver_id.getText().trim(); 
+	         String driverNAME = driver_name.getText().trim();
 
-		        String query = "INSERT INTO driver (driver_id, driver_name) VALUES (?, ?);";
+	         // Check if driverID is an integer using a regular expression
+	         if (!driverID.matches("\\d+")) {
+	             // Show error alert for non-integer driver ID
+	             Alert alert = new Alert(AlertType.ERROR);
+	             alert.setTitle("Validation Error");
+	             alert.setContentText("Error: Driver ID must be a number.");
+	             alert.showAndWait();
+	             return;
+	         }
 
-		        try (Connection conn = dbManager.getConnection();
-		             PreparedStatement pst = conn.prepareStatement(query)) {
+	         String query = "INSERT INTO driver (driver_id, driver_name) VALUES (?, ?);";
 
-		            
+	         try (Connection conn = dbManager.getConnection();
+	              PreparedStatement pst = conn.prepareStatement(query)) {
 
-		            
-		            pst.setString(1, driverID);
-		            pst.setString(2, driverNAME);
-		            int result = pst.executeUpdate();
+	             pst.setString(1, driverID);
+	             pst.setString(2, driverNAME);
+	             int result = pst.executeUpdate();
 
-		            
+	             // Create and show the confirmation alert
+	             Alert alert = new Alert(AlertType.CONFIRMATION);
+	             alert.setTitle("Registration Successful");
+	             alert.setContentText("Successfully registered " + result + " record(s).");
+	             alert.showAndWait();
+	             
+	             driver_id.setText("");
+	             driver_name.setText("");
+	             
+	         } catch (SQLException e) {
+	             e.printStackTrace();
 
-		            // Create and show the confirmation alert
-		            Alert alert = new Alert(AlertType.CONFIRMATION);
-		            alert.setTitle("Registration Successful");
-		            alert.setContentText("Successfully registered " + result + " record(s).");
-		            alert.showAndWait();
-		            
-		            driver_id.setText("");
-		            driver_name.setText("");
-
-		            
-		        } catch (SQLException e) {
-		            e.printStackTrace();
-
-		            // Create and show the SQL error alert
-		            Alert alert = new Alert(AlertType.ERROR);
-		            alert.setTitle("Database Error");
-		            alert.setHeaderText("Failed to register the driver.");
-		            alert.setContentText("A database error occurred: " + e.getMessage());
-		            alert.showAndWait();
-		        }
-		    } else {
-		        // Create and show the error alert for empty driver ID
-		        Alert alert = new Alert(AlertType.ERROR);
-		        alert.setTitle("Validation Error");
-		        alert.setContentText("Error: Driver ID is required and cannot be empty.");
-		        alert.showAndWait();
-		    }
-		}
+	             // Create and show the SQL error alert
+	             Alert alert = new Alert(AlertType.ERROR);
+	             alert.setTitle("Database Error");
+	             alert.setHeaderText("Failed to register the driver.");
+	             alert.setContentText("A database error occurred: " + e.getMessage());
+	             alert.showAndWait();
+	         }
+	     } else {
+	         // Create and show the error alert for empty driver ID
+	         Alert alert = new Alert(AlertType.ERROR);
+	         alert.setTitle("Validation Error");
+	         alert.setContentText("Error: Driver ID is required and cannot be empty.");
+	         alert.showAndWait();
+	     }
 	
 	 }
-
-//  }
+}
 
 
 	

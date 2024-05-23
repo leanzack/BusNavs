@@ -40,7 +40,7 @@
       </BorderPane>
       <AnchorPane layoutX="264.0" layoutY="484.0" prefHeight="231.0" prefWidth="334.0" style="-fx-background-color: #4f566c;" styleClass="pane">
          <children>
-            <ScrollPane layoutX="66.0" layoutY="19.0" prefHeight="193.0" prefWidth="202.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
+            <ScrollPane layoutX="82.0" layoutY="19.0" prefHeight="193.0" prefWidth="202.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
                <content>
                   <VBox fx:id="vbox" alignment="CENTER" prefHeight="191.0" prefWidth="200.0" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
                </content>
