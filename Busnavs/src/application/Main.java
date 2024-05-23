@@ -30,7 +30,7 @@ public class Main extends Application {
             primaryStage.setResizable(false);
             primaryStage.setTitle("Busnavs: Navigation and Ticketing");
             primaryStage.show();
-            
+            primaryStage.centerOnScreen();
             
           
           

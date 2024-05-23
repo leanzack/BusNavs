@@ -149,6 +149,7 @@ public class SceneController {
 	                     Scene scene = new Scene(root);
 	                     stage.setScene(scene);
 	                     stage.show();
+	                  
 	                     applyStylesheet(scene); 
 
 	                     // Show welcome message
