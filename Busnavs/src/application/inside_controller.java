@@ -933,21 +933,21 @@ private void insertTODB(String routeName, double fare) {
 					                incomeVBoxforroute.getChildren().add(new Label(" "));
 
 					                  
-			            	        ticketIdButton.setOnAction(event -> {
-			            	        	
-			                            saveFareAndRoute(driverName, routeName, fare);
-
-			                            selected_ticket_List.add(routeName); // Add the route to the selectedRoutes ArrayList
-
-			            	        });
-			            }
-			            }
-			        } catch (SQLException e) {
-			            e.printStackTrace();
-			        }
-			 }
-			 
-			
+					                ticketIdButton.setOnAction(event -> {
+				                        if (selected_ticket_List.contains(routeName)) {
+				                            Alert alert = new Alert(Alert.AlertType.ERROR, "The route is already selected: " + routeName);
+				                            alert.showAndWait();
+				                        } else {
+				                            saveFareAndRoute(driverName, routeName, fare);
+				                            selected_ticket_List.add(routeName); // Add the route to the selectedRoutes set
+				                        }
+				                    });
+				                }
+				            }
+				        } catch (SQLException e) {
+				            e.printStackTrace();
+				        }
+				    }
 
 			 private void saveFareAndRoute(String driverName, String routeName, double fare) {
 				    try {
