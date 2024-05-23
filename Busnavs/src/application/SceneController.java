@@ -148,6 +148,8 @@ public class SceneController {
 	                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 	                     Scene scene = new Scene(root);
 	                     stage.setScene(scene);
+	                     stage.alwaysOnTopProperty();
+
 	                     stage.show();
 	                  
 	                     applyStylesheet(scene); 
@@ -202,7 +204,9 @@ public class SceneController {
 		                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		                     Scene scene = new Scene(root);
 		                     stage.setScene(scene);
+		                     stage.alwaysOnTopProperty();
 		                     stage.show();
+		                     
 		                     applyStylesheet(scene); 
 		                     // Show welcome message
 		                     Alert alert = new Alert(Alert.AlertType.INFORMATION);

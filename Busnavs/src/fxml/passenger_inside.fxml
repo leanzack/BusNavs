@@ -9,77 +9,79 @@
 <?import javafx.scene.layout.VBox?>
 
 
-
-
-<AnchorPane prefHeight="777.0" prefWidth="1156.0" style="-fx-background-color: #687197;" styleClass="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-      <AnchorPane layoutX="245.0" layoutY="7.0" prefHeight="761.0" prefWidth="905.0" style="-fx-background-color: #868DAC;" styleClass="pane">
-         <children>
-            <AnchorPane layoutX="396.0" layoutY="476.0" prefHeight="231.0" prefWidth="495.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+<AnchorPane prefHeight="773.0" prefWidth="1768.0" style="-fx-background-color: #313131;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="766.0" prefWidth="1156.0" style="-fx-background-color: #687197;" styleClass="root">
+          <children>
+            <AnchorPane layoutX="245.0" layoutY="7.0" prefHeight="732.0" prefWidth="908.0" style="-fx-background-color: #868DAC;" styleClass="pane">
                <children>
-                  <VBox fx:id="view" layoutX="152.0" layoutY="25.0" prefHeight="182.0" prefWidth="191.0" />
+                  <AnchorPane layoutX="394.0" layoutY="466.0" prefHeight="227.0" prefWidth="495.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+                     <children>
+                        <VBox fx:id="view" layoutX="152.0" layoutY="25.0" prefHeight="173.0" prefWidth="191.0" />
+                     </children>
+                  </AnchorPane>
+            <Button fx:id="selected" layoutX="94.0" layoutY="713.0" mnemonicParsing="false" onAction="#routeActionselected" opacity="0.69" prefHeight="34.0" prefWidth="184.0" styleClass="done_route" text="Done" textFill="WHITE" visible="false" />
+                  
+                                          <Label fx:id="routelist_label" layoutX="126.0" layoutY="448.0" prefHeight="18.0" prefWidth="124.0" text="Route Information" textFill="WHITE" />
+                  <Label fx:id="routelist_label1" layoutX="582.0" layoutY="448.0" prefHeight="18.0" prefWidth="124.0" text="Ticket Information" textFill="WHITE" />
                </children>
             </AnchorPane>
-      <Button fx:id="selected" layoutX="94.0" layoutY="713.0" mnemonicParsing="false" onAction="#routeActionselected" opacity="0.69" prefHeight="34.0" prefWidth="184.0" styleClass="done_route" text="Done" textFill="WHITE" visible="false" />
-            
-                              <Label fx:id="routelist_label" layoutX="126.0" layoutY="448.0" prefHeight="18.0" prefWidth="124.0" text="Route Information" textFill="WHITE" />
-            <Label fx:id="routelist_label1" layoutX="582.0" layoutY="448.0" prefHeight="18.0" prefWidth="124.0" text="Ticket Information" textFill="WHITE" />
-         </children>
-      </AnchorPane>
-      <Label layoutX="590.0" layoutY="278.0" prefHeight="18.0" prefWidth="233.0" text="Available driver in your selected route" textFill="WHITE" />
-      <Label alignment="CENTER" layoutX="563.0" layoutY="28.0" prefHeight="23.0" prefWidth="275.0" text="Select your routes today" textFill="WHITE" />
-      <BorderPane layoutX="266.0" layoutY="58.0" prefHeight="208.0" prefWidth="868.0" style="-fx-background-color: #4f566c;" styleClass="pane">
-         <top>
-            <AnchorPane prefHeight="190.0" prefWidth="875.0" style="-fx-background-color: #4f566c;" styleClass="pane" BorderPane.alignment="CENTER">
+            <Label layoutX="590.0" layoutY="278.0" prefHeight="18.0" prefWidth="233.0" text="Available driver in your selected route" textFill="WHITE" />
+            <Label alignment="CENTER" layoutX="563.0" layoutY="28.0" prefHeight="23.0" prefWidth="275.0" text="Select your routes today" textFill="WHITE" />
+            <BorderPane layoutX="266.0" layoutY="58.0" prefHeight="208.0" prefWidth="868.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+               <top>
+                  <AnchorPane prefHeight="190.0" prefWidth="875.0" style="-fx-background-color: #4f566c;" styleClass="pane" BorderPane.alignment="CENTER">
+                     <children>
+                        <ScrollPane hbarPolicy="ALWAYS" layoutX="13.0" layoutY="9.0" prefHeight="184.0" prefWidth="843.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" vbarPolicy="NEVER">
+                           <content>
+                              <HBox fx:id="h_box" alignment="CENTER" prefHeight="177.0" prefWidth="841.0" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+               </top>
+            </BorderPane>
+            <AnchorPane layoutX="264.0" layoutY="484.0" prefHeight="215.0" prefWidth="334.0" style="-fx-background-color: #4f566c;" styleClass="pane">
                <children>
-                  <ScrollPane hbarPolicy="ALWAYS" layoutX="13.0" layoutY="9.0" prefHeight="184.0" prefWidth="843.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" vbarPolicy="NEVER">
+                  <ScrollPane layoutX="82.0" layoutY="19.0" prefHeight="181.0" prefWidth="202.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
                      <content>
-                        <HBox fx:id="h_box" alignment="CENTER" prefHeight="177.0" prefWidth="841.0" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
+                        <VBox fx:id="vbox" alignment="CENTER" prefHeight="179.0" prefWidth="200.0" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
                      </content>
                   </ScrollPane>
                </children>
             </AnchorPane>
-         </top>
-      </BorderPane>
-      <AnchorPane layoutX="264.0" layoutY="484.0" prefHeight="231.0" prefWidth="334.0" style="-fx-background-color: #4f566c;" styleClass="pane">
-         <children>
-            <ScrollPane layoutX="82.0" layoutY="19.0" prefHeight="193.0" prefWidth="202.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane">
-               <content>
-                  <VBox fx:id="vbox" alignment="CENTER" prefHeight="191.0" prefWidth="200.0" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
-               </content>
-            </ScrollPane>
-         </children>
+            <AnchorPane layoutX="265.0" layoutY="296.0" prefHeight="150.0" prefWidth="868.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+               <children>
+                  <ScrollPane hbarPolicy="ALWAYS" layoutX="18.0" layoutY="14.0" prefHeight="124.0" prefWidth="840.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" vbarPolicy="NEVER">
+                     <content>
+                        <HBox fx:id="h_box_fordriver" alignment="CENTER" prefHeight="112.0" prefWidth="840.0" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+      			<AnchorPane layoutX="9.0" layoutY="7.0" prefHeight="749.0" prefWidth="226.0" style="-fx-background-color: #868DAC;" styleClass="pane">
+      			    <children>
+                  <AnchorPane fx:id="logout_frame" layoutX="21.0" layoutY="638.0" prefHeight="40.0" prefWidth="191.0" style="-fx-background-color: #4f566c;" styleClass="logout">
+                     <children>
+                        <Button fx:id="Logout2" layoutX="61.0" layoutY="7.0" mnemonicParsing="false" onMouseClicked="#Logout_account2" prefHeight="27.0" prefWidth="69.0" style="-fx-background-color: #FFFFFF;" styleClass="Logout_route" text="Logout" textFill="WHITE" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="18.0" layoutY="214.0" prefHeight="231.0" prefWidth="191.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+                     <children>
+                        <VBox fx:id="view1" layoutX="-1.0" layoutY="25.0" prefHeight="182.0" prefWidth="191.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="18.0" layoutY="28.0" prefHeight="98.0" prefWidth="191.0" style="-fx-background-color: #4f566c;" styleClass="pane">
+                     <children>
+                        <Label fx:id="passen" alignment="CENTER" layoutX="97.0" layoutY="26.0" prefHeight="27.0" prefWidth="94.0" text="Label" textFill="WHITE" />
+                        <Label alignment="CENTER" layoutX="97.0" layoutY="62.0" prefHeight="18.0" prefWidth="94.0" text="Passenger" textFill="WHITE" />
+                        <Label fx:id="passen1" alignment="CENTER" layoutY="33.0" prefHeight="40.0" prefWidth="85.0" text="sample image" textFill="WHITE" />
+                     </children>
+                  </AnchorPane>
+                  <Label fx:id="routelist_label11" layoutX="51.0" layoutY="189.0" prefHeight="18.0" prefWidth="124.0" text="Ticket Information" textFill="WHITE" />
+      			    </children>
+      			</AnchorPane>
+          </children>
       </AnchorPane>
-      <AnchorPane layoutX="265.0" layoutY="296.0" prefHeight="150.0" prefWidth="868.0" style="-fx-background-color: #4f566c;" styleClass="pane">
-         <children>
-            <ScrollPane hbarPolicy="ALWAYS" layoutX="18.0" layoutY="14.0" prefHeight="124.0" prefWidth="840.0" style="-fx-background-color: transparent;" styleClass="my-scroll-pane" vbarPolicy="NEVER">
-               <content>
-                  <HBox fx:id="h_box_fordriver" alignment="CENTER" prefHeight="112.0" prefWidth="840.0" style="-fx-background-color: #4f566c;" styleClass="hbox-container" />
-               </content>
-            </ScrollPane>
-         </children>
-      </AnchorPane>
-			<AnchorPane layoutX="9.0" layoutY="7.0" prefHeight="761.0" prefWidth="226.0" style="-fx-background-color: #868DAC;" styleClass="pane">
-			    <children>
-            <AnchorPane fx:id="logout_frame" layoutX="18.0" layoutY="706.0" prefHeight="40.0" prefWidth="191.0" style="-fx-background-color: #4f566c;" styleClass="logout">
-               <children>
-                  <Button fx:id="Logout2" layoutX="61.0" layoutY="7.0" mnemonicParsing="false" onMouseClicked="#Logout_account2" prefHeight="27.0" prefWidth="69.0" style="-fx-background-color: #FFFFFF;" styleClass="Logout_route" text="Logout" textFill="WHITE" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="18.0" layoutY="214.0" prefHeight="231.0" prefWidth="191.0" style="-fx-background-color: #4f566c;" styleClass="pane">
-               <children>
-                  <VBox fx:id="view1" layoutX="-1.0" layoutY="25.0" prefHeight="182.0" prefWidth="191.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="18.0" layoutY="28.0" prefHeight="98.0" prefWidth="191.0" style="-fx-background-color: #4f566c;" styleClass="pane">
-               <children>
-                  <Label fx:id="passen" alignment="CENTER" layoutX="97.0" layoutY="26.0" prefHeight="27.0" prefWidth="94.0" text="Label" textFill="WHITE" />
-                  <Label alignment="CENTER" layoutX="97.0" layoutY="62.0" prefHeight="18.0" prefWidth="94.0" text="Passenger" textFill="WHITE" />
-                  <Label fx:id="passen1" alignment="CENTER" layoutY="33.0" prefHeight="40.0" prefWidth="85.0" text="sample image" textFill="WHITE" />
-               </children>
-            </AnchorPane>
-            <Label fx:id="routelist_label11" layoutX="51.0" layoutY="189.0" prefHeight="18.0" prefWidth="124.0" text="Ticket Information" textFill="WHITE" />
-			    </children>
-			</AnchorPane>
-    </children>
+   </children>
 </AnchorPane>
