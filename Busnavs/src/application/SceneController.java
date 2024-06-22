@@ -1,9 +1,9 @@
 package application;
+
 import javafx.event.ActionEvent;  
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,11 +17,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Alert.AlertType;
+
 import javafx.stage.Stage;
 
 public class SceneController {
 	
+
+
 
 	  public DBConnectionManager dbManager = new DBConnectionManager();
 	  
@@ -29,15 +33,19 @@ public class SceneController {
 	        String cssPath = "application.css"; // Adjust this path as needed
 	        scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
 	    }
-	  
+	    public String driverName; 
+	    public String passengername; 
+	    public ImageView for_logo; 
+
+
 	private Stage stage;
 	private Scene scene;
-	private Parent root;
+
 	 @FXML public TextField driver_id;
 	 @FXML public TextField driver_name;
 	 @FXML public TextField login;
 	 @FXML public TextField login2;
-
+	
 	 @FXML public TextField passenger_name;
 
 
@@ -49,6 +57,7 @@ public class SceneController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();	
+        applyStylesheet(scene); 
 	}
 	 @FXML
 	public void switchToScene3(ActionEvent event) throws IOException {
@@ -57,7 +66,9 @@ public class SceneController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();	
+        applyStylesheet(scene); 
 	}
+	 
 	 @FXML
 	public void Logout(ActionEvent event) throws IOException {
 		    Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -70,19 +81,22 @@ public class SceneController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();	
+        applyStylesheet(scene); 
+        
 	}
 	 }
 	 @FXML
 	 public void BacktoMain(ActionEvent event) throws IOException {
-		
-		        Parent root = FXMLLoader.load(getClass().getResource("/fxml/edit.fxml"));
-		        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		        Scene scene = new Scene(root);
-		        stage.setScene(scene);
-		        stage.show();
-		   
-		}
-	 
+	     Parent root = FXMLLoader.load(getClass().getResource("/fxml/edit.fxml"));
+	     Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+	     Scene scene = new Scene(root);
+	     stage.setScene(scene);
+	     stage.show();
+         applyStylesheet(scene); 
+
+	     
+	     
+	 }
 	 @FXML
 	    public void Driver_main(ActionEvent event) throws IOException {
 
@@ -91,6 +105,7 @@ public class SceneController {
 	            scene = new Scene(root);
 	            stage.setScene(scene);
 	            stage.show();	
+	            applyStylesheet(scene); 
 	        }
 	 
 	 @FXML
@@ -101,6 +116,9 @@ public class SceneController {
 	            scene = new Scene(root);
 	            stage.setScene(scene);
 	            stage.show();	
+                applyStylesheet(scene); 
+                
+          
 	        }
 	
 
@@ -125,11 +143,15 @@ public class SceneController {
 
 	                     controller.setDriverName(driverName);
 
-	                     
+	                     this.driverName = driverName;
+
 	                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 	                     Scene scene = new Scene(root);
 	                     stage.setScene(scene);
+	                     stage.alwaysOnTopProperty();
+
 	                     stage.show();
+	                  
 	                     applyStylesheet(scene); 
 
 	                     // Show welcome message
@@ -177,11 +199,14 @@ public class SceneController {
 
 		                     controller2.setPassengerName(passengername);
 
+		                     this.passengername = passengername;
 		                     
 		                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		                     Scene scene = new Scene(root);
 		                     stage.setScene(scene);
+		                     stage.alwaysOnTopProperty();
 		                     stage.show();
+		                     
 		                     applyStylesheet(scene); 
 		                     // Show welcome message
 		                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -261,57 +286,59 @@ public class SceneController {
 		 
 	 
 	 @FXML
-	 public void register() throws IOException{
-		 if (driver_id != null && !driver_id.getText().trim().isEmpty()) {
-		        String driverID = driver_id.getText().trim(); 
-		        String driverNAME = driver_name.getText().trim();
+	 public void register() throws IOException {
+	     if (driver_id != null && !driver_id.getText().trim().isEmpty()) {
+	         String driverID = driver_id.getText().trim(); 
+	         String driverNAME = driver_name.getText().trim();
 
-		        String query = "INSERT INTO driver (driver_id, driver_name) VALUES (?, ?);";
+	         // Check if driverID is an integer using a regular expression
+	         if (!driverID.matches("\\d+")) {
+	             // Show error alert for non-integer driver ID
+	             Alert alert = new Alert(AlertType.ERROR);
+	             alert.setTitle("Validation Error");
+	             alert.setContentText("Error: Driver ID must be a number.");
+	             alert.showAndWait();
+	             return;
+	         }
 
-		        try (Connection conn = dbManager.getConnection();
-		             PreparedStatement pst = conn.prepareStatement(query)) {
+	         String query = "INSERT INTO driver (driver_id, driver_name) VALUES (?, ?);";
 
-		            
+	         try (Connection conn = dbManager.getConnection();
+	              PreparedStatement pst = conn.prepareStatement(query)) {
 
-		            
-		            pst.setString(1, driverID);
-		            pst.setString(2, driverNAME);
-		            int result = pst.executeUpdate();
+	             pst.setString(1, driverID);
+	             pst.setString(2, driverNAME);
+	             int result = pst.executeUpdate();
 
-		            
+	             // Create and show the confirmation alert
+	             Alert alert = new Alert(AlertType.CONFIRMATION);
+	             alert.setTitle("Registration Successful");
+	             alert.setContentText("Successfully registered " + result + " record(s).");
+	             alert.showAndWait();
+	             
+	             driver_id.setText("");
+	             driver_name.setText("");
+	             
+	         } catch (SQLException e) {
+	             e.printStackTrace();
 
-		            // Create and show the confirmation alert
-		            Alert alert = new Alert(AlertType.CONFIRMATION);
-		            alert.setTitle("Registration Successful");
-		            alert.setContentText("Successfully registered " + result + " record(s).");
-		            alert.showAndWait();
-		            
-		            driver_id.setText("");
-		            driver_name.setText("");
-
-		            
-		        } catch (SQLException e) {
-		            e.printStackTrace();
-
-		            // Create and show the SQL error alert
-		            Alert alert = new Alert(AlertType.ERROR);
-		            alert.setTitle("Database Error");
-		            alert.setHeaderText("Failed to register the driver.");
-		            alert.setContentText("A database error occurred: " + e.getMessage());
-		            alert.showAndWait();
-		        }
-		    } else {
-		        // Create and show the error alert for empty driver ID
-		        Alert alert = new Alert(AlertType.ERROR);
-		        alert.setTitle("Validation Error");
-		        alert.setContentText("Error: Driver ID is required and cannot be empty.");
-		        alert.showAndWait();
-		    }
-		}
+	             // Create and show the SQL error alert
+	             Alert alert = new Alert(AlertType.ERROR);
+	             alert.setTitle("Database Error");
+	             alert.setHeaderText("Failed to register the driver.");
+	             alert.setContentText("A database error occurred: " + e.getMessage());
+	             alert.showAndWait();
+	         }
+	     } else {
+	         // Create and show the error alert for empty driver ID
+	         Alert alert = new Alert(AlertType.ERROR);
+	         alert.setTitle("Validation Error");
+	         alert.setContentText("Error: Driver ID is required and cannot be empty.");
+	         alert.showAndWait();
+	     }
 	
 	 }
-
-//  }
+}
 
 
 	

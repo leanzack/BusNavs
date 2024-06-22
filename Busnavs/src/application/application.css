@@ -3,6 +3,13 @@
     -fx-spacing: 10; /* Space between buttons */
 }
 
+.hbox-container2 {
+    -fx-padding: 5;
+    -fx-spacing: 10; /* Space between buttons */
+    fx-text-fill: white; /* Color text to match your previous button color */
+}
+
+
 .my-scroll-pane .scroll-bar {
     -fx-background-color: transparent;
 }
@@ -29,8 +36,234 @@
     -fx-spacing: 10px; /* Adjust the spacing between buttons as needed */
 }
 
+
 .route-button, .driver-button {
-    -fx-background-color: #ffffff; /* White background for a cleaner look */
+    -fx-background-color: transparent; /* White background for a cleaner look */
+    -fx-text-fill: #000000; /* Color text to match your previous button color */
+    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 30px; /* Rounded corners */
+    -fx-padding: 30px 35px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 150px; /* Smaller minimum width */
+    -fx-alignment: center; /* Center text within the button */    
+     -fx-border-color: #000000; /* Border color */
+    -fx-border-width: 2px; /* Border width */
+}
+
+
+.vbox_routebutton {
+   -fx-background-color: transparent; /* White background for a cleaner look */
+    -fx-text-fill: white; /* Color text to match your previous button color */
+    -fx-font-size: 12px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius:10px; /* Rounded corners */
+    -fx-padding: 10px 15px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 150px; /* Smaller minimum width */
+    -fx-alignment: center; /* Center text within the button */    
+     -fx-border-color: #000000; /* Border color */
+    -fx-border-width: 2px; /* Border width */
+}
+
+.main-button{
+    -fx-background-color: transparent; /* White background for a cleaner look */
+    -fx-text-fill: #FFFFFF; /* Color text to match your previous button color */
+    -fx-font-size: 20px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 30px; /* Rounded corners */
+    -fx-padding: 30px 35px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 150px; /* Smaller minimum width */
+    -fx-alignment: center; /* Center text within the button */    
+     -fx-border-color: #000000; /* Border color */
+    -fx-border-width: 2px; /* Border width */
+}
+
+
+
+
+.route-button:hover, .driver-button:hover, .vbox_routebutton:hover, .main-button:hover{
+	 -fx-border-color: #e0e0e0; /* Border color */
+    -fx-border-width: 2px; /* Border width */
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+}
+
+.hover {
+    -fx-background-color: #e0e0e0; /* Lighter grey on hover for a soft interaction feedback */
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+}
+.fare-button-passenger {	
+    -fx-background-color: #000000; /* White background for a cleaner look */
+    -fx-text-fill: #4A90E2; /* Color text to match your previous button color */
+    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-radius: 15px; /* Ensures the background matches the border radius */
+    -fx-padding: 10px 20px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 150px; /* Smaller minimum width */
+    -fx-alignment: center; /* Center text within the button */
+}
+
+
+.fare-button {	
+    -fx-background-color: #000000; /* White background for a cleaner look */
+    -fx-text-fill: #4A90E2; /* Color text to match your previous button color */
+    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-radius: 15px; /* Ensures the background matches the border radius */
+    -fx-padding: 10px 20px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 150px; /* Smaller minimum width */
+    -fx-alignment: center; /* Center text within the button */
+}
+
+
+.ticket {	
+    -fx-background-color:  #868DAC; /* White background for a cleaner look */
+    -fx-text-fill: white; /* Color text to match your previous button color */
+    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-radius: 15px; /* Ensures the background matches the border radius */
+    -fx-padding: 10px 20px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 150px; /* Smaller minimum width */
+    -fx-alignment: center; /* Center text within the button */
+    
+}
+
+
+.white-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
+    -fx-alignment: center; /* Center text within the button */
+
+}
+.other_ticket {	
+    -fx-background-color:  #868DAC; /* White background for a cleaner look */
+    -fx-text-fill: white; /* Color text to match your previous button color */
+    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-radius: 15px; /* Ensures the background matches the border radius */
+    -fx-padding: 10px 20px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 150px; /* Smaller minimum width */
+    -fx-alignment: center; /* Center text within the button */
+}
+.ticket:hover {
+	 -fx-border-color: black; /* Border color */
+    -fx-border-width: 3px; /* Border width */
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+
+}
+
+.transparent-background {
+    -fx-background-color:  #687197;
+}
+
+.delete {
+    -fx-background-color: #800000; /* White background for a cleaner look */
+    -fx-text-fill: #000000; /* Color text to match your previous button color */
+    -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
+    -fx-border-radius: 3px; /* Rounded corners */
+    -fx-background-radius: 3px; /* Ensures the background matches the border radius */
+    -fx-padding: 5px 10px; /* Reduced padding for a less chunky feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
+    -fx-min-width: 100px; /* Smaller minimum width */
+    -fx-alignment: center;
+}
+.delete:hover {
+    -fx-background-color: #FFFFFF; /* Make the background transparent */
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+}
+
+
+.AnchorPane {
+    -fx-background-color: #868DAC; /* Background color */
+    -fx-padding: 20px; /* Padding */
+}
+
+
+
+.add_route {
+    -fx-background-color: #000000; /* Make the background transparent */
+    -fx-text-fill: black; /* Set text color */
+    -fx-font-size: 20px; /* Increase font size for better visibility */
+    -fx-padding: 5px; /* Adjust padding */
+    -fx-alignment: center; /* Center text within the button */
+     -fx-font-weight: bold; /* Make the text bold */
+   -fx-border-width: 10px 10px 10px 10px;
+	
+}
+
+.done_route {
+    -fx-background-color: #000000; /* Make the background transparent */
+    -fx-text-fill: #4A90E2; /* Set text color */
+    -fx-padding: 5px; /* Adjust padding */
+    -fx-alignment: center; /* Center text within the button */
+	-fx-border-width: 2px 2px 2px 2px;
+	-fx-border-radius: 20px;
+	   	-fx-background-radius: 20px;
+   
+	
+}
+.pane {
+	-fx-border-width: 2px 2px 2px 2px;
+	-fx-border-radius: 20px;
+	-fx-background-radius: 20px;
+}
+
+.logout {
+	-fx-border-width: 2px 2px 2px 2px;
+	-fx-border-radius: 20px;
+	-fx-background-radius: 20px;
+	
+}
+.t_field {
+	
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-border-color:  #FFFFFF; /* Red color example */
+    
+}
+
+
+.Logout_route {
+    -fx-text-fill: #4A90E2; /* Set text color */
+   	-fx-border-width: 2px 2px 2px 2px;
+	-fx-border-radius: 20px;
+	-fx-background-radius: 20px;
+	
+}
+
+.Logout_route:hover {
+    -fx-border-color: black; /* Change border color to white on hover */
+    -fx-cursor: hand; /* Change cursor to pointer on hover */
+        -fx-background-color: #FFFFFF; /* Make the background transparent */
+    
+}
+
+.account_buttons {
+    -fx-text-fill: #4A90E2; /* Set text color */
+   	-fx-border-width: 2px 2px 2px 2px;
+	-fx-border-radius: 20px;
+	-fx-background-radius: 20px;
+	-fx-background-color: #000000; /* Make the background transparent */
+	
+}
+
+
+
+.add_route:hover, .done_route:hover, .account_buttons:hover {
+    -fx-background-color: #FFFFFF; /* Make the background transparent */
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+}
+
+.delete_route:hover {
+    -fx-background-color: #FF0000; /* Make the background transparent */
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+}
+
+.done_select {
+     -fx-background-color: #ffffff; /* White background for a cleaner look */
     -fx-text-fill: #4A90E2; /* Color text to match your previous button color */
     -fx-font-size: 14px; /* Slightly smaller font size for a more subtle design */
     -fx-border-radius: 5px; /* Rounded corners */
@@ -39,12 +272,21 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); /* Subtle shadow for depth */
     -fx-min-width: 150px; /* Smaller minimum width */
     -fx-alignment: center; /* Center text within the button */
+    
 }
 
-.route-button:hover, .driver-button:hover {
+.done_select:hover {
+    -fx-cursor: hand; /* Cursor change to indicate button is clickable */
+}
+
+
+
+
+.fare-button:hover {
     -fx-background-color: #e0e0e0; /* Lighter grey on hover for a soft interaction feedback */
     -fx-cursor: hand; /* Cursor change to indicate button is clickable */
 }
+
 .empty-border {
     -fx-border-color: transparent; /* Makes the border invisible, but space is allocated for it */
     -fx-border-width: 10; /* Width of the border space */
@@ -58,17 +300,20 @@
     -fx-padding: 10;
 }
 
-
-.label-title {
-   -fx-font-size: 24px; /* Larger font size for better visibility and importance */
-    -fx-font-weight: bold; /* Make the font bold to stand out */
-    -fx-text-fill: #2e2e2e; /* A darker text color for better readability */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0, 0, 1); /* Text shadow for depth */
-    -fx-padding: 5px; /* Padding around the text */
-    -fx-alignment: center-left; /* Align text to the left */
-    -fx-background-color: #f0f0f0; /* A light background color */
-    -fx-background-radius: 5; /* Rounded corners for the background */
-    -fx-padding: 10px; /* Padding to give some breathing room around the text */
-    -fx-margin: 10px; /* Optional: margin around the label */
+.title-label {
+    -fx-font-size: 24px; /* Set the font size */
+    -fx-text-fill: #333333; /* Set the text color */
+    -fx-padding: 10px; /* Add padding around the label */
+    -fx-background-color: white; /* Set background color */
+    -fx-border-color: transparent; /* Set border color */
+    -fx-border-width: 2px; /* Set border width */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-radius: 5px; /* Match the border radius */
+    -fx-alignment: center; /* Center the text */
 }
+
+
+
+
+
 

@@ -5,14 +5,20 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="377.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="377.0" style="-fx-background-color: #4f566c;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SceneController">
    <children>
-      <Button fx:id="back" layoutX="29.0" layoutY="86.0" mnemonicParsing="false" onAction="#BacktoMain" text="Back" />
-       <Button layoutX="151.0" layoutY="248.0" mnemonicParsing="false" text="Register"  onAction="#register"/>     
-      <TextField fx:id="driver_id" layoutX="114.0" layoutY="140.0" />
-      <TextField fx:id="driver_name" layoutX="114.0" layoutY="200.0" />
-      
-      <Label layoutX="114.0" layoutY="111.0" prefWidth="52.0" text="Driver ID" />
-      <Label layoutX="114.0" layoutY="175.0" prefHeight="17.0" prefWidth="74.0" text="Driver Name" />
+      <Button fx:id="back" layoutX="14.0" layoutY="28.0" mnemonicParsing="false" onAction="#BacktoMain" styleClass="account_buttons" text="Back" />
+      <AnchorPane layoutX="49.0" layoutY="74.0" prefHeight="253.0" prefWidth="266.0" style="-fx-background-color: #868DAC;" styleClass="pane">
+         <children>
+            <TextField fx:id="driver_name" layoutX="61.0" layoutY="131.0" styleClass="t_field" />
+            <Label layoutX="99.0" layoutY="164.0" prefHeight="17.0" prefWidth="74.0" text="Driver Name" />     
+            <TextField fx:id="driver_id" layoutX="61.0" layoutY="64.0" styleClass="t_field" />
+            
+            <Label layoutX="110.0" layoutY="99.0" prefWidth="52.0" text="Driver ID" />
+                   <Button layoutX="91.0" layoutY="189.0" mnemonicParsing="false" onAction="#register" prefHeight="50.0" prefWidth="91.0" styleClass="account_buttons" text="Register" />
+            
+         </children>
+      </AnchorPane>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="89.0" layoutY="32.0" prefHeight="17.0" prefWidth="186.0" text="Driver Registration" textFill="WHITE" />
    </children>
 </AnchorPane>
